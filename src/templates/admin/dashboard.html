@@ -1,0 +1,43 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Dashboard Overview{% endblock %}
+{% block page_title %}Dashboard Overview{% endblock %}
+{% block nav_dash %}active{% endblock %}
+
+{% block content %}
+
+<div class="card">
+    <h2 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Welcome to the Control Panel</h2>
+    <p>This is your custom administration dashboard. From here, you can manage all dynamic content on your website,
+        including the latest courses, portfolio projects, team members, and general site texts.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+    <!-- Course Stats -->
+    <div class="card" style="text-align: center; border-bottom: 5px solid var(--accent-yellow);">
+        <i class="fas fa-graduation-cap fa-3x" style="color: var(--primary-blue); margin-bottom: 15px;"></i>
+        <h3>Courses</h3>
+        <p style="color: gray;">Manage Learning Section</p>
+        <a href="{{ url_for('admin.courses') }}" class="btn" style="width:100%; box-sizing:border-box;">Go to
+            Courses</a>
+    </div>
+
+    <!-- Project Stats -->
+    <div class="card" style="text-align: center; border-bottom: 5px solid var(--accent-yellow);">
+        <i class="fas fa-briefcase fa-3x" style="color: var(--primary-blue); margin-bottom: 15px;"></i>
+        <h3>Projects</h3>
+        <p style="color: gray;">Manage Portfolio</p>
+        <a href="{{ url_for('admin.projects') }}" class="btn" style="width:100%; box-sizing:border-box;">Go to
+            Projects</a>
+    </div>
+
+    <!-- Team Stats -->
+    <div class="card" style="text-align: center; border-bottom: 5px solid var(--accent-yellow);">
+        <i class="fas fa-users fa-3x" style="color: var(--primary-blue); margin-bottom: 15px;"></i>
+        <h3>Team</h3>
+        <p style="color: gray;">Manage Staff</p>
+        <a href="{{ url_for('admin.team') }}" class="btn" style="width:100%; box-sizing:border-box;">Go to Team</a>
+    </div>
+</div>
+
+{% endblock %}

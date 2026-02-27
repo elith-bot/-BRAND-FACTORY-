@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard{% endblock %} - PHOTOGENIC Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #003366;
+            --accent-yellow: #FFD700;
+            --sidebar-width: 250px;
+            --bg-color: #f4f7f6;
+            --text-dark: #333;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--primary-blue);
+            color: white;
+            position: fixed;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h2 {
+            font-family: 'Anton', sans-serif;
+            color: var(--accent-yellow);
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        .nav-items {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            flex: 1;
+        }
+
+        .nav-items li a {
+            display: block;
+            padding: 15px 20px;
+            color: #ccc;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .nav-items li a:hover,
+        .nav-items li a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--accent-yellow);
+            border-left: 4px solid var(--accent-yellow);
+        }
+
+        .nav-items li a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .logout-btn {
+            padding: 15px 20px;
+            background: #cc0000;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #ff3333;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            background: white;
+            padding: 20px 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+        }
+
+        .content-area {
+            padding: 30px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* Utilities */
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: var(--primary-blue);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--accent-yellow);
+            color: var(--primary-blue);
+        }
+
+        /* Mobile Adjustments */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 9999;
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .topbar h1 {
+                font-size: 1.2rem;
+            }
+
+            .content-area {
+                padding: 15px;
+            }
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table th,
+        table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background: #f8f9fa;
+            color: var(--primary-blue);
+        }
+
+        .flash-success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .flash-error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>PHOTOGENIC</h2>
+            <small style="color: #ccc;">Control Panel</small>
+        </div>
+        <ul class="nav-items">
+            <li><a href="{{ url_for('admin.dashboard') }}" class="{% block nav_dash %}{% endblock %}"><i
+                        class="fas fa-home"></i> Overview</a></li>
+            <li><a href="{{ url_for('admin.courses') }}" class="{% block nav_courses %}{% endblock %}"><i
+                        class="fas fa-graduation-cap"></i>
+                    Courses</a></li>
+            <li><a href="{{ url_for('admin.projects') }}" class="{% block nav_projects %}{% endblock %}"><i
+                        class="fas fa-briefcase"></i> Projects</a>
+            </li>
+            <li><a href="{{ url_for('admin.team') }}" class="{% block nav_team %}{% endblock %}"><i
+                        class="fas fa-users"></i> Team Members</a>
+            </li>
+            <li><a href="{{ url_for('admin.site_content') }}" class="{% block nav_content %}{% endblock %}"><i
+                        class="fas fa-file-alt"></i> Site
+                    Content</a></li>
+            <li><a href="{{ url_for('admin.users') }}" class="{% block nav_users %}{% endblock %}"><i
+                        class="fas fa-shield-alt"></i> Security & Access</a></li>
+            <li style="margin-top:20px;border-top:1px solid rgba(255,255,255,0.1);"><a href="{{ url_for('index') }}"
+                    target="_blank"><i class="fas fa-external-link-alt"></i> View Website</a></li>
+        </ul>
+        <a href="{{ url_for('admin.logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+
+    <div class="main-content">
+        <header class="topbar">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button class="mobile-toggle" id="sidebar-toggle"><i class="fas fa-bars"></i></button>
+                <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+            </div>
+            <div>
+                <span class="desktop-only" style="color: gray; margin-right: 10px;">Admin</span>
+                <i class="fas fa-user-circle fa-2x" style="color: var(--primary-blue); vertical-align: middle;"></i>
+            </div>
+        </header>
+
+        <div class="content-area">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- Mobile Sidebar Overlay Scripts -->
+    <script>
+        const toggleBtn = document.getElementById('sidebar-toggle');
+        const sidebar = document.querySelector('.sidebar');
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('show');
+            });
+        }
+    </script>
+</body>
+
+</html>

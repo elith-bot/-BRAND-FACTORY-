@@ -1,0 +1,103 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Team Members{% endblock %}
+{% block page_title %}Manage Team Members{% endblock %}
+{% block nav_team %}active{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;"><i class="fas fa-plus-circle"></i> Add New
+        Team Member</h3>
+    <form method="POST" action="{{ url_for('admin.team') }}" enctype="multipart/form-data">
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 300px;">
+                <label style="font-weight: bold;">Name (EN):</label>
+                <input type="text" name="name_en" required
+                    style="width:100%; padding:10px; margin-bottom:15px; border-radius: 5px; border: 1px solid #ccc;">
+
+                <label style="font-weight: bold;">Position (EN):</label>
+                <input type="text" name="position_en" required
+                    style="width:100%; padding:10px; margin-bottom:15px; border-radius: 5px; border: 1px solid #ccc;">
+
+                <label style="font-weight: bold;">Bio (EN):</label>
+                <textarea name="bio_en" rows="4"
+                    style="width:100%; padding:10px; margin-bottom:15px; border-radius: 5px; border: 1px solid #ccc;"></textarea>
+            </div>
+            <div style="flex: 1; min-width: 300px;" dir="rtl">
+                <label style="font-weight: bold;">الاسم (AR):</label>
+                <input type="text" name="name_ar" required
+                    style="width:100%; padding:10px; margin-bottom:15px; border-radius: 5px; border: 1px solid #ccc;">
+
+                <label style="font-weight: bold;">المنصب (AR):</label>
+                <input type="text" name="position_ar" required
+                    style="width:100%; padding:10px; margin-bottom:15px; border-radius: 5px; border: 1px solid #ccc;">
+
+                <label style="font-weight: bold;">نبذة (AR):</label>
+                <textarea name="bio_ar" rows="4"
+                    style="width:100%; padding:10px; margin-bottom:15px; border-radius: 5px; border: 1px solid #ccc;"></textarea>
+            </div>
+        </div>
+
+        <label style="font-weight: bold; display: block; margin-top: 10px;">Profile Image (Will be optimized
+            automatically):</label>
+        <input type="file" name="image" accept="image/*"
+            style="display:block; margin-bottom:20px; padding: 10px; background: #f9f9f9; width: 100%; border-radius: 5px; border: 1px dashed #ccc;">
+
+        <h4 style="color: #666; margin-bottom: 10px;">Social Links (Optional)</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px;">
+            <input type="url" name="facebook" placeholder="Facebook URL"
+                style="padding:10px; border-radius: 5px; border: 1px solid #ccc;">
+            <input type="url" name="twitter" placeholder="Twitter URL"
+                style="padding:10px; border-radius: 5px; border: 1px solid #ccc;">
+            <input type="url" name="instagram" placeholder="Instagram URL"
+                style="padding:10px; border-radius: 5px; border: 1px solid #ccc;">
+            <input type="url" name="linkedin" placeholder="LinkedIn URL"
+                style="padding:10px; border-radius: 5px; border: 1px solid #ccc;">
+        </div>
+        <button type="submit" class="btn" style="margin-top: 25px;"><i class="fas fa-user-plus"></i> Add Member</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Current Team Members</h3>
+    <div class="table-responsive">
+        <table>
+            <tr>
+                <th>Image</th>
+                <th>Name (EN/AR)</th>
+                <th>Position</th>
+                <th>Action</th>
+            </tr>
+            {% for member in members %}
+            <tr>
+                <td>
+                    {% if member.image %}
+                    <img src="{{ url_for('static', filename='uploads/' + member.image) }}" width="60"
+                        style="border-radius: 50%; height: 60px; object-fit: cover; border: 2px solid var(--accent-yellow);">
+                    {% else %}
+                    <div
+                        style="width: 60px; height: 60px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #999;">
+                        N/A</div>
+                    {% endif %}
+                </td>
+                <td style="font-weight: bold;">{{ member.name_en }}<br><span
+                        style="color: gray; font-size: 0.9em; font-weight: normal;">{{ member.name_ar }}</span></td>
+                <td>{{ member.position_en }}</td>
+                <td>
+                    <a href="{{ url_for('admin.edit_team', id=member.id) }}" class="btn"
+                        style="background:var(--accent-yellow); color:var(--primary-blue); padding:8px 15px; margin-right:5px; margin-bottom: 5px;"><i
+                            class="fas fa-edit"></i> Edit</a>
+                    <form method="POST" action="{{ url_for('admin.delete_team', id=member.id) }}"
+                        style="display:inline;"
+                        onsubmit="return confirm('Are you sure you want to delete this member?');">
+                        <button type="submit"
+                            style="background:#cc0000; color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer;"><i
+                                class="fas fa-trash-alt"></i> Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Edit Team Member{% endblock %}
+{% block page_title %}Editing: {{ member.name_en }} / {{ member.name_ar }}{% endblock %}
+{% block nav_team %}active{% endblock %}
+
+{% block content %}
+<div class="card">
+    <a href="{{ url_for('admin.team') }}" class="btn" style="background:#666; margin-bottom: 20px;"><i
+            class="fas fa-arrow-left"></i> Back to Team</a>
+
+    <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Update Details & Profile Picture</h3>
+    <form method="POST" enctype="multipart/form-data">
+        <label style="font-weight: bold; display:block; margin-bottom:5px;">English Name:</label>
+        <input type="text" name="name_en" required value="{{ member.name_en }}"
+            style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">
+
+        <label style="font-weight: bold; display:block; margin-bottom:5px;">Arabic Name (الاسم بالعربي):</label>
+        <input type="text" name="name_ar" required value="{{ member.name_ar }}" dir="rtl"
+            style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">
+
+        <label style="font-weight: bold; display:block; margin-bottom:5px;">English Position:</label>
+        <input type="text" name="position_en" required value="{{ member.position_en }}"
+            style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">
+
+        <label style="font-weight: bold; display:block; margin-bottom:5px;">Arabic Position (المنصب بالعربي):</label>
+        <input type="text" name="position_ar" required value="{{ member.position_ar }}" dir="rtl"
+            style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">
+
+        <label style="font-weight: bold; display:block; margin-bottom:5px;">English Bio:</label>
+        <textarea name="bio_en" rows="3"
+            style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">{{ member.bio_en }}</textarea>
+
+        <label style="font-weight: bold; display:block; margin-bottom:5px;">Arabic Bio (نبذة بالعربي):</label>
+        <textarea name="bio_ar" rows="3" dir="rtl"
+            style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">{{ member.bio_ar }}</textarea>
+
+        <h4 style="margin-top: 20px; border-bottom: 2px solid var(--accent-yellow); display: inline-block;">Social Links
+            (Optional)</h4>
+        <input type="url" name="facebook" placeholder="Facebook URL" value="{{ member.facebook or '' }}"
+            style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">
+        <input type="url" name="twitter" placeholder="Twitter URL" value="{{ member.twitter or '' }}"
+            style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">
+        <input type="url" name="instagram" placeholder="Instagram URL" value="{{ member.instagram or '' }}"
+            style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">
+        <input type="url" name="linkedin" placeholder="LinkedIn URL" value="{{ member.linkedin or '' }}"
+            style="width:100%; padding:10px; margin-bottom:20px; border-radius:5px; border:1px solid #ccc;">
+
+        <h4 style="margin-top: 20px; border-bottom: 2px solid var(--accent-yellow); display: inline-block;">Current
+            Profile Picture</h4>
+        <div style="margin-bottom: 20px;">
+            {% if member.image %}
+            <img src="{{ url_for('static', filename='uploads/' + member.image) }}"
+                style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 3px solid var(--primary-blue); box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            {% else %}
+            <p style="color:gray;">No image uploaded.</p>
+            {% endif %}
+        </div>
+
+        <label style="font-weight: bold; display:block; margin-bottom:5px;">Replace Profile Picture: (تغيير الصورة
+            الشخصية)</label>
+        <input type="file" name="image" accept="image/*" style="margin-bottom:20px;">
+
+        <button type="submit" class="btn" style="display:block; width:100%; font-size:1.1rem; padding: 15px;"><i
+                class="fas fa-save"></i> Save All Updates</button>
+    </form>
+</div>
+{% endblock %}

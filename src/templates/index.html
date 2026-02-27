@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+<html lang="{{ lang }}" dir="{{ 'rtl' if lang == 'ar' else 'ltr' }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHOTOGENIG | Creative Solutions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=2.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}?v=1.3" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}?v=1.3" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}?v=1.3">
+    <!-- FontAwesome Library for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body
+    style="background-color: {{ global_site_content.bg_color if global_site_content and global_site_content.bg_color else '#000000' }};">
+
+
+
+    <header>
+        <nav>
+            <a href="{{ url_for('index') }}" class="logo">
+                <div class="logo-icon"></div>
+                <span>PHOTOGENIC</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#learning">{{ 'Learning' if lang == 'en' else 'التعليم' }}</a></li>
+                <li><a href="#portfolio">{{ 'Work' if lang == 'en' else 'أعمالنا' }}</a></li>
+                <li><a href="#about">{{ 'About' if lang == 'en' else 'من نحن' }}</a></li>
+                <li><a href="#contact">{{ 'Contact' if lang == 'en' else 'تواصل معنا' }}</a></li>
+                <li>
+                    <a href="{{ url_for('set_lang', lang='ar' if lang == 'en' else 'en') }}" class="lang-btn">
+                        <span style="border:1px solid #FFD700; padding: 3px 8px; border-radius: 5px;">{{ 'ع' if lang ==
+                            'en' else 'EN' }}</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <main>
+            <section id="hero"
+                style="background: linear-gradient(rgba(6, 11, 82, 0.7), rgba(0, 0, 0, 0.9)), url('{{ url_for('static', filename='uploads/' + site_content.hero_bg_media) if site_content and site_content.hero_bg_media else url_for('static', filename='images/hero_photography_bg.jpg') }}') center / cover no-repeat;">
+                <div class="hero-content" data-aos="zoom-in">
+                    {% if site_content and (site_content.hero_title_en or site_content.hero_title_ar) %}
+                    <h1 style="color:white; font-family: 'Anton', sans-serif;">{{ site_content.hero_title_en if lang ==
+                        'en'
+                        else site_content.hero_title_ar }}</h1>
+                    <p>{{ site_content.hero_subtitle_en if lang == 'en' else site_content.hero_subtitle_ar }}</p>
+                    {% else %}
+                    <h1>{{ 'WE ARE' if lang == 'en' else 'نحن' }} <span style="color: #FFD700;">PHOTOGENIC</span></h1>
+                    <p>{{ 'Coding Your Vision into Reality' if lang == 'en' else 'نصنع رؤيتك إلى واقع' }}</p>
+                    {% endif %}
+                    <a href="#portfolio" class="cta-button">{{ 'See Our Projects' if lang == 'en' else 'شاهد مشاريعنا'
+                        }}</a>
+                </div>
+            </section>
+
+            <section id="about" data-aos="fade-up">
+                <div class="section-content about-content">
+                    <h2>{{ 'ABOUT US' if lang == 'en' else 'من نحن' }}</h2>
+                    <p>{{ (site_content.about_us_en if lang == 'en' else site_content.about_us_ar) if site_content else
+                        ("We
+                        are a team of developers and creatives tailored to bring your digital dreams to life." if lang
+                        ==
+                        'en' else "نحن فريق من المطورين والمبدعين مصممون لتحويل أحلامك الرقمية إلى حقيقة.") }}</p>
+                    <div class="view-all-wrapper" data-aos="fade-up" style="margin-top: 20px;">
+                        <a href="{{ url_for('team') }}" class="cta-button">{{ 'Our Team' if lang == 'en' else 'فريق
+                            العمل'
+                            }}</a>
+                    </div>
+                </div>
+            </section>
+
+            <section id="portfolio" data-aos="fade-up">
+                <div class="section-content">
+                    <h2>{{ 'OUR LATEST WORK' if lang == 'en' else 'أحدث أعمالنا' }}</h2>
+                    <div class="slider-container">
+                        <div class="portfolio-grid">
+                            {% for project in projects %}
+                            <a href="{{ url_for('project_detail', project_id=project.id) }}">
+                                <div class="portfolio-item">
+                                    {% if project.cover_media_type == 'video' %}
+                                    <video src="{{ url_for('static', filename='uploads/' + project.cover_media) }}"
+                                        loading="lazy" muted playsinline
+                                        style="object-fit:cover; width:100%; height:100%;" onmouseover="this.play()"
+                                        onmouseout="this.pause()"></video>
+                                    {% else %}
+                                    <img src="{{ url_for('static', filename='uploads/' + (project.cover_media or 'placeholder.png')) }}"
+                                        alt="{{ project.title_en if lang == 'en' else project.title_ar }}"
+                                        loading="lazy">
+                                    {% endif %}
+                                    <span class="portfolio-text">{{ project.title_en if lang == 'en' else
+                                        project.title_ar
+                                        }}</span>
+                                </div>
+                            </a>
+                            {% else %}
+                            <p>{{ 'No projects to display yet.' if lang == 'en' else 'لا توجد مشاريع للعرض بعد.' }}</p>
+                            {% endfor %}
+                        </div>
+                        <a class="prev">&#10094;</a>
+                        <a class="next">&#10095;</a>
+                    </div>
+                    <div class="view-all-wrapper" data-aos="fade-up">
+                        <a href="{{ url_for('portfolio') }}" class="cta-button">{{ 'View All Work' if lang == 'en' else
+                            'شاهد جميع الأعمال' }}</a>
+                    </div>
+                </div>
+            </section>
+
+            <section id="learning" data-aos="fade-up">
+                <div class="section-content">
+                    <h2>{{ 'COURSES' if lang == 'en' else 'الكورسات التعليمية' }}</h2>
+                    <p>{{ 'Learn from the best' if lang == 'en' else 'تعلم من الأفضل' }}</p>
+                    <div class="slider-container">
+                        <div class="portfolio-grid">
+                            {% for course in courses %}
+                            <a href="{{ url_for('course_detail', course_id=course.id) }}">
+                                <div class="portfolio-item">
+                                    {% if course.cover_media_type == 'video' %}
+                                    <video src="{{ url_for('static', filename='uploads/' + course.cover_media) }}"
+                                        loading="lazy" style="object-fit:cover; width:100%; height:100%;"></video>
+                                    {% else %}
+                                    <img src="{{ url_for('static', filename='uploads/' + (course.cover_media or 'placeholder.png')) }}"
+                                        alt="{{ course.title_en if lang == 'en' else course.title_ar }}" loading="lazy">
+                                    {% endif %}
+                                    <span class="portfolio-text">{{ course.title_en if lang == 'en' else course.title_ar
+                                        }}</span>
+                                </div>
+                            </a>
+                            {% else %}
+                            <p>{{ 'No courses to display yet.' if lang == 'en' else 'لا توجد كورسات للعرض بعد.' }}</p>
+                            {% endfor %}
+                        </div>
+                        <a class="prev">&#10094;</a>
+                        <a class="next">&#10095;</a>
+                    </div>
+                    <div class="view-all-wrapper" data-aos="fade-up">
+                        <a href="{{ url_for('learning') }}" class="cta-button">{{ 'View All Courses' if lang == 'en'
+                            else
+                            'عرض كل الكورسات' }}</a>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact" data-aos="fade-up">
+                <div class="section-content">
+                    <h2>{{ 'GET IN TOUCH' if lang == 'en' else 'تواصل معنا' }}</h2>
+                    <p>{{ (site_content.contact_info_en if lang == 'en' else site_content.contact_info_ar) if
+                        site_content
+                        else ("Ready to start your project? Contact us today." if lang == 'en' else "جاهز للبدء في
+                        مشروعك؟
+                        تواصل معنا اليوم.") }}
+                    </p>
+                    <div class="contact-buttons">
+                        <a href="mailto:contact@photogenig.com" class="cta-button">{{ 'Email Us' if lang == 'en' else
+                            'راسلنا' }}</a>
+                        <a href="tel:07813886233" class="cta-button">{{ 'Call Us' if lang == 'en' else 'اتصل بنا'
+                            }}</a>
+                    </div>
+
+                    <div class="social-icons-row">
+                        <!-- GPS / Location -->
+                        <a href="https://maps.google.com" target="_blank" class="contact-icon-btn" title="Location"><i
+                                class="fas fa-map-marker-alt"></i></a>
+                        <!-- Socials -->
+                        <a href="https://www.facebook.com/share/1DgECZfEpi/?mibextid=wwXIfr" target="_blank"
+                            class="contact-icon-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/photo_s_genic/" target="_blank" class="contact-icon-btn"
+                            title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.tiktok.com/@photoganic?_r=1&_t=ZS-94GYIPBvkjk" target="_blank"
+                            class="contact-icon-btn" title="TikTok"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://wa.me/9647813886233" target="_blank" class="contact-icon-btn"
+                            title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer>
+            <p>&copy; 2024 PHOTOGENIC. {{ 'All rights reserved.' if lang == 'en' else 'جميع الحقوق محفوظة.' }}</p>
+        </footer>
+
+        <!-- زر اتصل بنا العائم -->
+        <a href="#contact" class="floating-contact-btn" title="Contact Us">
+            <span>{{ 'Contact Us' if lang == 'en' else 'اتصل بنا' }}</span>
+        </a>
+
+        <script src="{{ url_for('static', filename='main.js') }}"></script>
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+        <script>
+            // تفعيل مكتبة الأنيميشن عند السكرول
+            AOS.init({
+                duration: 800,
+                once: false,
+            });
+
+        </script>
+</body>
+
+
+
+
+</html>

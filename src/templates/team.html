@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" dir="{{ 'rtl' if lang == 'ar' else 'ltr' }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ 'Our Team' if lang == 'en' else 'فريقنا' }} | PHOTOGENIG</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=2.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}?v=1.3" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}?v=1.3" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}?v=1.3">
+</head>
+
+<body
+    style="background-color: {{ global_site_content.bg_color if global_site_content and global_site_content.bg_color else '#000000' }};">
+
+
+
+    <header>
+        <nav>
+            <a href="{{ url_for('index') }}" class="logo">
+                <div class="logo-icon"></div>
+                <span>PHOTOGENIC</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}#learning">{{ 'Learning' if lang == 'en' else 'التعليم' }}</a></li>
+                <li><a href="{{ url_for('index') }}#portfolio">{{ 'Work' if lang == 'en' else 'أعمالنا' }}</a></li>
+                <li><a href="{{ url_for('index') }}#about">{{ 'About' if lang == 'en' else 'من نحن' }}</a></li>
+                <li><a href="{{ url_for('index') }}#contact">{{ 'Contact' if lang == 'en' else 'تواصل معنا' }}</a></li>
+                <li>
+                    <a href="{{ url_for('set_lang', lang='ar' if lang == 'en' else 'en') }}" class="lang-btn">
+                        {{ 'عربي' if lang == 'en' else 'English' }}
+                    </a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="team-section" data-aos="fade-up">
+            <div class="section-content">
+                <h2>{{ 'OUR TEAM' if lang == 'en' else 'فريق العمل' }}</h2>
+                <p>{{ 'Meet the talented people behind PHOTOGENIC' if lang == 'en' else 'تعرف على الموهوبين وراء
+                    فوتوجينيك' }}</p>
+
+                <div class="team-grid">
+                    {% for member in team_members %}
+                    <div class="team-card" data-aos="zoom-in">
+                        <div class="team-image">
+                            <img src="{{ url_for('static', filename='uploads/' + member.image) if member.image else 'https://via.placeholder.com/300' }}"
+                                alt="{{ member.name_en if lang == 'en' else member.name_ar }}">
+                        </div>
+                        <div class="team-info">
+                            <h3>{{ member.name_en if lang == 'en' else member.name_ar }}</h3>
+                            <p class="team-position">{{ member.position_en if lang == 'en' else member.position_ar }}
+                            </p>
+                            <p class="team-bio">{{ (member.bio_en if lang == 'en' else member.bio_ar) if member.bio_ar
+                                else '' }}</p>
+                            <div class="team-social">
+                                {% if member.facebook %}
+                                <a href="{{ member.facebook }}" target="_blank" title="Facebook"><i
+                                        class="fab fa-facebook"></i></a>
+                                {% endif %}
+                                {% if member.twitter %}
+                                <a href="{{ member.twitter }}" target="_blank" title="Twitter"><i
+                                        class="fab fa-twitter"></i></a>
+                                {% endif %}
+                                {% if member.instagram %}
+                                <a href="{{ member.instagram }}" target="_blank" title="Instagram"><i
+                                        class="fab fa-instagram"></i></a>
+                                {% endif %}
+                                {% if member.linkedin %}
+                                <a href="{{ member.linkedin }}" target="_blank" title="LinkedIn"><i
+                                        class="fab fa-linkedin"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p>{{ 'No team members to display yet.' if lang == 'en' else 'لا يوجد أعضاء في الفريق للعرض بعد.' }}
+                    </p>
+                    {% endfor %}
+                </div>
+
+                <div class="view-all-wrapper" data-aos="fade-up" style="margin-top: 40px;">
+                    <a href="{{ url_for('index') }}" class="cta-button">{{ 'Back to Home' if lang == 'en' else 'العودة
+                        للرئيسية' }}</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 PHOTOGENIC. {{ 'All rights reserved.' if lang == 'en' else 'جميع الحقوق محفوظة.' }}</p>
+    </footer>
+
+    <!-- زر اتصل بنا العائم -->
+    <a href="{{ url_for('index') }}#contact" class="floating-contact-btn" title="Contact Us">
+        <span>{{ 'Contact Us' if lang == 'en' else 'اتصل بنا' }}</span>
+    </a>
+
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        AOS.init({
+            duration: 800,
+            once: false,
+        });
+
+    </script>
+</body>
+
+</html>

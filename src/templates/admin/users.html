@@ -1,0 +1,88 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Manage Access{% endblock %}
+{% block page_title %}Security & Admin Users{% endblock %}
+{% block nav_users %}active{% endblock %}
+
+{% block content %}
+<div class="card" style="border-top: 5px solid var(--primary-blue);">
+    <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;"><i class="fas fa-key"></i> Change My
+        Passcode</h3>
+    <form method="POST" action="{{ url_for('admin.users') }}">
+        <input type="hidden" name="action" value="change_passcode">
+        <label style="font-weight: bold; display:block; margin-bottom:5px;">Current Passcode:</label>
+        <input type="password" name="old_passcode" required
+            style="width:100%; max-width: 400px; padding:10px; margin-bottom:15px; border-radius: 5px; border: 1px solid #ccc;">
+
+        <label style="font-weight: bold; display:block; margin-bottom:5px;">New Passcode:</label>
+        <input type="password" name="new_passcode" required
+            style="width:100%; max-width: 400px; padding:10px; margin-bottom:15px; border-radius: 5px; border: 1px solid #ccc;">
+
+        <button type="submit" class="btn" style="display:block;"><i class="fas fa-save"></i> Save New Passcode</button>
+    </form>
+</div>
+
+{% if current_role == 'owner' %}
+<div class="card" style="border-top: 5px solid var(--accent-yellow);">
+    <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;"><i class="fas fa-user-plus"></i> Add New
+        Admin/Owner</h3>
+    <p style="color: gray; margin-bottom: 20px;">Owners have full control over the system, while Admins cannot manage
+        users.</p>
+    <form method="POST" action="{{ url_for('admin.users') }}">
+        <input type="hidden" name="action" value="add_user">
+
+        <label style="font-weight: bold; display:block; margin-bottom:5px;">Assign New Passcode:</label>
+        <input type="text" name="new_passcode" required placeholder="Ex: AliBoss99"
+            style="width:100%; max-width: 400px; padding:10px; margin-bottom:15px; border-radius: 5px; border: 1px solid #ccc;">
+
+        <label style="font-weight: bold; display:block; margin-bottom:5px;">Assign Role:</label>
+        <select name="role"
+            style="width:100%; max-width: 400px; padding:10px; margin-bottom:20px; border-radius: 5px; border: 1px solid #ccc;">
+            <option value="admin">Administrator (Standard Access)</option>
+            <option value="owner">Owner (Full Superuser Security Access)</option>
+        </select>
+
+        <button type="submit" class="btn" style="display:block;"><i class="fas fa-plus"></i> Create Account</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Active Administrators</h3>
+    <div class="table-responsive">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Role</th>
+                <th>Authentication Security</th>
+                <th>Action</th>
+            </tr>
+            {% for u in admin_users %}
+            <tr>
+                <td style="font-weight: bold;">#{{ u.id }}</td>
+                <td>
+                    {% if u.role == 'owner' %}
+                    <span
+                        style="background:var(--primary-blue); color:var(--accent-yellow); padding:5px 10px; border-radius:20px; font-weight:bold;"><i
+                            class="fas fa-crown"></i> Owner</span>
+                    {% else %}
+                    <span
+                        style="background:#eee; color:#333; padding:5px 10px; border-radius:20px; font-weight:bold;">Admin</span>
+                    {% endif %}
+                </td>
+                <td><i class="fas fa-lock" style="color:green;"></i> Secure Hashed Passcode</td>
+                <td>
+                    <form method="POST" action="{{ url_for('admin.delete_user', id=u.id) }}" style="display:inline;"
+                        onsubmit="return confirm('Revoke access for this user permanently?');">
+                        <button type="submit"
+                            style="background:#cc0000; color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer;"><i
+                                class="fas fa-user-slash"></i> Revoke Access</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

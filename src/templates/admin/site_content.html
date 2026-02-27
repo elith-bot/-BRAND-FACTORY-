@@ -1,0 +1,81 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Site Content{% endblock %}
+{% block page_title %}Manage Site Content{% endblock %}
+{% block nav_content %}active{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">About Us & Contact Information</h3>
+    <form method="POST" enctype="multipart/form-data">
+        <label style="font-weight: bold; color: #555;">About Us (English)</label>
+        <textarea name="about_us_en" rows="5"
+            style="width:100%; margin-bottom:15px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: inherit;">{{ content.about_us_en if content else '' }}</textarea>
+
+        <label style="font-weight: bold; color: #555;">About Us (Arabic) / من نحن</label>
+        <textarea name="about_us_ar" rows="5"
+            style="width:100%; margin-bottom:15px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: inherit;"
+            dir="rtl">{{ content.about_us_ar if content else '' }}</textarea>
+
+        <label style="font-weight: bold; color: #555;">Contact Info (English)</label>
+        <textarea name="contact_info_en" rows="5"
+            style="width:100%; margin-bottom:15px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: inherit;">{{ content.contact_info_en if content else '' }}</textarea>
+
+        <label style="font-weight: bold; color: #555;">Contact Info (Arabic) / معلومات التواصل</label>
+        <textarea name="contact_info_ar" rows="5"
+            style="width:100%; margin-bottom:20px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: inherit;"
+            dir="rtl">{{ content.contact_info_ar if content else '' }}</textarea>
+
+        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
+        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Homepage Hero Text</h3>
+
+        <label style="font-weight: bold; color: #555;">Hero Title (English) [Ex: WE ARE PHOTOGENIC]</label>
+        <input type="text" name="hero_title_en" value="{{ content.hero_title_en if content else '' }}"
+            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
+
+        <label style="font-weight: bold; color: #555;">Hero Title (Arabic) [Ex: نحن فوتوجينيك]</label>
+        <input type="text" name="hero_title_ar" value="{{ content.hero_title_ar if content else '' }}" dir="rtl"
+            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
+
+        <label style="font-weight: bold; color: #555;">Hero Subtitle (English) [Ex: Coding Your Vision into
+            Reality]</label>
+        <input type="text" name="hero_subtitle_en" value="{{ content.hero_subtitle_en if content else '' }}"
+            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
+
+        <label style="font-weight: bold; color: #555;">Hero Subtitle (Arabic) [Ex: نحول رؤيتك إلى حقيقة]</label>
+        <input type="text" name="hero_subtitle_ar" value="{{ content.hero_subtitle_ar if content else '' }}" dir="rtl"
+            style="width:100%; margin-bottom:25px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
+
+        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
+        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Dynamic Hero Background</h3>
+
+        <label style="font-weight: bold; color: #555;">Upload Background Media (Image or Video)</label>
+        <input type="file" name="hero_bg" accept="image/*,video/*,.mkv,.flv,.wmv,.avi,.mov"
+            style="width:100%; margin-bottom:10px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
+
+        {% if content and content.hero_bg_media %}
+        <div style="margin-bottom: 25px;">
+            <p style="margin: 0; color: #777; font-size: 0.9rem;">Current Background Preview:</p>
+            <img src="{{ url_for('static', filename='uploads/' + content.hero_bg_media) }}" alt="Hero BG"
+                style="max-height: 100px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+        </div>
+        {% else %}
+        <p style="margin-bottom: 25px; color: #777; font-size: 0.9rem;">No custom background set. Default is used.</p>
+        {% endif %}
+
+        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
+        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Website Global Background Color</h3>
+
+        <label style="font-weight: bold; color: #555;">Scroll Background Color</label>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px;">
+            <input type="color" name="bg_color"
+                value="{{ content.bg_color if content and content.bg_color else '#000000' }}"
+                style="width: 50px; height: 50px; padding: 0; border: none; cursor: pointer; border-radius: 5px;">
+            <span style="color: #777; font-size: 0.9rem;">(Default is Black #000000)</span>
+        </div>
+
+        <button type="submit" class="btn" style="font-size: 1.1rem; padding: 12px 25px;"><i class="fas fa-save"></i>
+            Update Content</button>
+    </form>
+</div>
+{% endblock %}

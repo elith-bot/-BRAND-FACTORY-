@@ -1,0 +1,499 @@
+/* 
+   PHOTOGENIC - Professional Brand Identity Redesign
+   Colors: Blue, Yellow, White, Black
+*/
+
+:root {
+    --primary-blue: #060b52;
+    /* Deep Navy Blue from Logo */
+    --accent-yellow: #fdcc04;
+    /* Golden Yellow from Logo */
+    --dark-yellow: #d8aa00;
+    --bg-white: #FFFFFF;
+    --text-black: #000000;
+    --text-muted: #e0e0e0;
+    --transparent-white: rgba(6, 11, 82, 0.4);
+    --border-white: rgba(253, 204, 4, 0.3);
+    --soft-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+* {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    color: var(--bg-white);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #000000;
+}
+
+/* Header and Navigation */
+header {
+    background-color: var(--primary-blue);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    border-bottom: 3px solid var(--primary-blue);
+    box-shadow: var(--soft-shadow);
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: 0 auto;
+    max-width: 1400px;
+}
+
+[dir="rtl"] nav {
+    flex-direction: row-reverse;
+}
+
+[dir="ltr"] nav {
+    flex-direction: row-reverse;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--bg-white);
+    font-family: 'Anton', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 1.5px;
+}
+
+.logo-icon {
+    width: 80px;
+    height: 80px;
+    margin-right: 15px;
+    background-image: url('logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: var(--bg-white);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: var(--accent-yellow);
+}
+
+.hamburger {
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.hamburger .line {
+    width: 25px;
+    height: 3px;
+    background-color: var(--bg-white);
+}
+
+/* Hero Section */
+#hero {
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    padding: 0 1rem;
+    /* Glassmorphism Hero */
+    background: rgba(0, 51, 102, 0.85);
+    color: var(--bg-white);
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+#hero h1 {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(3rem, 10vw, 5rem);
+    margin: 0 0 1rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+#hero p {
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
+    margin: 0 0 2rem;
+    color: var(--accent-yellow);
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+}
+
+.cta-button {
+    background-color: var(--accent-yellow);
+    color: var(--primary-blue);
+    text-decoration: none;
+    padding: 1rem 3.5rem;
+    border-radius: 8px;
+    /* Rounded rectangles */
+    font-weight: 700;
+    display: inline-block;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.cta-button:hover {
+    background-color: var(--accent-yellow);
+    color: var(--primary-blue);
+    transform: translateY(-5px);
+    /* Lift up animation */
+    box-shadow: 0 10px 25px rgba(253, 204, 4, 0.6);
+    /* Golden Glowing Shadow */
+}
+
+/* General Section Styling */
+section {
+    padding: 5rem 1rem;
+}
+
+/* Centering wrapper for additional buttons */
+.view-all-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+    width: 100%;
+}
+
+.section-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem;
+    /* Dark Theme containers */
+    background-color: var(--transparent-white);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    border: 1px solid var(--border-white);
+    box-shadow: var(--soft-shadow);
+}
+
+.section-content p,
+.project-detail-section p,
+#team-section p,
+#work-with-section p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+/* Page containers for Detail/Team/Portfolio pages */
+.project-detail-section,
+#team-section,
+#work-with-section {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 3rem;
+    background-color: var(--transparent-white);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    border: 1px solid var(--border-white);
+    box-shadow: var(--soft-shadow);
+}
+
+h2 {
+    font-family: 'Anton', sans-serif;
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    color: var(--accent-yellow);
+    text-transform: uppercase;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: var(--accent-yellow);
+    margin: 15px auto 0;
+}
+
+/* Portfolio Section */
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.portfolio-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    aspect-ratio: 4/3;
+    box-shadow: var(--soft-shadow);
+    transition: transform 0.3s ease, border 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.portfolio-item:hover {
+    transform: translateY(-10px) scale(1.02);
+    border: 2px solid var(--accent-yellow);
+    box-shadow: 0 15px 30px rgba(253, 204, 4, 0.4);
+}
+
+.portfolio-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.portfolio-text {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: var(--primary-blue);
+    color: var(--accent-yellow);
+    padding: 1rem;
+    text-align: center;
+    font-family: 'Anton', sans-serif;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.portfolio-item:hover .portfolio-text {
+    transform: translateY(0);
+}
+
+/* Team Section */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.team-card {
+    text-align: center;
+    padding: 2.5rem;
+    background: var(--transparent-white);
+    border-radius: 15px;
+    border: 1px solid var(--border-white);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border-top: 5px solid var(--accent-yellow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(253, 204, 4, 0.3);
+}
+
+.team-image {
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--accent-yellow);
+}
+
+.team-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.team-info h3 {
+    color: var(--accent-yellow);
+    margin-bottom: 0.5rem;
+}
+
+/* Contact Section */
+.contact-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.social-icons-row {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.contact-icon-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--primary-blue);
+    color: var(--accent-yellow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: var(--soft-shadow);
+}
+
+.contact-icon-btn:hover {
+    background-color: var(--accent-yellow);
+    color: var(--primary-blue);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(253, 204, 4, 0.5);
+}
+
+/* Footer */
+footer {
+    background-color: var(--primary-blue);
+    color: var(--bg-white);
+    text-align: center;
+    padding: 3rem 0;
+    position: relative;
+    z-index: 10;
+    border-top: 2px solid var(--accent-yellow);
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--bg-white);
+        box-shadow: var(--soft-shadow);
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .hamburger {
+        display: flex;
+        z-index: 100;
+    }
+
+    .hamburger.active .line:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .hamburger.active .line:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active .line:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    .hamburger .line {
+        transition: all 0.3s ease;
+    }
+
+    #hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .contact-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-content,
+    .project-detail-section,
+    #team-section,
+    #work-with-section {
+        padding: 1.5rem;
+    }
+}
+
+/* Floating Button */
+.floating-contact-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--accent-yellow);
+    color: var(--primary-blue);
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    /* Rectangular floating btn */
+    text-decoration: none;
+    font-weight: 700;
+    box-shadow: 0 10px 20px rgba(253, 204, 4, 0.3);
+    z-index: 1001;
+    transition: all 0.3s ease;
+}
+
+.floating-contact-btn:hover {
+    transform: scale(1.05) translateY(-5px);
+}
+
+/* --- RTL (Arabic) Overrides --- */
+[dir="rtl"] .logo-icon {
+    margin-right: 0;
+    margin-left: 15px;
+}
+
+[dir="ltr"] .logo-icon {
+    margin-right: 0;
+    margin-left: 15px;
+}
+
+[dir="rtl"] .floating-contact-btn {
+    right: 30px;
+    left: auto;
+}
+
+[dir="ltr"] .floating-contact-btn {
+    right: auto;
+    left: 30px;
+}
+
+[dir="rtl"] .prev {
+    left: auto;
+    right: 10px;
+    transform: rotate(180deg) translateY(50%);
+    /* flip arrow */
+}
+
+[dir="rtl"] .next {
+    right: auto;
+    left: 10px;
+    transform: rotate(180deg) translateY(50%);
+    /* flip arrow */
+}
+
+/* Adjust transforms for slider buttons specifically in RTL */
+[dir="rtl"] .prev,
+[dir="rtl"] .next {
+    transform-origin: center right;
+    /* or adjust dynamically */
+}
