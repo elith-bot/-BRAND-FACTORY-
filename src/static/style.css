@@ -41,6 +41,12 @@ header {
     z-index: 1000;
     border-bottom: 3px solid var(--primary-blue);
     box-shadow: var(--soft-shadow);
+    transition: transform 0.4s ease-in-out, background-color 0.3s ease;
+}
+
+/* Class to hide navbar when scrolling down */
+header.hidden {
+    transform: translateY(-100%);
 }
 
 nav {
@@ -50,14 +56,13 @@ nav {
     width: 90%;
     margin: 0 auto;
     max-width: 1400px;
+    direction: ltr;
+    /* Force layout to stay left-to-right */
 }
 
-[dir="rtl"] nav {
-    flex-direction: row-reverse;
-}
-
-[dir="ltr"] nav {
-    flex-direction: row-reverse;
+/* Ensure text inside links respects the document direction */
+[dir="rtl"] .nav-links {
+    direction: rtl;
 }
 
 .logo {
@@ -380,6 +385,13 @@ footer {
 
 /* Media Queries */
 @media (max-width: 768px) {
+
+    [dir="rtl"] nav,
+    [dir="ltr"] nav,
+    nav {
+        flex-direction: row !important;
+    }
+
     .nav-links {
         display: none;
         flex-direction: column;

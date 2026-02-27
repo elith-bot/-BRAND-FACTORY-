@@ -1,5 +1,6 @@
 import os
 import shutil
+import time
 from flask import Flask, render_template, url_for, send_from_directory, session, redirect, request, g, Blueprint, flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
@@ -7,6 +8,8 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from PIL import Image, ImageOps
 from functools import wraps
+
+app_version = str(int(time.time()))
 
 # --- 1. إعدادات المسارات ---
 _basedir = os.path.dirname(os.path.abspath(__file__))
@@ -135,7 +138,7 @@ def before_request():
 @app.context_processor
 def inject_global_data():
     content = SiteContent.query.first()
-    return dict(lang=g.lang, global_site_content=content)
+    return dict(lang=g.lang, global_site_content=content, cache_id=str(uuid.uuid4()))
 
 @app.route('/set_lang/<lang>')
 def set_lang(lang):

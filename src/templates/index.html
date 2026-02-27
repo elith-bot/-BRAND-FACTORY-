@@ -10,8 +10,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>PHOTOGENIG | Creative Solutions</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=2.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v={{ cache_id }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@300;400;700&display=swap"
@@ -25,18 +28,33 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <!-- AOS Animation Library CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: {
+                    {
+                    global_site_content.bg_color if global_site_content and global_site_content.bg_color else '#000000'
+                }
+            }
+
+            ;
+        }
+    </style>
 </head>
 
-<body
-    style="background-color: {{ global_site_content.bg_color if global_site_content and global_site_content.bg_color else '#000000' }};">
+<body>
 
 
 
     <header>
         <nav>
             <a href="{{ url_for('index') }}" class="logo">
+                {% if lang == 'en' %}
                 <div class="logo-icon"></div>
                 <span>PHOTOGENIC</span>
+                {% else %}
+                <div class="logo-icon"></div>
+                <span>PHOTOGENIC</span>
+                {% endif %}
             </a>
             <ul class="nav-links">
                 <li><a href="#learning">{{ 'Learning' if lang == 'en' else 'التعليم' }}</a></li>
@@ -246,7 +264,7 @@
         <!-- Swiper JS CDN -->
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-        <script src="{{ url_for('static', filename='main.js') }}"></script>
+        <script src="{{ url_for('static', filename='main.js') }}?v={{ cache_id }}"></script>
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
         <script>

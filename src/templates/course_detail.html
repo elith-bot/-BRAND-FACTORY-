@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>{{ course.title_en if lang == 'en' else course.title_ar }} - PHOTOGENIG</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=2.2">
@@ -78,8 +81,13 @@
     <header>
         <nav>
             <a href="{{ url_for('index') }}" class="logo">
+                {% if lang == 'en' %}
                 <div class="logo-icon"></div>
                 <span>PHOTOGENIC</span>
+                {% else %}
+                <span>PHOTOGENIC</span>
+                <div class="logo-icon"></div>
+                {% endif %}
             </a>
             <ul class="nav-links">
                 <li><a href="{{ url_for('index') }}#learning">{{ 'Learning' if lang == 'en' else 'التعليم' }}</a></li>

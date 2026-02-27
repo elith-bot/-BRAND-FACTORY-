@@ -24,17 +24,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.querySelector('header');
     if (header) {
         let lastScrollTop = 0;
-        const navbarHeight = header.offsetHeight;
+        const delta = 5; // Minimum scroll distance to trigger hide/show
 
         window.addEventListener('scroll', function () {
             let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-            if (scrollTop > lastScrollTop && scrollTop > navbarHeight) {
+            // Make sure they scroll more than delta
+            if (Math.abs(lastScrollTop - scrollTop) <= delta) {
+                return;
+            }
+
+            // Downscroll
+            if (scrollTop > lastScrollTop && scrollTop > header.offsetHeight) {
                 header.classList.add('hidden');
             } else {
+                // Upscroll or top of page
                 header.classList.remove('hidden');
             }
-            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+            lastScrollTop = scrollTop;
         }, false);
     }
 

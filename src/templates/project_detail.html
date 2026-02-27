@@ -4,9 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>{{ project.title_en if lang == 'en' else project.title_ar }} - PHOTOGENIG</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=1.9">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v={{ cache_id }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@300;400;700&display=swap"
@@ -82,8 +85,13 @@
     <header>
         <nav>
             <a href="{{ url_for('index') }}" class="logo">
+                {% if lang == 'en' %}
                 <div class="logo-icon"></div>
                 <span>PHOTOGENIC</span>
+                {% else %}
+                <span>PHOTOGENIC</span>
+                <div class="logo-icon"></div>
+                {% endif %}
             </a>
             <ul class="nav-links">
                 <li><a href="{{ url_for('index') }}#learning">{{ 'Learning' if lang == 'en' else 'التعليم' }}</a></li>
