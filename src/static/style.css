@@ -387,7 +387,9 @@ footer {
         top: 100%;
         left: 0;
         width: 100%;
-        background-color: var(--bg-white);
+        background-color: var(--primary-blue);
+        /* Fixed white-on-white text */
+        border-bottom: 2px solid var(--accent-yellow);
         box-shadow: var(--soft-shadow);
         padding: 20px 0;
         text-align: center;
@@ -425,6 +427,20 @@ footer {
     .contact-buttons {
         flex-direction: column;
         align-items: center;
+    }
+
+    /* Smaller and elegant Swiper arrows for mobile */
+    .swiper-button-next,
+    .swiper-button-prev {
+        width: 35px !important;
+        height: 35px !important;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 50%;
+    }
+
+    .swiper-button-next:after,
+    .swiper-button-prev:after {
+        font-size: 16px !important;
     }
 
     .section-content,
@@ -496,4 +512,22 @@ footer {
 [dir="rtl"] .next {
     transform-origin: center right;
     /* or adjust dynamically */
+}
+
+/* --- Glowing Text Animation --- */
+.glowing-text {
+    animation: textGlow 2.5s infinite alternate ease-in-out;
+}
+
+@keyframes textGlow {
+    from {
+        text-shadow: 0 0 5px rgba(253, 204, 4, 0.2),
+            0 0 10px rgba(253, 204, 4, 0.3);
+    }
+
+    to {
+        text-shadow: 0 0 10px rgba(253, 204, 4, 0.7),
+            0 0 20px rgba(253, 204, 4, 0.6),
+            0 0 30px rgba(253, 204, 4, 0.5);
+    }
 }

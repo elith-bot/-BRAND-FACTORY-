@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let lastScrollTop = 0;
         const navbarHeight = header.offsetHeight;
 
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
             if (scrollTop > lastScrollTop && scrollTop > navbarHeight) {
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 header.classList.remove('hidden');
             }
-            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
         }, false);
     }
 
@@ -45,52 +45,47 @@ document.addEventListener('DOMContentLoaded', () => {
             const targetId = this.getAttribute('href');
             const targetElement = document.querySelector(targetId);
 
-            if(targetElement){
+            if (targetElement) {
                 targetElement.scrollIntoView({ behavior: 'smooth' });
             }
         });
     });
 
-    // --- Mobile Portfolio Slider ---
-    const sliderContainer = document.querySelector('#portfolio .slider-container');
-    if (sliderContainer) {
-        const track = sliderContainer.querySelector('.portfolio-grid');
-        const slides = Array.from(track.children);
-        const nextButton = sliderContainer.querySelector('.next');
-        const prevButton = sliderContainer.querySelector('.prev');
-
-        if (track && nextButton && prevButton && slides.length > 0) {
-            let currentIndex = 0;
-            const slideCount = slides.length;
-
-            function goToSlide(index) {
-                if (index < 0) {
-                    currentIndex = slideCount - 1;
-                } else if (index >= slideCount) {
-                    currentIndex = 0;
-                } else {
-                    currentIndex = index;
+    // --- Swiper Slider Initialization ---
+    // Applies to both Portfolio and Courses Swiper Containers
+    const swipers = document.querySelectorAll('.swiper');
+    swipers.forEach((swiperEl) => {
+        if (swiperEl) {
+            new Swiper(swiperEl, {
+                slidesPerView: 1,      // Show 1 item on mobile
+                spaceBetween: 30,
+                loop: true,
+                autoplay: {
+                    delay: 2000,
+                    disableOnInteraction: false,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    768: {
+                        slidesPerView: 2, // Show 2 items on tablet
+                        spaceBetween: 40,
+                        autoplay: false,  // Disable autoplay
+                    },
+                    1024: {
+                        slidesPerView: 3, // Show 3 items on desktop
+                        spaceBetween: 50,
+                        autoplay: false,  // Disable autoplay
+                    },
                 }
-                track.style.transform = 'translateX(-' + currentIndex * 100 + '%)';
-            }
-
-            nextButton.addEventListener('click', () => goToSlide(currentIndex + 1));
-            prevButton.addEventListener('click', () => goToSlide(currentIndex - 1));
-
-            function checkMobileView() {
-                const isMobile = window.innerWidth <= 768;
-                if (isMobile) {
-                    // In mobile view, we make sure the slider is active
-                    track.style.display = 'flex'; // Make sure the items are in a row
-                } else {
-                    // In desktop view, we reset the styles
-                    track.style.transform = 'translateX(0%)';
-                    track.style.display = 'grid'; // Revert to grid
-                }
-            }
-
-            window.addEventListener('resize', checkMobileView);
-            checkMobileView(); // Initial check
+            });
         }
-    }
+    });
+
 });
