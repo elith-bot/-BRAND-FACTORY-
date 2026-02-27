@@ -77,6 +77,14 @@ class SiteContent(db.Model):
     hero_subtitle_en = db.Column(db.String(300), nullable=True)
     hero_bg_media = db.Column(db.String(255), nullable=True)
     bg_color = db.Column(db.String(7), nullable=True, default='#000000')
+    contact_phone = db.Column(db.String(50), nullable=True)
+    contact_whatsapp = db.Column(db.String(50), nullable=True)
+    contact_telegram = db.Column(db.String(200), nullable=True)
+    contact_email = db.Column(db.String(100), nullable=True)
+    contact_facebook = db.Column(db.String(200), nullable=True)
+    contact_instagram = db.Column(db.String(200), nullable=True)
+    contact_tiktok = db.Column(db.String(200), nullable=True)
+    contact_gps = db.Column(db.String(500), nullable=True)
 
 class TeamMember(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -338,6 +346,16 @@ def site_content():
         content.hero_subtitle_ar = request.form.get('hero_subtitle_ar')
         content.hero_subtitle_en = request.form.get('hero_subtitle_en')
         content.bg_color = request.form.get('bg_color') or '#000000'
+        
+        # New Contact Fields
+        content.contact_phone = request.form.get('contact_phone')
+        content.contact_whatsapp = request.form.get('contact_whatsapp')
+        content.contact_telegram = request.form.get('contact_telegram')
+        content.contact_email = request.form.get('contact_email')
+        content.contact_facebook = request.form.get('contact_facebook')
+        content.contact_instagram = request.form.get('contact_instagram')
+        content.contact_tiktok = request.form.get('contact_tiktok')
+        content.contact_gps = request.form.get('contact_gps')
         
         # Handle Hero Background Upload
         file = request.files.get('hero_bg')

@@ -27,6 +27,51 @@
             dir="rtl">{{ content.contact_info_ar if content else '' }}</textarea>
 
         <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
+        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Direct Contact Links & Social Media
+        </h3>
+
+        <label style="font-weight: bold; color: #555;"><i class="fas fa-phone"></i> Phone Number</label>
+        <input type="text" name="contact_phone" value="{{ content.contact_phone if content else '' }}"
+            placeholder="+964..."
+            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
+
+        <label style="font-weight: bold; color: #555;"><i class="fab fa-whatsapp"></i> WhatsApp Number</label>
+        <input type="text" name="contact_whatsapp" value="{{ content.contact_whatsapp if content else '' }}"
+            placeholder="+964..."
+            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
+
+        <label style="font-weight: bold; color: #555;"><i class="fab fa-telegram"></i> Telegram Link</label>
+        <input type="text" name="contact_telegram" value="{{ content.contact_telegram if content else '' }}"
+            placeholder="https://t.me/username"
+            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
+
+        <label style="font-weight: bold; color: #555;"><i class="fas fa-envelope"></i> Email Address</label>
+        <input type="email" name="contact_email" value="{{ content.contact_email if content else '' }}"
+            placeholder="example@email.com"
+            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
+
+        <label style="font-weight: bold; color: #555;"><i class="fab fa-facebook"></i> Facebook Link</label>
+        <input type="text" name="contact_facebook" value="{{ content.contact_facebook if content else '' }}"
+            placeholder="https://facebook.com/..."
+            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
+
+        <label style="font-weight: bold; color: #555;"><i class="fab fa-instagram"></i> Instagram Link</label>
+        <input type="text" name="contact_instagram" value="{{ content.contact_instagram if content else '' }}"
+            placeholder="https://instagram.com/..."
+            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
+
+        <label style="font-weight: bold; color: #555;"><i class="fab fa-tiktok"></i> TikTok Link</label>
+        <input type="text" name="contact_tiktok" value="{{ content.contact_tiktok if content else '' }}"
+            placeholder="https://tiktok.com/@..."
+            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
+
+        <label style="font-weight: bold; color: #555;"><i class="fas fa-map-marker-alt"></i> GPS / Google Maps
+            Link</label>
+        <input type="text" name="contact_gps" value="{{ content.contact_gps if content else '' }}"
+            placeholder="https://maps.google.com/..."
+            style="width:100%; margin-bottom:25px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
+
+        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
         <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Homepage Hero Text</h3>
 
         <label style="font-weight: bold; color: #555;">Hero Title (English) [Ex: WE ARE PHOTOGENIC]</label>
