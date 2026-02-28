@@ -34,7 +34,7 @@ body {
 /* Header and Navigation */
 header {
     background-color: var(--primary-blue);
-    padding: 1rem 0;
+    padding: 0.5rem 0;
     position: sticky;
     top: 0;
     width: 100%;
@@ -53,9 +53,9 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 90%;
+    width: 96%;
     margin: 0 auto;
-    max-width: 1400px;
+    max-width: 1600px;
     direction: ltr;
     /* Force layout to stay left-to-right */
 }
