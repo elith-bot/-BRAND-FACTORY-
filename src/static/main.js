@@ -25,24 +25,29 @@ document.addEventListener('DOMContentLoaded', () => {
     if (header) {
         let lastScrollTop = 0;
         const delta = 5; // Minimum scroll distance to trigger hide/show
+        let ticking = false;
 
         window.addEventListener('scroll', function () {
             let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-            // Make sure they scroll more than delta
-            if (Math.abs(lastScrollTop - scrollTop) <= delta) {
-                return;
+            if (!ticking) {
+                window.requestAnimationFrame(function () {
+                    // Make sure they scroll more than delta
+                    if (Math.abs(lastScrollTop - scrollTop) > delta) {
+                        // Downscroll
+                        if (scrollTop > lastScrollTop && scrollTop > header.offsetHeight) {
+                            header.classList.add('hidden');
+                        } else {
+                            // Upscroll or top of page
+                            header.classList.remove('hidden');
+                        }
+                        lastScrollTop = scrollTop;
+                    }
+                    ticking = false;
+                });
+                ticking = true;
             }
-
-            // Downscroll
-            if (scrollTop > lastScrollTop && scrollTop > header.offsetHeight) {
-                header.classList.add('hidden');
-            } else {
-                // Upscroll or top of page
-                header.classList.remove('hidden');
-            }
-            lastScrollTop = scrollTop;
-        }, false);
+        }, { passive: true });
     }
 
     // --- Smooth Scrolling for Anchors ---

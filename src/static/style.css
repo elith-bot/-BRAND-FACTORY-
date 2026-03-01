@@ -436,6 +436,23 @@ footer {
         font-size: 2.5rem;
     }
 
+    /* FIX FOR IOS ZOOM & ANDROID JANK */
+    #hero {
+        /* Prevents iOS from zooming the background massively */
+        /* Prevents Android from heavily lagging on scroll repaints */
+        background-attachment: scroll !important;
+        background-position: center center !important;
+    }
+
+    .section-content,
+    .project-detail-section,
+    #team-section,
+    #work-with-section {
+        /* Lighter blur on mobile to improve scrolling framerate on Android */
+        backdrop-filter: blur(8px);
+        padding: 1.5rem;
+    }
+
     .contact-buttons {
         flex-direction: column;
         align-items: center;
