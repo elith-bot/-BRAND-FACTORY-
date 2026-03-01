@@ -3,6 +3,7 @@ import shutil
 import time
 import uuid
 from flask import Flask, render_template, url_for, send_from_directory, session, redirect, request, g, Blueprint, flash
+from flask import Flask, render_template, url_for, send_from_directory, session, redirect, request, g, Blueprint, flash, send_file
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from werkzeug.utils import secure_filename
@@ -147,8 +148,19 @@ def set_lang(lang):
         session['lang'] = lang
     return redirect(request.referrer or url_for('index'))
 
+# --- 5. معالجة الملفات المرفوعة و التدفق المستمر ---
+@app.route('/static/uploads/<path:filename>')
+def serve_uploads(filename):
+    file_path = os.path.join(final_upload_path, filename)
+    if os.path.exists(file_path):
+        # Using conditional=True enables HTTP Range Requests (206 Partial Content)
+        # This is critical for mobile browsers to stream MP4 videos incrementally
+        # rather than downloading the entire file before playback.
+        max_age = 31536000 # 1 year cache for static media
+        return send_file(file_path, conditional=True, max_age=max_age)
+    else:
+        return "File not found", 404
 
-# --- 5. معالجة الملفات المرفوعة ---
 def process_any_file(file_data):
     filename = secure_filename(file_data.filename)
     if not filename: return None
