@@ -66,19 +66,17 @@ body::before {
    HEADER — Glassmorphism
 =========================== */
 header {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    width: 100%;
     z-index: 1000;
     background: rgba(10, 3, 26, 0.75);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     border-bottom: 1px solid var(--border-gold);
     box-shadow: 0 2px 20px rgba(107, 33, 200, 0.3);
-    transition: transform 0.4s ease;
-}
-
-header.hidden {
-    transform: translateY(-100%);
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.4s ease;
 }
 
 nav {
