@@ -1,8 +1,6 @@
 import os
 import shutil
 import time
-import uuid
-from flask import Flask, render_template, url_for, send_from_directory, session, redirect, request, g, Blueprint, flash
 from flask import Flask, render_template, url_for, send_from_directory, session, redirect, request, g, Blueprint, flash, send_file
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
@@ -33,7 +31,7 @@ def favicon():
 
 app.config.update(
     SQLALCHEMY_DATABASE_URI='sqlite:///' + db_path,
-    SECRET_KEY='photogenic-pro-key-99', # المستخدم في الجلسات وللأمان
+    SECRET_KEY='brand-factory-pro-key-2026', # المستخدم في الجلسات وللأمان
     SQLALCHEMY_TRACK_MODIFICATIONS=False
 )
 
@@ -139,14 +137,47 @@ def before_request():
 
 @app.context_processor
 def inject_global_data():
-    content = SiteContent.query.first()
-    return dict(lang=g.lang, global_site_content=content, cache_id=str(uuid.uuid4()))
+    # Cache SiteContent in g to avoid repeated DB queries per request
+    if not hasattr(g, '_site_content'):
+        g._site_content = SiteContent.query.first()
+    return dict(lang=g.lang, global_site_content=g._site_content, cache_id=app_version)
 
 @app.route('/set_lang/<lang>')
 def set_lang(lang):
     if lang in ['ar', 'en']:
         session['lang'] = lang
     return redirect(request.referrer or url_for('index'))
+
+# --- SEO: robots.txt & sitemap.xml ---
+@app.route('/robots.txt')
+def robots():
+    return send_from_directory(app.static_folder, 'robots.txt')
+
+@app.route('/sitemap.xml')
+def sitemap():
+    from flask import make_response
+    pages = []
+    # Static pages
+    for route in ['index', 'portfolio', 'team', 'learning']:
+        pages.append(url_for(route, _external=True))
+    # Dynamic project pages
+    for project in Project.query.all():
+        pages.append(url_for('project_detail', project_id=project.id, _external=True))
+    # Dynamic course pages
+    for course in Course.query.all():
+        pages.append(url_for('course_detail', course_id=course.id, _external=True))
+    
+    xml_urls = '\n'.join(
+        f'  <url><loc>{page}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>'
+        for page in pages
+    )
+    xml = f'''<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{xml_urls}
+</urlset>'''
+    response = make_response(xml)
+    response.headers['Content-Type'] = 'application/xml'
+    return response
 
 # --- 5. معالجة الملفات المرفوعة و التدفق المستمر ---
 @app.route('/static/uploads/<path:filename>')

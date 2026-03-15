@@ -4,16 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Dashboard{% endblock %} - PHOTOGENIC Admin</title>
+    <title>{% block title %}Dashboard{% endblock %} - BRAND FACTORY Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@300;400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-blue: #003366;
-            --accent-yellow: #FFD700;
+            --primary-blue: #6B21C8;
+            --accent-yellow: #FDCC04;
             --sidebar-width: 250px;
-            --bg-color: #f4f7f6;
+            --bg-color: #f4f0ff;
             --text-dark: #333;
         }
 
@@ -30,13 +30,13 @@
         /* Sidebar */
         .sidebar {
             width: var(--sidebar-width);
-            background-color: var(--primary-blue);
+            background: linear-gradient(180deg, #1a0533 0%, #2d0f5e 60%, #6B21C8 100%);
             color: white;
             position: fixed;
             height: 100%;
             display: flex;
             flex-direction: column;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 3px 0 15px rgba(107, 33, 200, 0.4);
         }
 
         .sidebar-header {
@@ -232,8 +232,8 @@
 
     <nav class="sidebar">
         <div class="sidebar-header">
-            <h2>PHOTOGENIC</h2>
-            <small style="color: #ccc;">Control Panel</small>
+            <h2>BRAND FACTORY</h2>
+            <small style="color: #FDCC04; font-weight: bold;">Control Panel</small>
         </div>
         <ul class="nav-items">
             <li><a href="{{ url_for('admin.dashboard') }}" class="{% block nav_dash %}{% endblock %}"><i

@@ -4,48 +4,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    <title>{{ 'Learning Courses' if lang == 'en' else 'الكورسات التعليمية' }} - PHOTOGENIG</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v={{ cache_id }}">
+
+    <!-- SEO -->
+    <title>{{ 'Learning Courses | BRAND FACTORY' if lang == 'en' else 'كورسات تعليمية | براند فاكتوري' }}</title>
+    <meta name="description"
+        content="{{ 'Learn photography, videography and creative skills with BRAND FACTORY professional courses.' if lang == 'en' else 'تعلم التصوير والفيديو مع كورسات براند فاكتوري الاحترافية.' }}">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="BRAND FACTORY | Courses">
+    <meta property="og:image" content="{{ url_for('static', filename='logo.png', _external=True) }}">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" sizes="256x256" type="image/x-icon">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo.png') }}" sizes="512x512">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}" sizes="180x180">
+    <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+    <meta name="theme-color" content="#6B21C8">
+
+    <!-- Fonts & Styles -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@300;400;700&display=swap"
         rel="stylesheet">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}?v=1.3" type="image/x-icon">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}?v=1.3" type="image/x-icon">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}?v=1.3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v={{ cache_id }}">
+    <style>
+        body {
+            background-color: {
+                    {
+                    global_site_content.bg_color if global_site_content and global_site_content.bg_color else '#0A0A0A'
+                }
+            }
+
+            ;
+        }
+    </style>
 </head>
 
-<body
-    style="background-color: {{ global_site_content.bg_color if global_site_content and global_site_content.bg_color else '#000000' }};">
+<body>
 
-
-
+    <!-- ========== HEADER ========== -->
     <header>
         <nav>
             <a href="{{ url_for('index') }}" class="logo">
-                {% if lang == 'en' %}
                 <div class="logo-icon"></div>
-                <span>PHOTOGENIC</span>
-                {% else %}
-                <span>PHOTOGENIC</span>
-                <div class="logo-icon"></div>
-                {% endif %}
+                <span>BRAND FACTORY</span>
             </a>
             <ul class="nav-links">
-                <li><a href="{{ url_for('index') }}#learning">{{ 'Learning' if lang == 'en' else 'التعليم' }}</a></li>
                 <li><a href="{{ url_for('index') }}#portfolio">{{ 'Work' if lang == 'en' else 'أعمالنا' }}</a></li>
+                <li><a href="{{ url_for('index') }}#learning">{{ 'Learning' if lang == 'en' else 'التعليم' }}</a></li>
                 <li><a href="{{ url_for('index') }}#about">{{ 'About' if lang == 'en' else 'من نحن' }}</a></li>
-                <li><a href="{{ url_for('index') }}#contact">{{ 'Contact' if lang == 'en' else 'تواصل معنا' }}</a></li>
+                <li><a href="{{ url_for('index') }}#contact">{{ 'Contact' if lang == 'en' else 'تواصل' }}</a></li>
                 <li>
                     <a href="{{ url_for('set_lang', lang='ar' if lang == 'en' else 'en') }}" class="lang-btn">
-                        {{ 'عربي' if lang == 'en' else 'English' }}
+                        <span>{{ 'ع' if lang == 'en' else 'EN' }}</span>
                     </a>
                 </li>
             </ul>
-            <div class="hamburger">
+            <div class="hamburger" id="hamburger" aria-label="Menu">
                 <div class="line"></div>
                 <div class="line"></div>
                 <div class="line"></div>
@@ -54,34 +75,37 @@
     </header>
 
     <main>
-        <section id="courses-section" data-aos="fade-up">
-            <div class="section-content">
-                <h2>{{ 'OUR COURSES' if lang == 'en' else 'كورساتنا التعليمية' }}</h2>
-                <p>{{ 'Learn from the best' if lang == 'en' else 'تعلم من الأفضل' }}</p>
+        <section id="courses-section" style="padding-top: 4rem;">
+            <div class="section-inner">
+                <div class="section-header" data-aos="fade-up">
+                    <h2 class="glowing-text">{{ 'OUR COURSES' if lang == 'en' else 'كورساتنا التعليمية' }}</h2>
+                    <p class="section-subtitle">{{ 'Learn photography and videography from the best' if lang == 'en'
+                        else 'تعلم التصوير والفيديو من الأفضل' }}</p>
+                </div>
 
-                <div class="portfolio-grid-full">
+                <div class="courses-grid" style="margin-bottom: 3rem;">
                     {% for course in courses %}
-                    <a href="{{ url_for('course_detail', course_id=course.id) }}"
-                        style="text-decoration: none; color: inherit;">
-                        <div class="portfolio-item" data-aos="zoom-in">
-                            <img src="{{ url_for('static', filename='uploads/' + course.thumbnail) if course.thumbnail else 'https://via.placeholder.com/400x300' }}"
-                                alt="{{ course.title_en if lang == 'en' else course.title_ar }}" loading="lazy"
-                                style="width: 100%; display: block;">
-                            <div class="portfolio-overlay">
-                                <h3 style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{
-                                    course.title_en if lang == 'en' else course.title_ar }}</h3>
-                                <p
-                                    style="max-height: 4.5em; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical;">
-                                    {{ course.description_en if lang == 'en' else course.description_ar }}</p>
-                            </div>
+                    <a href="{{ url_for('course_detail', course_id=course.id) }}" class="course-card" data-aos="fade-up"
+                        data-aos-delay="{{ loop.index0 * 80 }}">
+                        <img class="course-card-img"
+                            src="{{ url_for('static', filename='uploads/' + (course.thumbnail or 'placeholder.png')) }}"
+                            alt="{{ course.title_en if lang == 'en' else course.title_ar }}" loading="lazy">
+                        <div class="course-card-body">
+                            <span class="course-badge">{{ 'Course' if lang == 'en' else 'كورس' }}</span>
+                            <h3 class="course-title">{{ course.title_en if lang == 'en' else course.title_ar }}</h3>
+                            <p class="course-desc">{{ (course.description_en if lang == 'en' else
+                                course.description_ar)|striptags|truncate(120) if (course.description_en or
+                                course.description_ar) else '' }}</p>
                         </div>
                     </a>
                     {% else %}
-                    <p>{{ 'No courses to display yet.' if lang == 'en' else 'لا توجد كورسات للعرض بعد.' }}</p>
+                    <p style="color:var(--text-muted); text-align:center; grid-column:1/-1;">
+                        {{ 'No courses to display yet.' if lang == 'en' else 'لا توجد كورسات للعرض بعد.' }}
+                    </p>
                     {% endfor %}
                 </div>
 
-                <div class="view-all-wrapper" data-aos="fade-up" style="margin-top: 40px;">
+                <div class="view-all-wrapper" data-aos="fade-up">
                     <a href="{{ url_for('index') }}" class="cta-button">{{ 'Back to Home' if lang == 'en' else 'العودة
                         للرئيسية' }}</a>
                 </div>
@@ -89,24 +113,66 @@
         </section>
     </main>
 
+    <!-- ========== FOOTER ========== -->
     <footer>
-        <p>&copy; 2024 PHOTOGENIC. {{ 'All rights reserved.' if lang == 'en' else 'جميع الحقوق محفوظة.' }}</p>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="{{ url_for('index') }}" class="logo">
+                    <div class="logo-icon"></div>
+                    <span>BRAND FACTORY</span>
+                </a>
+                <p style="margin-top:1rem;">{{ 'Professional photography, videography & branding services.' if lang ==
+                    'en' else 'خدمات تصوير وفيديو وبراندينج احترافية.' }}</p>
+                <div class="footer-socials" style="margin-top:1.2rem;">
+                    <a href="{{ site_content.contact_facebook if site_content and site_content.contact_facebook else '#' }}"
+                        target="_blank" class="footer-social-btn"><i class="fab fa-facebook-f"></i></a>
+                    <a href="{{ site_content.contact_instagram if site_content and site_content.contact_instagram else '#' }}"
+                        target="_blank" class="footer-social-btn"><i class="fab fa-instagram"></i></a>
+                    <a href="{{ site_content.contact_tiktok if site_content and site_content.contact_tiktok else '#' }}"
+                        target="_blank" class="footer-social-btn"><i class="fab fa-tiktok"></i></a>
+                    <a href="{{ ('https://wa.me/' + site_content.contact_whatsapp.replace('+','').replace(' ','')) if site_content and site_content.contact_whatsapp else '#' }}"
+                        target="_blank" class="footer-social-btn"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>{{ 'Pages' if lang == 'en' else 'الصفحات' }}</h4>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">{{ 'Home' if lang == 'en' else 'الرئيسية' }}</a></li>
+                    <li><a href="{{ url_for('portfolio') }}">{{ 'Portfolio' if lang == 'en' else 'الأعمال' }}</a></li>
+                    <li><a href="{{ url_for('team') }}">{{ 'Team' if lang == 'en' else 'الفريق' }}</a></li>
+                    <li><a href="{{ url_for('learning') }}">{{ 'Courses' if lang == 'en' else 'الكورسات' }}</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>{{ 'Contact' if lang == 'en' else 'التواصل' }}</h4>
+                <ul>
+                    <li><a
+                            href="mailto:{{ site_content.contact_email if site_content and site_content.contact_email else 'photogenic2026@gmail.com' }}">{{
+                            'Email Us' if lang == 'en' else 'راسلنا' }}</a></li>
+                    <li><a
+                            href="tel:{{ site_content.contact_phone if site_content and site_content.contact_phone else '07813886233' }}">{{
+                            'Call Us' if lang == 'en' else 'اتصل بنا' }}</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            &copy; 2026 BRAND FACTORY. {{ 'All rights reserved.' if lang == 'en' else 'جميع الحقوق محفوظة.' }}
+        </div>
     </footer>
 
-    <!-- زر اتصل بنا العائم -->
-    <a href="{{ url_for('index') }}#contact" class="floating-contact-btn" title="Contact Us">
-        <span>{{ 'Contact Us' if lang == 'en' else 'اتصل بنا' }}</span>
+    <!-- Floating Contact Button -->
+    <a href="{{ url_for('index') }}#contact" class="floating-contact-btn">
+        {{ 'Contact Us' if lang == 'en' else 'اتصل بنا' }}
     </a>
 
+    <!-- Scripts -->
     <script src="{{ url_for('static', filename='main.js') }}?v={{ cache_id }}"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
     <script>
-        AOS.init({
-            duration: 800,
-            once: false,
-        });
-
+        AOS.init({ duration: 700, once: false, offset: 60 });
     </script>
 </body>
 

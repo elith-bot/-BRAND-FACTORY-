@@ -1,38 +1,55 @@
 <!DOCTYPE html>
-
-
-
-
-
-
 <html lang="{{ lang }}" dir="{{ 'rtl' if lang == 'ar' else 'ltr' }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    <title>PHOTOGENIG | Creative Solutions</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v={{ cache_id }}">
+
+    <!-- SEO -->
+    <title>{% if lang == 'en' %}BRAND FACTORY | Creative Visual Solutions{% else %}براند فاكتوري | حلول بصرية إبداعية{%
+        endif %}</title>
+    <meta name="description"
+        content="{% if lang == 'en' %}BRAND FACTORY offers professional photography, videography, branding, and creative media services.{% else %}براند فاكتوري تقدم خدمات التصوير الفوتوغرافي، الفيديو، وبناء الهوية البصرية.{% endif %}">
+    <meta name="keywords" content="brand factory, photography, videography, branding, براند فاكتوري, تصوير, فيديو">
+    <meta name="author" content="BRAND FACTORY">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="BRAND FACTORY | Creative Visual Solutions">
+    <meta property="og:description" content="Professional photography, videography & branding.">
+    <meta property="og:image" content="{{ url_for('static', filename='logo.png', _external=True) }}">
+    <meta property="og:locale" content="{{ 'ar_IQ' if lang == 'ar' else 'en_US' }}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="BRAND FACTORY">
+    <meta name="twitter:image" content="{{ url_for('static', filename='logo.png', _external=True) }}">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" sizes="256x256" type="image/x-icon">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo.png') }}" sizes="512x512">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}" sizes="180x180">
+    <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+    <meta name="theme-color" content="#6B21C8">
+
+    <!-- Fonts & Styles -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@300;400;700&display=swap"
         rel="stylesheet">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}?v=1.3" type="image/x-icon">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}?v=1.3" type="image/x-icon">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}?v=1.3">
-    <!-- FontAwesome Library for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Swiper CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <!-- AOS Animation Library CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v={{ cache_id }}">
+    <link rel="preload" href="{{ url_for('static', filename='logo.png') }}" as="image">
     <style>
         body {
             background-color: {
                     {
-                    global_site_content.bg_color if global_site_content and global_site_content.bg_color else '#000000'
+                    global_site_content.bg_color if global_site_content and global_site_content.bg_color else '#0A0A0A'
                 }
             }
 
@@ -43,32 +60,25 @@
 
 <body>
 
-
-
+    <!-- ========== HEADER ========== -->
     <header>
         <nav>
             <a href="{{ url_for('index') }}" class="logo">
-                {% if lang == 'en' %}
                 <div class="logo-icon"></div>
-                <span>PHOTOGENIC</span>
-                {% else %}
-                <div class="logo-icon"></div>
-                <span>PHOTOGENIC</span>
-                {% endif %}
+                <span>BRAND FACTORY</span>
             </a>
             <ul class="nav-links">
-                <li><a href="#learning">{{ 'Learning' if lang == 'en' else 'التعليم' }}</a></li>
                 <li><a href="#portfolio">{{ 'Work' if lang == 'en' else 'أعمالنا' }}</a></li>
+                <li><a href="#learning">{{ 'Learning' if lang == 'en' else 'التعليم' }}</a></li>
                 <li><a href="#about">{{ 'About' if lang == 'en' else 'من نحن' }}</a></li>
-                <li><a href="#contact">{{ 'Contact' if lang == 'en' else 'تواصل معنا' }}</a></li>
+                <li><a href="#contact">{{ 'Contact' if lang == 'en' else 'تواصل' }}</a></li>
                 <li>
                     <a href="{{ url_for('set_lang', lang='ar' if lang == 'en' else 'en') }}" class="lang-btn">
-                        <span style="border:1px solid #FFD700; padding: 3px 8px; border-radius: 5px;">{{ 'ع' if lang ==
-                            'en' else 'EN' }}</span>
+                        <span>{{ 'ع' if lang == 'en' else 'EN' }}</span>
                     </a>
                 </li>
             </ul>
-            <div class="hamburger">
+            <div class="hamburger" id="hamburger" aria-label="Menu">
                 <div class="line"></div>
                 <div class="line"></div>
                 <div class="line"></div>
@@ -77,207 +87,292 @@
     </header>
 
     <main>
-        <main>
-            <section id="hero"
-                style="background: linear-gradient(rgba(6, 11, 82, 0.7), rgba(0, 0, 0, 0.9)), url('{{ url_for('static', filename='uploads/' + site_content.hero_bg_media) if site_content and site_content.hero_bg_media else url_for('static', filename='images/hero_photography_bg.jpg') }}') center / cover no-repeat; background-attachment: fixed;">
-                <div class="hero-content" data-aos="zoom-in">
+
+        <!-- ========== HERO ========== -->
+        <section id="hero">
+            <!-- Background image overlay -->
+            <div class="hero-bg"
+                style="background-image: url('{{ url_for('static', filename='uploads/' + site_content.hero_bg_media) if site_content and site_content.hero_bg_media else url_for('static', filename='images/hero_photography_bg.jpg') }}');">
+            </div>
+
+            <div class="hero-wrapper">
+                <div class="hero-text" data-aos="fade-right">
+                    <span class="hero-tag">✦ {{ 'Creative Media Agency' if lang == 'en' else 'وكالة إبداعية' }}</span>
+
                     {% if site_content and (site_content.hero_title_en or site_content.hero_title_ar) %}
-                    <h1 class="glowing-text" style="color:white; font-family: 'Anton', sans-serif;">{{
-                        site_content.hero_title_en if lang ==
-                        'en'
-                        else site_content.hero_title_ar }}</h1>
+                    <h1 class="glowing-text">{{ site_content.hero_title_en if lang == 'en' else
+                        site_content.hero_title_ar }}</h1>
                     <p>{{ site_content.hero_subtitle_en if lang == 'en' else site_content.hero_subtitle_ar }}</p>
                     {% else %}
-                    <h1 class="glowing-text">{{ 'WE ARE' if lang == 'en' else 'نحن' }} <span
-                            style="color: #FFD700;">PHOTOGENIC</span></h1>
-                    <p>{{ 'Coding Your Vision into Reality' if lang == 'en' else 'نصنع رؤيتك إلى واقع' }}</p>
+                    <h1 class="glowing-text">
+                        {{ 'WE ARE' if lang == 'en' else 'نحن' }}<br>
+                        <span class="brand-gradient">BRAND FACTORY</span>
+                    </h1>
+                    <p>{{ 'Crafting your vision into stunning visual reality.' if lang == 'en' else 'نحوّل رؤيتك إلى
+                        واقع بصري مبهر.' }}</p>
                     {% endif %}
-                    <a href="#portfolio" class="cta-button">{{ 'See Our Projects' if lang == 'en' else 'شاهد مشاريعنا'
-                        }}</a>
-                </div>
-            </section>
 
-            <section id="about" data-aos="fade-up">
-                <div class="section-content about-content">
-                    <h2 class="glowing-text">{{ 'ABOUT US' if lang == 'en' else 'من نحن' }}</h2>
-                    <p>{{ (site_content.about_us_en if lang == 'en' else site_content.about_us_ar) if site_content else
-                        ("We
-                        are a team of developers and creatives tailored to bring your digital dreams to life." if lang
-                        ==
-                        'en' else "نحن فريق من المطورين والمبدعين مصممون لتحويل أحلامك الرقمية إلى حقيقة.") }}</p>
-                    <div class="view-all-wrapper" data-aos="fade-up" style="margin-top: 20px;">
-                        <a href="{{ url_for('team') }}" class="cta-button">{{ 'Our Team' if lang == 'en' else 'فريق
-                            العمل'
+                    <div class="hero-buttons">
+                        <a href="#portfolio" class="cta-button">{{ 'Our Work' if lang == 'en' else 'شاهد أعمالنا' }}</a>
+                        <a href="#contact" class="cta-button-outline">{{ 'Contact Us' if lang == 'en' else 'تواصل معنا'
                             }}</a>
                     </div>
                 </div>
-            </section>
 
-            <section id="portfolio" data-aos="fade-up">
-                <div class="section-content">
+                <div class="hero-visual" data-aos="fade-left">
+                    <div class="hero-logo-big"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== PORTFOLIO ========== -->
+        <section id="portfolio">
+            <div class="section-inner">
+                <div class="section-header" data-aos="fade-up">
                     <h2 class="glowing-text">{{ 'OUR LATEST WORK' if lang == 'en' else 'أحدث أعمالنا' }}</h2>
-                    <div class="swiper mySwiper">
-                        <div class="swiper-wrapper">
-                            {% for project in projects %}
-                            <div class="swiper-slide" data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 150 }}">
-                                <a href="{{ url_for('project_detail', project_id=project.id) }}"
-                                    style="display: block; width: 100%;">
-                                    <div class="portfolio-item">
-                                        {% if project.cover_media_type == 'video' %}
-                                        <video src="{{ url_for('static', filename='uploads/' + project.cover_media) }}"
-                                            loading="lazy" muted playsinline loop
-                                            style="object-fit:cover; width:100%; height:100%;" onmouseover="this.play()"
-                                            onmouseout="this.pause()"></video>
-                                        {% else %}
-                                        <img src="{{ url_for('static', filename='uploads/' + (project.cover_media or 'placeholder.png')) }}"
-                                            alt="{{ project.title_en if lang == 'en' else project.title_ar }}"
-                                            loading="lazy">
-                                        {% endif %}
-                                        <span class="portfolio-text">{{ project.title_en if lang == 'en' else
-                                            project.title_ar
-                                            }}</span>
-                                    </div>
-                                </a>
-                            </div>
-                            {% else %}
-                            <div class="swiper-slide">
-                                <p>{{ 'No projects to display yet.' if lang == 'en' else 'لا توجد مشاريع للعرض بعد.' }}
-                                </p>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        <div class="swiper-button-next" style="color: var(--accent-yellow);"></div>
-                        <div class="swiper-button-prev" style="color: var(--accent-yellow);"></div>
-                        <div class="swiper-pagination"></div>
-                    </div>
-                    <div class="view-all-wrapper" data-aos="fade-up">
-                        <a href="{{ url_for('portfolio') }}" class="cta-button">{{ 'View All Work' if lang == 'en' else
-                            'شاهد جميع الأعمال' }}</a>
-                    </div>
+                    <p class="section-subtitle">{{ 'A selection of our finest creative projects.' if lang == 'en' else
+                        'مختارات من أفضل مشاريعنا الإبداعية.' }}</p>
                 </div>
-            </section>
 
-            <section id="learning" data-aos="fade-up">
-                <div class="section-content">
-                    <h2 class="glowing-text">{{ 'COURSES' if lang == 'en' else 'الكورسات التعليمية' }}</h2>
-                    <p>{{ 'Learn from the best' if lang == 'en' else 'تعلم من الأفضل' }}</p>
-                    <div class="swiper mySwiper">
-                        <div class="swiper-wrapper">
-                            {% for course in courses %}
-                            <div class="swiper-slide" data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 150 }}">
-                                <a href="{{ url_for('course_detail', course_id=course.id) }}"
-                                    style="display: block; width: 100%;">
-                                    <div class="portfolio-item">
-                                        {% if course.cover_media_type == 'video' %}
-                                        <video src="{{ url_for('static', filename='uploads/' + course.cover_media) }}"
-                                            loading="lazy" style="object-fit:cover; width:100%; height:100%;"></video>
-                                        {% else %}
-                                        <img src="{{ url_for('static', filename='uploads/' + (course.cover_media or 'placeholder.png')) }}"
-                                            alt="{{ course.title_en if lang == 'en' else course.title_ar }}"
-                                            loading="lazy">
-                                        {% endif %}
-                                        <span class="portfolio-text">{{ course.title_en if lang == 'en' else
-                                            course.title_ar
-                                            }}</span>
-                                    </div>
-                                </a>
-                            </div>
-                            {% else %}
-                            <div class="swiper-slide">
-                                <p>{{ 'No courses to display yet.' if lang == 'en' else 'لا توجد كورسات للعرض بعد.' }}
-                                </p>
-                            </div>
-                            {% endfor %}
+                <div class="portfolio-grid">
+                    {% for project in projects %}
+                    <a href="{{ url_for('project_detail', project_id=project.id) }}" class="portfolio-card"
+                        data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 80 }}">
+                        {% if project.cover_media_type == 'video' %}
+                        <video src="{{ url_for('static', filename='uploads/' + project.cover_media) }}" loading="lazy"
+                            muted playsinline loop onmouseover="this.play()" onmouseout="this.pause()"></video>
+                        {% else %}
+                        <img src="{{ url_for('static', filename='uploads/' + (project.cover_media or 'placeholder.png')) }}"
+                            alt="{{ project.title_en if lang == 'en' else project.title_ar }}" loading="lazy">
+                        {% endif %}
+                        <div class="portfolio-overlay">
+                            <span class="portfolio-title">{{ project.title_en if lang == 'en' else project.title_ar
+                                }}</span>
                         </div>
-                        <div class="swiper-button-next" style="color: var(--accent-yellow);"></div>
-                        <div class="swiper-button-prev" style="color: var(--accent-yellow);"></div>
-                        <div class="swiper-pagination"></div>
-                    </div>
-                    <div class="view-all-wrapper" data-aos="fade-up">
-                        <a href="{{ url_for('learning') }}" class="cta-button">{{ 'View All Courses' if lang == 'en'
-                            else
-                            'عرض كل الكورسات' }}</a>
-                    </div>
-                </div>
-            </section>
-
-            <section id="contact" data-aos="fade-up">
-                <div class="section-content">
-                    <h2 class="glowing-text">{{ 'GET IN TOUCH' if lang == 'en' else 'تواصل معنا' }}</h2>
-                    <p>{{ (site_content.contact_info_en if lang == 'en' else site_content.contact_info_ar) if
-                        site_content
-                        else ("Ready to start your project? Contact us today." if lang == 'en' else "جاهز للبدء في
-                        مشروعك؟
-                        تواصل معنا اليوم.") }}
+                    </a>
+                    {% else %}
+                    <p style="color:var(--text-muted); text-align:center; grid-column:1/-1;">
+                        {{ 'No projects yet.' if lang == 'en' else 'لا توجد مشاريع بعد.' }}
                     </p>
-                    <div class="contact-buttons">
-                        <a href="mailto:{{ site_content.contact_email if site_content and site_content.contact_email else 'photogenic2026@gmail.com' }}"
-                            class="cta-button">{{ 'Email Us' if lang == 'en' else
-                            'راسلنا' }}</a>
-                        <a href="tel:{{ site_content.contact_phone if site_content and site_content.contact_phone else '07813886233' }}"
-                            class="cta-button">{{ 'Call Us' if lang == 'en' else 'اتصل بنا'
-                            }}</a>
+                    {% endfor %}
+                </div>
+
+                <div class="view-all-wrapper" data-aos="fade-up">
+                    <a href="{{ url_for('portfolio') }}" class="cta-button">{{ 'View All Work' if lang == 'en' else
+                        'شاهد جميع الأعمال' }}</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== ABOUT ========== -->
+        <section id="about">
+            <div class="section-inner">
+                <div class="section-header" data-aos="fade-up">
+                    <h2 class="glowing-text">{{ 'ABOUT US' if lang == 'en' else 'من نحن' }}</h2>
+                </div>
+
+                <div class="about-grid">
+                    <div class="about-text" data-aos="fade-right">
+                        <p>{{ (site_content.about_us_en if lang == 'en' else site_content.about_us_ar) if site_content
+                            else
+                            ('We are a passionate team of photographers, videographers, and brand builders dedicated to
+                            transforming your ideas into unforgettable visual experiences.' if lang == 'en' else
+                            'نحن فريق شغوف من المصورين ومنتجي الفيديو وبناة العلامات التجارية، نحوّل أفكارك إلى تجارب
+                            بصرية لا تُنسى.') }}</p>
+                        <a href="{{ url_for('team') }}" class="cta-button">{{ 'Meet Our Team' if lang == 'en' else 'تعرف
+                            على فريقنا' }}</a>
                     </div>
 
-                    <div class="social-icons-row"
-                        style="margin-top: 25px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                        <!-- GPS / Location -->
-                        <a href="{{ site_content.contact_gps if site_content and site_content.contact_gps else 'https://maps.google.com' }}"
-                            target="_blank" class="contact-icon-btn" title="Location"><i
-                                class="fas fa-map-marker-alt"></i></a>
-
-                        <!-- Socials -->
-                        <a href="{{ site_content.contact_facebook if site_content and site_content.contact_facebook else 'https://www.facebook.com/share/1DgECZfEpi/?mibextid=wwXIfr' }}"
-                            target="_blank" class="contact-icon-btn" title="Facebook"><i
-                                class="fab fa-facebook-f"></i></a>
-
-                        <a href="{{ site_content.contact_instagram if site_content and site_content.contact_instagram else 'https://www.instagram.com/photo_s_genic/' }}"
-                            target="_blank" class="contact-icon-btn" title="Instagram"><i
-                                class="fab fa-instagram"></i></a>
-
-                        <a href="{{ site_content.contact_tiktok if site_content and site_content.contact_tiktok else 'https://www.tiktok.com/@photoganic?_r=1&_t=ZS-94GYIPBvkjk' }}"
-                            target="_blank" class="contact-icon-btn" title="TikTok"><i class="fab fa-tiktok"></i></a>
-
-                        <a href="{{ ('https://wa.me/' + site_content.contact_whatsapp.replace('+', '').replace(' ', '')) if site_content and site_content.contact_whatsapp else 'https://wa.me/9647813886233' }}"
-                            target="_blank" class="contact-icon-btn" title="WhatsApp"><i
-                                class="fab fa-whatsapp"></i></a>
-
-                        <!-- Telegram Formatted Icon -->
-                        <a href="{{ site_content.contact_telegram if site_content and site_content.contact_telegram else 'https://t.me/username' }}"
-                            target="_blank" class="contact-icon-btn" title="Telegram"><i
-                                class="fab fa-telegram-plane"></i></a>
+                    <div class="about-stats" data-aos="fade-left">
+                        <div class="stat-card">
+                            <span class="stat-number">50+</span>
+                            <span class="stat-label">{{ 'Projects Done' if lang == 'en' else 'مشروع منجز' }}</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">3+</span>
+                            <span class="stat-label">{{ 'Years Experience' if lang == 'en' else 'سنوات خبرة' }}</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">100%</span>
+                            <span class="stat-label">{{ 'Client Satisfaction' if lang == 'en' else 'رضا العملاء'
+                                }}</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">20+</span>
+                            <span class="stat-label">{{ 'Happy Clients' if lang == 'en' else 'عميل سعيد' }}</span>
+                        </div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-        </main>
+        <!-- ========== LEARNING ========== -->
+        <section id="learning">
+            <div class="section-inner">
+                <div class="section-header" data-aos="fade-up">
+                    <h2 class="glowing-text">{{ 'COURSES' if lang == 'en' else 'الكورسات التعليمية' }}</h2>
+                    <p class="section-subtitle">{{ 'Learn photography & videography from the best.' if lang == 'en' else
+                        'تعلم التصوير والفيديو من الأفضل.' }}</p>
+                </div>
 
-        <footer>
-            <p>&copy; 2024 PHOTOGENIC. {{ 'All rights reserved.' if lang == 'en' else 'جميع الحقوق محفوظة.' }}</p>
-        </footer>
+                <div class="courses-grid">
+                    {% for course in courses %}
+                    <a href="{{ url_for('course_detail', course_id=course.id) }}" class="course-card" data-aos="fade-up"
+                        data-aos-delay="{{ loop.index0 * 80 }}">
+                        {% if course.cover_media_type == 'video' %}
+                        <video class="course-card-img"
+                            src="{{ url_for('static', filename='uploads/' + course.cover_media) }}" loading="lazy"
+                            muted></video>
+                        {% else %}
+                        <img class="course-card-img"
+                            src="{{ url_for('static', filename='uploads/' + (course.cover_media or 'placeholder.png')) }}"
+                            alt="{{ course.title_en if lang == 'en' else course.title_ar }}" loading="lazy">
+                        {% endif %}
+                        <div class="course-card-body">
+                            <span class="course-badge">{{ 'New' if lang == 'en' else 'جديد' }}</span>
+                            <h3 class="course-title">{{ course.title_en if lang == 'en' else course.title_ar }}</h3>
+                            <p class="course-desc">{{ (course.description_en if lang == 'en' else
+                                course.description_ar)|striptags|truncate(90) if (course.description_en or
+                                course.description_ar) else '' }}</p>
+                        </div>
+                    </a>
+                    {% else %}
+                    <p style="color:var(--text-muted); text-align:center; grid-column:1/-1;">
+                        {{ 'No courses yet.' if lang == 'en' else 'لا توجد كورسات بعد.' }}
+                    </p>
+                    {% endfor %}
+                </div>
 
-        <!-- زر اتصل بنا العائم -->
-        <a href="#contact" class="floating-contact-btn" title="Contact Us">
-            <span>{{ 'Contact Us' if lang == 'en' else 'اتصل بنا' }}</span>
-        </a>
+                <div class="view-all-wrapper" data-aos="fade-up">
+                    <a href="{{ url_for('learning') }}" class="cta-button">{{ 'View All Courses' if lang == 'en' else
+                        'عرض كل الكورسات' }}</a>
+                </div>
+            </div>
+        </section>
 
-        <!-- Swiper JS CDN -->
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        <!-- ========== CONTACT ========== -->
+        <section id="contact">
+            <div class="section-inner">
+                <div class="section-header" data-aos="fade-up">
+                    <h2 class="glowing-text">{{ 'GET IN TOUCH' if lang == 'en' else 'تواصل معنا' }}</h2>
+                    <p class="section-subtitle">
+                        {{ (site_content.contact_info_en if lang == 'en' else site_content.contact_info_ar) if
+                        site_content
+                        else ('Ready to start your project? We would love to hear from you.' if lang == 'en'
+                        else 'جاهز لبدء مشروعك؟ يسعدنا سماعك.') }}
+                    </p>
+                </div>
 
-        <script src="{{ url_for('static', filename='main.js') }}?v={{ cache_id }}"></script>
-        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+                <!-- Three Contact Cards -->
+                <div class="contact-cards" data-aos="fade-up">
+                    <a href="mailto:{{ site_content.contact_email if site_content and site_content.contact_email else 'photogenic2026@gmail.com' }}"
+                        class="contact-card">
+                        <div class="contact-card-icon"><i class="fas fa-envelope"></i></div>
+                        <span class="contact-card-label">{{ 'Email' if lang == 'en' else 'البريد' }}</span>
+                        <span class="contact-card-value">{{ site_content.contact_email if site_content and
+                            site_content.contact_email else 'photogenic2026@gmail.com' }}</span>
+                    </a>
 
-        <script>
-            // تفعيل مكتبة الأنيميشن عند السكرول
-            AOS.init({
-                duration: 800,
-                once: false,
-            });
+                    <a href="tel:{{ site_content.contact_phone if site_content and site_content.contact_phone else '07813886233' }}"
+                        class="contact-card">
+                        <div class="contact-card-icon"><i class="fas fa-phone"></i></div>
+                        <span class="contact-card-label">{{ 'Phone' if lang == 'en' else 'الهاتف' }}</span>
+                        <span class="contact-card-value">{{ site_content.contact_phone if site_content and
+                            site_content.contact_phone else '07813886233' }}</span>
+                    </a>
 
-        </script>
+                    <a href="{{ site_content.contact_gps if site_content and site_content.contact_gps else 'https://maps.google.com' }}"
+                        target="_blank" class="contact-card">
+                        <div class="contact-card-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <span class="contact-card-label">{{ 'Location' if lang == 'en' else 'الموقع' }}</span>
+                        <span class="contact-card-value">{{ 'Find Us on Map' if lang == 'en' else 'اعثر علينا في
+                            الخريطة' }}</span>
+                    </a>
+                </div>
+
+                <!-- Social Icons -->
+                <div class="social-icons-row" data-aos="fade-up">
+                    <a href="{{ site_content.contact_facebook if site_content and site_content.contact_facebook else 'https://www.facebook.com/share/1DgECZfEpi/?mibextid=wwXIfr' }}"
+                        target="_blank" class="contact-icon-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="{{ site_content.contact_instagram if site_content and site_content.contact_instagram else 'https://www.instagram.com/photo_s_genic/' }}"
+                        target="_blank" class="contact-icon-btn" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="{{ site_content.contact_tiktok if site_content and site_content.contact_tiktok else 'https://www.tiktok.com/@photoganic' }}"
+                        target="_blank" class="contact-icon-btn" title="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a href="{{ ('https://wa.me/' + site_content.contact_whatsapp.replace('+','').replace(' ','')) if site_content and site_content.contact_whatsapp else 'https://wa.me/9647813886233' }}"
+                        target="_blank" class="contact-icon-btn" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="{{ site_content.contact_telegram if site_content and site_content.contact_telegram else 'https://t.me/username' }}"
+                        target="_blank" class="contact-icon-btn" title="Telegram"><i
+                            class="fab fa-telegram-plane"></i></a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="{{ url_for('index') }}" class="logo">
+                    <div class="logo-icon"></div>
+                    <span>BRAND FACTORY</span>
+                </a>
+                <p style="margin-top:1rem;">{{ 'Professional photography, videography & branding services.' if lang ==
+                    'en' else 'خدمات تصوير وفيديو وبراندينج احترافية.' }}</p>
+                <div class="footer-socials" style="margin-top:1.2rem;">
+                    <a href="{{ site_content.contact_facebook if site_content and site_content.contact_facebook else '#' }}"
+                        target="_blank" class="footer-social-btn"><i class="fab fa-facebook-f"></i></a>
+                    <a href="{{ site_content.contact_instagram if site_content and site_content.contact_instagram else '#' }}"
+                        target="_blank" class="footer-social-btn"><i class="fab fa-instagram"></i></a>
+                    <a href="{{ site_content.contact_tiktok if site_content and site_content.contact_tiktok else '#' }}"
+                        target="_blank" class="footer-social-btn"><i class="fab fa-tiktok"></i></a>
+                    <a href="{{ ('https://wa.me/' + site_content.contact_whatsapp.replace('+','').replace(' ','')) if site_content and site_content.contact_whatsapp else '#' }}"
+                        target="_blank" class="footer-social-btn"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>{{ 'Pages' if lang == 'en' else 'الصفحات' }}</h4>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">{{ 'Home' if lang == 'en' else 'الرئيسية' }}</a></li>
+                    <li><a href="{{ url_for('portfolio') }}">{{ 'Portfolio' if lang == 'en' else 'الأعمال' }}</a></li>
+                    <li><a href="{{ url_for('team') }}">{{ 'Team' if lang == 'en' else 'الفريق' }}</a></li>
+                    <li><a href="{{ url_for('learning') }}">{{ 'Courses' if lang == 'en' else 'الكورسات' }}</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>{{ 'Contact' if lang == 'en' else 'التواصل' }}</h4>
+                <ul>
+                    <li><a
+                            href="mailto:{{ site_content.contact_email if site_content and site_content.contact_email else 'photogenic2026@gmail.com' }}">{{
+                            'Email Us' if lang == 'en' else 'راسلنا' }}</a></li>
+                    <li><a
+                            href="tel:{{ site_content.contact_phone if site_content and site_content.contact_phone else '07813886233' }}">{{
+                            'Call Us' if lang == 'en' else 'اتصل بنا' }}</a></li>
+                    <li><a href="{{ site_content.contact_gps if site_content and site_content.contact_gps else '#' }}"
+                            target="_blank">{{ 'Find Us' if lang == 'en' else 'موقعنا' }}</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            &copy; 2026 BRAND FACTORY. {{ 'All rights reserved.' if lang == 'en' else 'جميع الحقوق محفوظة.' }}
+        </div>
+    </footer>
+
+    <!-- Floating Contact Button -->
+    <a href="#contact" class="floating-contact-btn">
+        {{ 'Contact Us' if lang == 'en' else 'اتصل بنا' }}
+    </a>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='main.js') }}?v={{ cache_id }}"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 700, once: false, offset: 60 });
+    </script>
 </body>
-
-
-
 
 </html>

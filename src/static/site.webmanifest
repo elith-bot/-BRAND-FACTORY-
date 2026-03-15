@@ -1,0 +1,23 @@
+  {
+    "name": "BRAND FACTORY",
+    "short_name": "BRAND FACTORY",
+    "description": "Creative Visual Solutions - Photography, Videography & Branding",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0A0A0A",
+    "theme_color": "#6B21C8",
+    "icons": [
+      {
+        "src": "/static/logo.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/static/logo.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "any maskable"
+      }
+    ]
+  }
