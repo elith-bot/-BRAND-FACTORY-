@@ -64,8 +64,8 @@
 
         .section-bridge {
             background: linear-gradient(to bottom, 
-                {{ global_site_content.hero_bg_color if global_site_content.hero_bg_type == 'color' else '#1a0533' }}, 
-                {{ global_site_content.section2_bg_color if global_site_content.section2_bg_type == 'color' else '#FDCC04' }}
+                var(--bridge-from, #1a0533), 
+                var(--bridge-to, #FDCC04)
             );
         }
     </style>
@@ -144,20 +144,17 @@
             </div>
         </section>
 
-        <!-- ========== BRIDGE ========== -->
-        <div class="section-bridge"></div>
+        <!-- ========== BRIDGE HERO-PORTFOLIO ========== -->
+        <div class="section-bridge" style="--bridge-from: {{ global_site_content.hero_bg_color if global_site_content.hero_bg_type == 'color' else '#1a0533' }}; --bridge-to: {{ global_site_content.section2_bg_color if global_site_content.section2_bg_type == 'color' else '#FDCC04' }};"></div>
 
         <!-- ========== PORTFOLIO ========== -->
-        <section id="portfolio" class="{{ 'light-bg' if not global_site_content or global_site_content.section2_bg_type == 'color' or global_site_content.section2_bg_type == 'image' else '' }}">
-            <!-- Optional Background for Section 2 -->
+        <section id="portfolio" class="{{ 'light-bg' if not global_site_content or global_site_content.section2_bg_type == 'color' or global_site_content.section2_bg_type == 'image' else '' }}" 
+            style="{% if global_site_content.section2_bg_type == 'color' %}background: {{ global_site_content.section2_bg_color or '#FDCC04' }} !important;{% endif %}">
+            
             {% if global_site_content.section2_bg_type == 'video' and global_site_content.section2_bg_media %}
-            <div class="hero-bg" style="z-index: 1;">
-                 <video src="{{ url_for('static', filename='uploads/' + global_site_content.section2_bg_media) }}" autoplay muted loop playsinline></video>
-            </div>
+            <div class="hero-bg" style="z-index: 1;"><video src="{{ url_for('static', filename='uploads/' + global_site_content.section2_bg_media) }}" autoplay muted loop playsinline></video></div>
             {% elif global_site_content.section2_bg_type == 'image' and global_site_content.section2_bg_media %}
-            <div class="hero-bg" style="z-index: 1;">
-                 <div style="background-image: url('{{ url_for('static', filename='uploads/' + global_site_content.section2_bg_media) }}'); width: 100%; height: 100%; background-size: cover; background-position: center;"></div>
-            </div>
+            <div class="hero-bg" style="z-index: 1;"><div style="background-image: url('{{ url_for('static', filename='uploads/' + global_site_content.section2_bg_media) }}'); width:100%; height:100%; background-size:cover; background-position:center;"></div></div>
             {% endif %}
 
             <div class="section-inner" style="position: relative; z-index: 2;">
@@ -197,9 +194,20 @@
             </div>
         </section>
 
+        <!-- ========== BRIDGE PORTFOLIO-ABOUT ========== -->
+        <div class="section-bridge" style="--bridge-from: {{ global_site_content.section2_bg_color if global_site_content.section2_bg_type == 'color' else '#0A0A0A' }}; --bridge-to: {{ global_site_content.about_bg_color if global_site_content.about_bg_type == 'color' else '#0A0A0A' }};"></div>
+
         <!-- ========== ABOUT ========== -->
-        <section id="about">
-            <div class="section-inner">
+        <section id="about" class="{{ 'light-bg' if global_site_content.about_bg_type == 'color' and global_site_content.about_bg_color == '#FDCC04' else '' }}"
+            style="{% if global_site_content.about_bg_type == 'color' %}background: {{ global_site_content.about_bg_color or '#0A0A0A' }} !important;{% endif %}">
+            
+            {% if global_site_content.about_bg_type == 'video' and global_site_content.about_bg_media %}
+            <div class="hero-bg" style="z-index: 1;"><video src="{{ url_for('static', filename='uploads/' + global_site_content.about_bg_media) }}" autoplay muted loop playsinline></video></div>
+            {% elif global_site_content.about_bg_type == 'image' and global_site_content.about_bg_media %}
+            <div class="hero-bg" style="z-index: 1;"><div style="background-image: url('{{ url_for('static', filename='uploads/' + global_site_content.about_bg_media) }}'); width:100%; height:100%; background-size:cover; background-position:center;"></div></div>
+            {% endif %}
+
+            <div class="section-inner" style="position: relative; z-index: 2;">
                 <div class="section-header" data-aos="fade-up">
                     <h2 class="glowing-text">{{ 'ABOUT US' if lang == 'en' else 'من نحن' }}</h2>
                 </div>
@@ -239,9 +247,20 @@
             </div>
         </section>
 
+        <!-- ========== BRIDGE ABOUT-LEARNING ========== -->
+        <div class="section-bridge" style="--bridge-from: {{ global_site_content.about_bg_color if global_site_content.about_bg_type == 'color' else '#0A0A0A' }}; --bridge-to: {{ global_site_content.learning_bg_color if global_site_content.learning_bg_type == 'color' else '#0A0A0A' }};"></div>
+
         <!-- ========== LEARNING ========== -->
-        <section id="learning">
-            <div class="section-inner">
+        <section id="learning" class="{{ 'light-bg' if global_site_content.learning_bg_type == 'color' and global_site_content.learning_bg_color == '#FDCC04' else '' }}"
+            style="{% if global_site_content.learning_bg_type == 'color' %}background: {{ global_site_content.learning_bg_color or '#0A0A0A' }} !important;{% endif %}">
+            
+            {% if global_site_content.learning_bg_type == 'video' and global_site_content.learning_bg_media %}
+            <div class="hero-bg" style="z-index: 1;"><video src="{{ url_for('static', filename='uploads/' + global_site_content.learning_bg_media) }}" autoplay muted loop playsinline></video></div>
+            {% elif global_site_content.learning_bg_type == 'image' and global_site_content.learning_bg_media %}
+            <div class="hero-bg" style="z-index: 1;"><div style="background-image: url('{{ url_for('static', filename='uploads/' + global_site_content.learning_bg_media) }}'); width:100%; height:100%; background-size:cover; background-position:center;"></div></div>
+            {% endif %}
+
+            <div class="section-inner" style="position: relative; z-index: 2;">
                 <div class="section-header" data-aos="fade-up">
                     <h2 class="glowing-text">{{ 'COURSES' if lang == 'en' else 'الكورسات التعليمية' }}</h2>
                     <p class="section-subtitle">{{ 'Learn photography & videography from the best.' if lang == 'en' else
@@ -283,9 +302,20 @@
             </div>
         </section>
 
+        <!-- ========== BRIDGE LEARNING-CONTACT ========== -->
+        <div class="section-bridge" style="--bridge-from: {{ global_site_content.learning_bg_color if global_site_content.learning_bg_type == 'color' else '#0A0A0A' }}; --bridge-to: {{ global_site_content.contact_bg_color if global_site_content.contact_bg_type == 'color' else '#0A0A0A' }};"></div>
+
         <!-- ========== CONTACT ========== -->
-        <section id="contact">
-            <div class="section-inner">
+        <section id="contact" class="{{ 'light-bg' if global_site_content.contact_bg_type == 'color' and global_site_content.contact_bg_color == '#FDCC04' else '' }}"
+            style="{% if global_site_content.contact_bg_type == 'color' %}background: {{ global_site_content.contact_bg_color or '#0A0A0A' }} !important;{% endif %}">
+            
+            {% if global_site_content.contact_bg_type == 'video' and global_site_content.contact_bg_media %}
+            <div class="hero-bg" style="z-index: 1;"><video src="{{ url_for('static', filename='uploads/' + global_site_content.contact_bg_media) }}" autoplay muted loop playsinline></video></div>
+            {% elif global_site_content.contact_bg_type == 'image' and global_site_content.contact_bg_media %}
+            <div class="hero-bg" style="z-index: 1;"><div style="background-image: url('{{ url_for('static', filename='uploads/' + global_site_content.contact_bg_media) }}'); width:100%; height:100%; background-size:cover; background-position:center;"></div></div>
+            {% endif %}
+
+            <div class="section-inner" style="position: relative; z-index: 2;">
                 <div class="section-header" data-aos="fade-up">
                     <h2 class="glowing-text">{{ 'GET IN TOUCH' if lang == 'en' else 'تواصل معنا' }}</h2>
                     <p class="section-subtitle">

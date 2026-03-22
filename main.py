@@ -84,10 +84,25 @@ class SiteContent(db.Model):
     hero_bg_media = db.Column(db.String(255), nullable=True)
     hero_bg_color = db.Column(db.String(7), default='#6B21C8')
     
-    # Section 2 Background
-    section2_bg_type = db.Column(db.String(20), default='color') # 'image', 'video', 'color'
+    # Section 2 Background (Portfolio)
+    section2_bg_type = db.Column(db.String(20), default='color') 
     section2_bg_media = db.Column(db.String(255), nullable=True)
     section2_bg_color = db.Column(db.String(7), default='#FDCC04')
+    
+    # Section 3 Background (About)
+    about_bg_type = db.Column(db.String(20), default='color')
+    about_bg_media = db.Column(db.String(255), nullable=True)
+    about_bg_color = db.Column(db.String(7), default='#0A0A0A')
+
+    # Section 4 Background (Learning)
+    learning_bg_type = db.Column(db.String(20), default='color')
+    learning_bg_media = db.Column(db.String(255), nullable=True)
+    learning_bg_color = db.Column(db.String(7), default='#0A0A0A')
+
+    # Section 5 Background (Contact)
+    contact_bg_type = db.Column(db.String(20), default='color')
+    contact_bg_media = db.Column(db.String(255), nullable=True)
+    contact_bg_color = db.Column(db.String(7), default='#0A0A0A')
     
     bg_color = db.Column(db.String(7), nullable=True, default='#000000') # Global fallback
     contact_phone = db.Column(db.String(50), nullable=True)
@@ -407,9 +422,19 @@ def site_content():
         # New Background Options
         content.hero_bg_type = request.form.get('hero_bg_type', 'image')
         content.hero_bg_color = request.form.get('hero_bg_color') or '#6B21C8'
+        
         content.section2_bg_type = request.form.get('section2_bg_type', 'color')
         content.section2_bg_color = request.form.get('section2_bg_color') or '#FDCC04'
-        
+
+        content.about_bg_type = request.form.get('about_bg_type', 'color')
+        content.about_bg_color = request.form.get('about_bg_color') or '#0A0A0A'
+
+        content.learning_bg_type = request.form.get('learning_bg_type', 'color')
+        content.learning_bg_color = request.form.get('learning_bg_color') or '#0A0A0A'
+
+        content.contact_bg_type = request.form.get('contact_bg_type', 'color')
+        content.contact_bg_color = request.form.get('contact_bg_color') or '#0A0A0A'
+
         # New Contact Fields
         content.contact_phone = request.form.get('contact_phone')
         content.contact_whatsapp = request.form.get('contact_whatsapp')
@@ -420,19 +445,28 @@ def site_content():
         content.contact_tiktok = request.form.get('contact_tiktok')
         content.contact_gps = request.form.get('contact_gps')
         
-        # Handle Hero Background Upload
-        file = request.files.get('hero_bg')
-        if file and file.filename != '':
-            filename, _ = process_any_file(file)
-            if filename:
-                content.hero_bg_media = filename
+        # Handle Media Uploads for all sections
+        def handle_upload(field_name):
+            f = request.files.get(field_name)
+            if f and f.filename != '':
+                fn, _ = process_any_file(f)
+                return fn
+            return None
 
-        # Handle Section 2 Background Upload
-        file2 = request.files.get('section2_bg_media')
-        if file2 and file2.filename != '':
-            filename2, _ = process_any_file(file2)
-            if filename2:
-                content.section2_bg_media = filename2
+        h_media = handle_upload('hero_bg')
+        if h_media: content.hero_bg_media = h_media
+
+        s2_media = handle_upload('section2_bg_media')
+        if s2_media: content.section2_bg_media = s2_media
+
+        about_media = handle_upload('about_bg_media')
+        if about_media: content.about_bg_media = about_media
+
+        learning_media = handle_upload('learning_bg_media')
+        if learning_media: content.learning_bg_media = learning_media
+
+        contact_media = handle_upload('contact_bg_media')
+        if contact_media: content.contact_bg_media = contact_media
 
         db.session.commit()
         flash('Site Content updated successfully!', 'success')

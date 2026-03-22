@@ -116,28 +116,51 @@
         {% endif %}
 
         <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 2: Content Background</h3>
+        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 2: Portfolio Background</h3>
 
         <div style="margin-bottom: 20px;">
             <label style="font-weight: bold; color: #555;">Background Type</label><br>
             <input type="radio" name="section2_bg_type" value="image" id="s2_img" {{ 'checked' if content and content.section2_bg_type == 'image' else '' }}> <label for="s2_img">Image Overlay</label> &nbsp;
             <input type="radio" name="section2_bg_type" value="video" id="s2_vid" {{ 'checked' if content and content.section2_bg_type == 'video' else '' }}> <label for="s2_vid">Video Overlay</label> &nbsp;
-            <input type="radio" name="section2_bg_type" value="color" id="s2_col" {{ 'checked' if not content or content.section2_bg_type == 'color' or not content.section2_bg_type else 'checked' if content.section2_bg_type == 'color' else '' }}> <label for="s2_col">Solid Color</label>
+            <input type="radio" name="section2_bg_type" value="color" id="s2_col" {{ 'checked' if not content or content.section2_bg_type == 'color' or not content.section2_bg_type else '' }}> <label for="s2_col">Solid Color</label>
         </div>
+        <label style="font-weight: bold; color: #555;">Upload Background Media</label>
+        <input type="file" name="section2_bg_media" accept="image/*,video/*">
+        <label style="font-weight: bold; color: #555; display:block; margin-top:10px;">Background Color</label>
+        <input type="color" name="section2_bg_color" value="{{ content.section2_bg_color if content and content.section2_bg_color else '#FDCC04' }}" style="width: 50px; height: 50px; border:none; cursor:pointer;">
 
-        <label style="font-weight: bold; color: #555;">Upload Background Media (Image or Video)</label>
-        <input type="file" name="section2_bg_media" accept="image/*,video/*,.mkv,.flv,.wmv,.avi,.mov"
-            style="width:100%; margin-bottom:10px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
-
-        <label style="font-weight: bold; color: #555;">Background Color (if Solid Color is selected)</label>
-        <input type="color" name="section2_bg_color" value="{{ content.section2_bg_color if content and content.section2_bg_color else '#FDCC04' }}"
-            style="width: 50px; height: 50px; display: block; margin-bottom: 15px; border: none; cursor: pointer;">
-
-        {% if content and content.section2_bg_media %}
-        <div style="margin-bottom: 25px;">
-            <p style="margin: 0; color: #777; font-size: 0.9rem;">Current Section 2 Media: <code>{{ content.section2_bg_media }}</code></p>
+        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
+        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 3: About Background</h3>
+        <div style="margin-bottom: 20px;">
+            <label style="font-weight: bold; color: #555;">Background Type</label><br>
+            <input type="radio" name="about_bg_type" value="image" id="s3_img" {{ 'checked' if content and content.about_bg_type == 'image' else '' }}> <label for="s3_img">Image Overlay</label> &nbsp;
+            <input type="radio" name="about_bg_type" value="video" id="s3_vid" {{ 'checked' if content and content.about_bg_type == 'video' else '' }}> <label for="s3_vid">Video Overlay</label> &nbsp;
+            <input type="radio" name="about_bg_type" value="color" id="s3_col" {{ 'checked' if not content or content.about_bg_type == 'color' or not content.about_bg_type else '' }}> <label for="s3_col">Solid Color</label>
         </div>
-        {% endif %}
+        <input type="file" name="about_bg_media" accept="image/*,video/*">
+        <input type="color" name="about_bg_color" value="{{ content.about_bg_color if content and content.about_bg_color else '#0A0A0A' }}" style="width: 50px; height: 50px; display:block; margin-top:10px; border:none; cursor:pointer;">
+
+        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
+        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 4: Learning Background</h3>
+        <div style="margin-bottom: 20px;">
+            <label style="font-weight: bold; color: #555;">Background Type</label><br>
+            <input type="radio" name="learning_bg_type" value="image" id="s4_img" {{ 'checked' if content and content.learning_bg_type == 'image' else '' }}> <label for="s4_img">Image Overlay</label> &nbsp;
+            <input type="radio" name="learning_bg_type" value="video" id="s4_vid" {{ 'checked' if content and content.learning_bg_type == 'video' else '' }}> <label for="s4_vid">Video Overlay</label> &nbsp;
+            <input type="radio" name="learning_bg_type" value="color" id="s4_col" {{ 'checked' if not content or content.learning_bg_type == 'color' or not content.learning_bg_type else '' }}> <label for="s4_col">Solid Color</label>
+        </div>
+        <input type="file" name="learning_bg_media" accept="image/*,video/*">
+        <input type="color" name="learning_bg_color" value="{{ content.learning_bg_color if content and content.learning_bg_color else '#0A0A0A' }}" style="width: 50px; height: 50px; display:block; margin-top:10px; border:none; cursor:pointer;">
+
+        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
+        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 5: Contact Background</h3>
+        <div style="margin-bottom: 20px;">
+            <label style="font-weight: bold; color: #555;">Background Type</label><br>
+            <input type="radio" name="contact_bg_type" value="image" id="s5_img" {{ 'checked' if content and content.contact_bg_type == 'image' else '' }}> <label for="s5_img">Image Overlay</label> &nbsp;
+            <input type="radio" name="contact_bg_type" value="video" id="s5_vid" {{ 'checked' if content and content.contact_bg_type == 'video' else '' }}> <label for="s5_vid">Video Overlay</label> &nbsp;
+            <input type="radio" name="contact_bg_type" value="color" id="s5_col" {{ 'checked' if not content or content.contact_bg_type == 'color' or not content.contact_bg_type else '' }}> <label for="s5_col">Solid Color</label>
+        </div>
+        <input type="file" name="contact_bg_media" accept="image/*,video/*">
+        <input type="color" name="contact_bg_color" value="{{ content.contact_bg_color if content and content.contact_bg_color else '#0A0A0A' }}" style="width: 50px; height: 50px; display:block; margin-top:10px; border:none; cursor:pointer;">
 
         <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
         <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Website Global Background Color</h3>
