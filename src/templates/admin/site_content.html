@@ -92,20 +92,51 @@
             style="width:100%; margin-bottom:25px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
 
         <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Dynamic Hero Background</h3>
+        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 1: Hero Background</h3>
+
+        <div style="margin-bottom: 20px;">
+            <label style="font-weight: bold; color: #555;">Background Type</label><br>
+            <input type="radio" name="hero_bg_type" value="image" id="hero_img" {{ 'checked' if not content or content.hero_bg_type == 'image' else '' }}> <label for="hero_img">Image Overlay</label> &nbsp;
+            <input type="radio" name="hero_bg_type" value="video" id="hero_vid" {{ 'checked' if content and content.hero_bg_type == 'video' else '' }}> <label for="hero_vid">Video Overlay</label> &nbsp;
+            <input type="radio" name="hero_bg_type" value="color" id="hero_col" {{ 'checked' if content and content.hero_bg_type == 'color' else '' }}> <label for="hero_col">Solid Color</label>
+        </div>
 
         <label style="font-weight: bold; color: #555;">Upload Background Media (Image or Video)</label>
         <input type="file" name="hero_bg" accept="image/*,video/*,.mkv,.flv,.wmv,.avi,.mov"
             style="width:100%; margin-bottom:10px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
 
+        <label style="font-weight: bold; color: #555;">Background Color (if Solid Color is selected)</label>
+        <input type="color" name="hero_bg_color" value="{{ content.hero_bg_color if content and content.hero_bg_color else '#6B21C8' }}"
+            style="width: 50px; height: 50px; display: block; margin-bottom: 15px; border: none; cursor: pointer;">
+
         {% if content and content.hero_bg_media %}
         <div style="margin-bottom: 25px;">
-            <p style="margin: 0; color: #777; font-size: 0.9rem;">Current Background Preview:</p>
-            <img src="{{ url_for('static', filename='uploads/' + content.hero_bg_media) }}" alt="Hero BG"
-                style="max-height: 100px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+            <p style="margin: 0; color: #777; font-size: 0.9rem;">Current Hero Media: <code>{{ content.hero_bg_media }}</code></p>
         </div>
-        {% else %}
-        <p style="margin-bottom: 25px; color: #777; font-size: 0.9rem;">No custom background set. Default is used.</p>
+        {% endif %}
+
+        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
+        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 2: Content Background</h3>
+
+        <div style="margin-bottom: 20px;">
+            <label style="font-weight: bold; color: #555;">Background Type</label><br>
+            <input type="radio" name="section2_bg_type" value="image" id="s2_img" {{ 'checked' if content and content.section2_bg_type == 'image' else '' }}> <label for="s2_img">Image Overlay</label> &nbsp;
+            <input type="radio" name="section2_bg_type" value="video" id="s2_vid" {{ 'checked' if content and content.section2_bg_type == 'video' else '' }}> <label for="s2_vid">Video Overlay</label> &nbsp;
+            <input type="radio" name="section2_bg_type" value="color" id="s2_col" {{ 'checked' if not content or content.section2_bg_type == 'color' or not content.section2_bg_type else 'checked' if content.section2_bg_type == 'color' else '' }}> <label for="s2_col">Solid Color</label>
+        </div>
+
+        <label style="font-weight: bold; color: #555;">Upload Background Media (Image or Video)</label>
+        <input type="file" name="section2_bg_media" accept="image/*,video/*,.mkv,.flv,.wmv,.avi,.mov"
+            style="width:100%; margin-bottom:10px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
+
+        <label style="font-weight: bold; color: #555;">Background Color (if Solid Color is selected)</label>
+        <input type="color" name="section2_bg_color" value="{{ content.section2_bg_color if content and content.section2_bg_color else '#FDCC04' }}"
+            style="width: 50px; height: 50px; display: block; margin-bottom: 15px; border: none; cursor: pointer;">
+
+        {% if content and content.section2_bg_media %}
+        <div style="margin-bottom: 25px;">
+            <p style="margin: 0; color: #777; font-size: 0.9rem;">Current Section 2 Media: <code>{{ content.section2_bg_media }}</code></p>
+        </div>
         {% endif %}
 
         <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">

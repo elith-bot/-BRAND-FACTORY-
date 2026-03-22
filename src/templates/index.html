@@ -47,13 +47,26 @@
     <link rel="preload" href="{{ url_for('static', filename='logo.png') }}" as="image">
     <style>
         body {
-            background-color: {
-                    {
-                    global_site_content.bg_color if global_site_content and global_site_content.bg_color else '#0A0A0A'
-                }
-            }
+            background-color: {{ global_site_content.section2_bg_color if global_site_content and global_site_content.section2_bg_color else '#FDCC04' }};
+        }
+        
+        #hero {
+            {% if global_site_content.hero_bg_type == 'color' %}
+            background: {{ global_site_content.hero_bg_color or '#6B21C8' }} !important;
+            {% endif %}
+        }
+        
+        #portfolio {
+            {% if global_site_content.section2_bg_type == 'color' %}
+            background: {{ global_site_content.section2_bg_color or '#FDCC04' }} !important;
+            {% endif %}
+        }
 
-            ;
+        .section-bridge {
+            background: linear-gradient(to bottom, 
+                {{ global_site_content.hero_bg_color if global_site_content.hero_bg_type == 'color' else '#1a0533' }}, 
+                {{ global_site_content.section2_bg_color if global_site_content.section2_bg_type == 'color' else '#FDCC04' }}
+            );
         }
     </style>
 </head>
@@ -90,9 +103,15 @@
 
         <!-- ========== HERO ========== -->
         <section id="hero">
-            <!-- Background image overlay -->
-            <div class="hero-bg"
-                style="background-image: url('{{ url_for('static', filename='uploads/' + site_content.hero_bg_media) if site_content and site_content.hero_bg_media else url_for('static', filename='images/hero_photography_bg.jpg') }}');">
+            <!-- Dynamic Background -->
+            <div class="hero-bg">
+                {% if global_site_content.hero_bg_type == 'video' and global_site_content.hero_bg_media %}
+                <video src="{{ url_for('static', filename='uploads/' + global_site_content.hero_bg_media) }}" autoplay muted loop playsinline></video>
+                {% elif global_site_content.hero_bg_type == 'image' and global_site_content.hero_bg_media %}
+                <div style="background-image: url('{{ url_for('static', filename='uploads/' + global_site_content.hero_bg_media) }}'); width: 100%; height: 100%; background-size: cover; background-position: center;"></div>
+                {% elif global_site_content.hero_bg_type == 'image' or not global_site_content.hero_bg_type %}
+                <div style="background-image: url('{{ url_for('static', filename='images/hero_photography_bg.jpg') }}'); width: 100%; height: 100%; background-size: cover; background-position: center;"></div>
+                {% endif %}
             </div>
 
             <div class="hero-wrapper">
@@ -125,9 +144,23 @@
             </div>
         </section>
 
+        <!-- ========== BRIDGE ========== -->
+        <div class="section-bridge"></div>
+
         <!-- ========== PORTFOLIO ========== -->
-        <section id="portfolio">
-            <div class="section-inner">
+        <section id="portfolio" class="{{ 'light-bg' if not global_site_content or global_site_content.section2_bg_type == 'color' or global_site_content.section2_bg_type == 'image' else '' }}">
+            <!-- Optional Background for Section 2 -->
+            {% if global_site_content.section2_bg_type == 'video' and global_site_content.section2_bg_media %}
+            <div class="hero-bg" style="z-index: 1;">
+                 <video src="{{ url_for('static', filename='uploads/' + global_site_content.section2_bg_media) }}" autoplay muted loop playsinline></video>
+            </div>
+            {% elif global_site_content.section2_bg_type == 'image' and global_site_content.section2_bg_media %}
+            <div class="hero-bg" style="z-index: 1;">
+                 <div style="background-image: url('{{ url_for('static', filename='uploads/' + global_site_content.section2_bg_media) }}'); width: 100%; height: 100%; background-size: cover; background-position: center;"></div>
+            </div>
+            {% endif %}
+
+            <div class="section-inner" style="position: relative; z-index: 2;">
                 <div class="section-header" data-aos="fade-up">
                     <h2 class="glowing-text">{{ 'OUR LATEST WORK' if lang == 'en' else 'أحدث أعمالنا' }}</h2>
                     <p class="section-subtitle">{{ 'A selection of our finest creative projects.' if lang == 'en' else

@@ -1241,3 +1241,57 @@ footer {
         font-size: 1.8rem;
     }
 }
+/* ===========================
+   DYNAMIC BACKGROUND UTILITIES
+=========================== */
+.section-bridge {
+    height: 150px;
+    width: 100%;
+    margin-top: -75px;
+    margin-bottom: -75px;
+    position: relative;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.hero-bg video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+}
+
+/* Light background support (Yellow mode) */
+.light-bg {
+    color: #1a0533 !important;
+}
+
+.light-bg .glowing-text {
+    color: #1a0533 !important;
+    text-shadow: 0 0 10px rgba(107, 33, 200, 0.2);
+}
+
+.light-bg .section-subtitle {
+    color: rgba(26, 5, 51, 0.8) !important;
+}
+
+.light-bg .portfolio-card,
+.light-bg .course-card {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(26, 5, 51, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.light-bg .portfolio-title,
+.light-bg .course-title {
+    color: #1a0533 !important;
+}
+
+.light-bg .course-desc {
+    color: rgba(26, 5, 51, 0.7) !important;
+}

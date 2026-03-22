@@ -78,8 +78,18 @@ class SiteContent(db.Model):
     hero_title_en = db.Column(db.String(200), nullable=True)
     hero_subtitle_ar = db.Column(db.String(300), nullable=True)
     hero_subtitle_en = db.Column(db.String(300), nullable=True)
+    
+    # Hero Background
+    hero_bg_type = db.Column(db.String(20), default='image') # 'image', 'video', 'color'
     hero_bg_media = db.Column(db.String(255), nullable=True)
-    bg_color = db.Column(db.String(7), nullable=True, default='#000000')
+    hero_bg_color = db.Column(db.String(7), default='#6B21C8')
+    
+    # Section 2 Background
+    section2_bg_type = db.Column(db.String(20), default='color') # 'image', 'video', 'color'
+    section2_bg_media = db.Column(db.String(255), nullable=True)
+    section2_bg_color = db.Column(db.String(7), default='#FDCC04')
+    
+    bg_color = db.Column(db.String(7), nullable=True, default='#000000') # Global fallback
     contact_phone = db.Column(db.String(50), nullable=True)
     contact_whatsapp = db.Column(db.String(50), nullable=True)
     contact_telegram = db.Column(db.String(200), nullable=True)
@@ -394,6 +404,12 @@ def site_content():
         content.hero_subtitle_en = request.form.get('hero_subtitle_en')
         content.bg_color = request.form.get('bg_color') or '#000000'
         
+        # New Background Options
+        content.hero_bg_type = request.form.get('hero_bg_type', 'image')
+        content.hero_bg_color = request.form.get('hero_bg_color') or '#6B21C8'
+        content.section2_bg_type = request.form.get('section2_bg_type', 'color')
+        content.section2_bg_color = request.form.get('section2_bg_color') or '#FDCC04'
+        
         # New Contact Fields
         content.contact_phone = request.form.get('contact_phone')
         content.contact_whatsapp = request.form.get('contact_whatsapp')
@@ -410,6 +426,13 @@ def site_content():
             filename, _ = process_any_file(file)
             if filename:
                 content.hero_bg_media = filename
+
+        # Handle Section 2 Background Upload
+        file2 = request.files.get('section2_bg_media')
+        if file2 and file2.filename != '':
+            filename2, _ = process_any_file(file2)
+            if filename2:
+                content.section2_bg_media = filename2
 
         db.session.commit()
         flash('Site Content updated successfully!', 'success')

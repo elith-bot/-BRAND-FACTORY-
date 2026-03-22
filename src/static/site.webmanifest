@@ -1,4 +1,7 @@
-  {
+   
+    
+     
+      {
     "name": "BRAND FACTORY",
     "short_name": "BRAND FACTORY",
     "description": "Creative Visual Solutions - Photography, Videography & Branding",
@@ -12,7 +15,11 @@
         "sizes": "192x192",
         "type": "image/png",
         "purpose": "any maskable"
-      },
+      }  ,  
+       
+        
+       
+            
       {
         "src": "/static/logo.png",
         "sizes": "512x512",
@@ -20,4 +27,4 @@
         "purpose": "any maskable"
       }
     ]
-  }
+     }
