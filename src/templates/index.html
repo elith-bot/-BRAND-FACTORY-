@@ -102,7 +102,7 @@
     <main>
 
         <!-- ========== HERO ========== -->
-        <section id="hero">
+        <section id="hero" style="--section-title-color: {{ global_site_content.hero_title_color if global_site_content.hero_title_color else '#ffffff' }}; --section-text-color: {{ global_site_content.hero_text_color if global_site_content.hero_text_color else '#ffffff' }}; --section-btn-bg: {{ global_site_content.hero_btn_bg_color if global_site_content.hero_btn_bg_color else '#6B21C8' }}; --section-btn-text: {{ global_site_content.hero_btn_text_color if global_site_content.hero_btn_text_color else '#FDCC04' }};">
             <!-- Dynamic Background -->
             <div class="hero-bg">
                 {% if global_site_content.hero_bg_type == 'video' and global_site_content.hero_bg_media %}
@@ -149,7 +149,7 @@
 
         <!-- ========== PORTFOLIO ========== -->
         <section id="portfolio" class="{{ 'light-bg' if not global_site_content or global_site_content.section2_bg_type == 'color' or global_site_content.section2_bg_type == 'image' else '' }}" 
-            style="{% if global_site_content.section2_bg_type == 'color' %}background: {{ global_site_content.section2_bg_color or '#FDCC04' }} !important;{% endif %}">
+            style="{% if global_site_content.section2_bg_type == 'color' %}background: {{ global_site_content.section2_bg_color or '#FDCC04' }} !important;{% endif %} --section-title-color: {{ global_site_content.section2_title_color if global_site_content.section2_title_color else '#ffffff' }}; --section-text-color: {{ global_site_content.section2_text_color if global_site_content.section2_text_color else '#ffffff' }}; --section-btn-bg: {{ global_site_content.section2_btn_bg_color if global_site_content.section2_btn_bg_color else '#6B21C8' }}; --section-btn-text: {{ global_site_content.section2_btn_text_color if global_site_content.section2_btn_text_color else '#FDCC04' }};">
             
             {% if global_site_content.section2_bg_type == 'video' and global_site_content.section2_bg_media %}
             <div class="hero-bg" style="z-index: 1;"><video src="{{ url_for('static', filename='uploads/' + global_site_content.section2_bg_media) }}" autoplay muted loop playsinline></video></div>
@@ -199,7 +199,7 @@
 
         <!-- ========== ABOUT ========== -->
         <section id="about" class="{{ 'light-bg' if global_site_content.about_bg_type == 'color' and global_site_content.about_bg_color == '#FDCC04' else '' }}"
-            style="{% if global_site_content.about_bg_type == 'color' %}background: {{ global_site_content.about_bg_color or '#0A0A0A' }} !important;{% endif %}">
+            style="{% if global_site_content.about_bg_type == 'color' %}background: {{ global_site_content.about_bg_color or '#0A0A0A' }} !important;{% endif %} --section-title-color: {{ global_site_content.about_title_color if global_site_content.about_title_color else '#ffffff' }}; --section-text-color: {{ global_site_content.about_text_color if global_site_content.about_text_color else '#ffffff' }}; --section-btn-bg: {{ global_site_content.about_btn_bg_color if global_site_content.about_btn_bg_color else '#6B21C8' }}; --section-btn-text: {{ global_site_content.about_btn_text_color if global_site_content.about_btn_text_color else '#FDCC04' }};">
             
             {% if global_site_content.about_bg_type == 'video' and global_site_content.about_bg_media %}
             <div class="hero-bg" style="z-index: 1;"><video src="{{ url_for('static', filename='uploads/' + global_site_content.about_bg_media) }}" autoplay muted loop playsinline></video></div>
@@ -252,7 +252,7 @@
 
         <!-- ========== LEARNING ========== -->
         <section id="learning" class="{{ 'light-bg' if global_site_content.learning_bg_type == 'color' and global_site_content.learning_bg_color == '#FDCC04' else '' }}"
-            style="{% if global_site_content.learning_bg_type == 'color' %}background: {{ global_site_content.learning_bg_color or '#0A0A0A' }} !important;{% endif %}">
+            style="{% if global_site_content.learning_bg_type == 'color' %}background: {{ global_site_content.learning_bg_color or '#0A0A0A' }} !important;{% endif %} --section-title-color: {{ global_site_content.learning_title_color if global_site_content.learning_title_color else '#ffffff' }}; --section-text-color: {{ global_site_content.learning_text_color if global_site_content.learning_text_color else '#ffffff' }}; --section-btn-bg: {{ global_site_content.learning_btn_bg_color if global_site_content.learning_btn_bg_color else '#6B21C8' }}; --section-btn-text: {{ global_site_content.learning_btn_text_color if global_site_content.learning_btn_text_color else '#FDCC04' }};">
             
             {% if global_site_content.learning_bg_type == 'video' and global_site_content.learning_bg_media %}
             <div class="hero-bg" style="z-index: 1;"><video src="{{ url_for('static', filename='uploads/' + global_site_content.learning_bg_media) }}" autoplay muted loop playsinline></video></div>
@@ -307,7 +307,7 @@
 
         <!-- ========== CONTACT ========== -->
         <section id="contact" class="{{ 'light-bg' if global_site_content.contact_bg_type == 'color' and global_site_content.contact_bg_color == '#FDCC04' else '' }}"
-            style="{% if global_site_content.contact_bg_type == 'color' %}background: {{ global_site_content.contact_bg_color or '#0A0A0A' }} !important;{% endif %}">
+            style="{% if global_site_content.contact_bg_type == 'color' %}background: {{ global_site_content.contact_bg_color or '#0A0A0A' }} !important;{% endif %} --section-title-color: {{ global_site_content.contact_title_color if global_site_content.contact_title_color else '#ffffff' }}; --section-text-color: {{ global_site_content.contact_text_color if global_site_content.contact_text_color else '#ffffff' }}; --section-btn-bg: {{ global_site_content.contact_btn_bg_color if global_site_content.contact_btn_bg_color else '#6B21C8' }}; --section-btn-text: {{ global_site_content.contact_btn_text_color if global_site_content.contact_btn_text_color else '#FDCC04' }};">
             
             {% if global_site_content.contact_bg_type == 'video' and global_site_content.contact_bg_media %}
             <div class="hero-bg" style="z-index: 1;"><video src="{{ url_for('static', filename='uploads/' + global_site_content.contact_bg_media) }}" autoplay muted loop playsinline></video></div>

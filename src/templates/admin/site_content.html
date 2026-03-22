@@ -92,7 +92,26 @@
             style="width:100%; margin-bottom:25px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
 
         <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 1: Hero Background</h3>
+        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 1: Hero Background & Colors</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <div>
+                <label style="font-weight: bold; color: #555;">Title Color</label>
+                <input type="color" name="hero_title_color" value="{{ content.hero_title_color if content and content.hero_title_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+            <div>
+                <label style="font-weight: bold; color: #555;">Text Color</label>
+                <input type="color" name="hero_text_color" value="{{ content.hero_text_color if content and content.hero_text_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+            <div>
+                <label style="font-weight: bold; color: #555;">Button Bg Color</label>
+                <input type="color" name="hero_btn_bg_color" value="{{ content.hero_btn_bg_color if content and content.hero_btn_bg_color else '#6B21C8' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+            <div>
+                <label style="font-weight: bold; color: #555;">Button Text Color</label>
+                <input type="color" name="hero_btn_text_color" value="{{ content.hero_btn_text_color if content and content.hero_btn_text_color else '#FDCC04' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+        </div>
 
         <div style="margin-bottom: 20px;">
             <label style="font-weight: bold; color: #555;">Background Type</label><br>
@@ -116,7 +135,26 @@
         {% endif %}
 
         <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 2: Portfolio Background</h3>
+        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 2: Portfolio Background & Colors</h3>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <div>
+                <label style="font-weight: bold; color: #555;">Title Color</label>
+                <input type="color" name="section2_title_color" value="{{ content.section2_title_color if content and content.section2_title_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+            <div>
+                <label style="font-weight: bold; color: #555;">Text Color</label>
+                <input type="color" name="section2_text_color" value="{{ content.section2_text_color if content and content.section2_text_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+            <div>
+                <label style="font-weight: bold; color: #555;">Button Bg Color</label>
+                <input type="color" name="section2_btn_bg_color" value="{{ content.section2_btn_bg_color if content and content.section2_btn_bg_color else '#6B21C8' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+            <div>
+                <label style="font-weight: bold; color: #555;">Button Text Color</label>
+                <input type="color" name="section2_btn_text_color" value="{{ content.section2_btn_text_color if content and content.section2_btn_text_color else '#FDCC04' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+        </div>
 
         <div style="margin-bottom: 20px;">
             <label style="font-weight: bold; color: #555;">Background Type</label><br>
@@ -130,7 +168,27 @@
         <input type="color" name="section2_bg_color" value="{{ content.section2_bg_color if content and content.section2_bg_color else '#FDCC04' }}" style="width: 50px; height: 50px; border:none; cursor:pointer;">
 
         <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 3: About Background</h3>
+        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 3: About Background & Colors</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <div>
+                <label style="font-weight: bold; color: #555;">Title Color</label>
+                <input type="color" name="about_title_color" value="{{ content.about_title_color if content and content.about_title_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+            <div>
+                <label style="font-weight: bold; color: #555;">Text Color</label>
+                <input type="color" name="about_text_color" value="{{ content.about_text_color if content and content.about_text_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+            <div>
+                <label style="font-weight: bold; color: #555;">Button Bg Color</label>
+                <input type="color" name="about_btn_bg_color" value="{{ content.about_btn_bg_color if content and content.about_btn_bg_color else '#6B21C8' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+            <div>
+                <label style="font-weight: bold; color: #555;">Button Text Color</label>
+                <input type="color" name="about_btn_text_color" value="{{ content.about_btn_text_color if content and content.about_btn_text_color else '#FDCC04' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+        </div>
+
         <div style="margin-bottom: 20px;">
             <label style="font-weight: bold; color: #555;">Background Type</label><br>
             <input type="radio" name="about_bg_type" value="image" id="s3_img" {{ 'checked' if content and content.about_bg_type == 'image' else '' }}> <label for="s3_img">Image Overlay</label> &nbsp;
@@ -141,7 +199,27 @@
         <input type="color" name="about_bg_color" value="{{ content.about_bg_color if content and content.about_bg_color else '#0A0A0A' }}" style="width: 50px; height: 50px; display:block; margin-top:10px; border:none; cursor:pointer;">
 
         <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 4: Learning Background</h3>
+        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 4: Learning Background & Colors</h3>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <div>
+                <label style="font-weight: bold; color: #555;">Title Color</label>
+                <input type="color" name="learning_title_color" value="{{ content.learning_title_color if content and content.learning_title_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+            <div>
+                <label style="font-weight: bold; color: #555;">Text Color</label>
+                <input type="color" name="learning_text_color" value="{{ content.learning_text_color if content and content.learning_text_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+            <div>
+                <label style="font-weight: bold; color: #555;">Button Bg Color</label>
+                <input type="color" name="learning_btn_bg_color" value="{{ content.learning_btn_bg_color if content and content.learning_btn_bg_color else '#6B21C8' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+            <div>
+                <label style="font-weight: bold; color: #555;">Button Text Color</label>
+                <input type="color" name="learning_btn_text_color" value="{{ content.learning_btn_text_color if content and content.learning_btn_text_color else '#FDCC04' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+        </div>
+
         <div style="margin-bottom: 20px;">
             <label style="font-weight: bold; color: #555;">Background Type</label><br>
             <input type="radio" name="learning_bg_type" value="image" id="s4_img" {{ 'checked' if content and content.learning_bg_type == 'image' else '' }}> <label for="s4_img">Image Overlay</label> &nbsp;
@@ -152,7 +230,27 @@
         <input type="color" name="learning_bg_color" value="{{ content.learning_bg_color if content and content.learning_bg_color else '#0A0A0A' }}" style="width: 50px; height: 50px; display:block; margin-top:10px; border:none; cursor:pointer;">
 
         <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 5: Contact Background</h3>
+        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 5: Contact Background & Colors</h3>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <div>
+                <label style="font-weight: bold; color: #555;">Title Color</label>
+                <input type="color" name="contact_title_color" value="{{ content.contact_title_color if content and content.contact_title_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+            <div>
+                <label style="font-weight: bold; color: #555;">Text Color</label>
+                <input type="color" name="contact_text_color" value="{{ content.contact_text_color if content and content.contact_text_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+            <div>
+                <label style="font-weight: bold; color: #555;">Button Bg Color</label>
+                <input type="color" name="contact_btn_bg_color" value="{{ content.contact_btn_bg_color if content and content.contact_btn_bg_color else '#6B21C8' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+            <div>
+                <label style="font-weight: bold; color: #555;">Button Text Color</label>
+                <input type="color" name="contact_btn_text_color" value="{{ content.contact_btn_text_color if content and content.contact_btn_text_color else '#FDCC04' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            </div>
+        </div>
+
         <div style="margin-bottom: 20px;">
             <label style="font-weight: bold; color: #555;">Background Type</label><br>
             <input type="radio" name="contact_bg_type" value="image" id="s5_img" {{ 'checked' if content and content.contact_bg_type == 'image' else '' }}> <label for="s5_img">Image Overlay</label> &nbsp;

@@ -103,6 +103,32 @@ class SiteContent(db.Model):
     contact_bg_type = db.Column(db.String(20), default='color')
     contact_bg_media = db.Column(db.String(255), nullable=True)
     contact_bg_color = db.Column(db.String(7), default='#0A0A0A')
+
+    # Color customization fields
+    hero_title_color = db.Column(db.String(7), default='#ffffff')
+    hero_text_color = db.Column(db.String(7), default='#ffffff')
+    hero_btn_bg_color = db.Column(db.String(7), default='#6B21C8')
+    hero_btn_text_color = db.Column(db.String(7), default='#FDCC04')
+
+    section2_title_color = db.Column(db.String(7), default='#ffffff')
+    section2_text_color = db.Column(db.String(7), default='#ffffff')
+    section2_btn_bg_color = db.Column(db.String(7), default='#6B21C8')
+    section2_btn_text_color = db.Column(db.String(7), default='#FDCC04')
+
+    about_title_color = db.Column(db.String(7), default='#ffffff')
+    about_text_color = db.Column(db.String(7), default='#ffffff')
+    about_btn_bg_color = db.Column(db.String(7), default='#6B21C8')
+    about_btn_text_color = db.Column(db.String(7), default='#FDCC04')
+
+    learning_title_color = db.Column(db.String(7), default='#ffffff')
+    learning_text_color = db.Column(db.String(7), default='#ffffff')
+    learning_btn_bg_color = db.Column(db.String(7), default='#6B21C8')
+    learning_btn_text_color = db.Column(db.String(7), default='#FDCC04')
+
+    contact_title_color = db.Column(db.String(7), default='#ffffff')
+    contact_text_color = db.Column(db.String(7), default='#ffffff')
+    contact_btn_bg_color = db.Column(db.String(7), default='#6B21C8')
+    contact_btn_text_color = db.Column(db.String(7), default='#FDCC04')
     
     bg_color = db.Column(db.String(7), nullable=True, default='#000000') # Global fallback
     contact_phone = db.Column(db.String(50), nullable=True)
@@ -434,6 +460,32 @@ def site_content():
 
         content.contact_bg_type = request.form.get('contact_bg_type', 'color')
         content.contact_bg_color = request.form.get('contact_bg_color') or '#0A0A0A'
+
+        # Color Fields
+        content.hero_title_color = request.form.get('hero_title_color') or '#ffffff'
+        content.hero_text_color = request.form.get('hero_text_color') or '#ffffff'
+        content.hero_btn_bg_color = request.form.get('hero_btn_bg_color') or '#6B21C8'
+        content.hero_btn_text_color = request.form.get('hero_btn_text_color') or '#FDCC04'
+
+        content.section2_title_color = request.form.get('section2_title_color') or '#ffffff'
+        content.section2_text_color = request.form.get('section2_text_color') or '#ffffff'
+        content.section2_btn_bg_color = request.form.get('section2_btn_bg_color') or '#6B21C8'
+        content.section2_btn_text_color = request.form.get('section2_btn_text_color') or '#FDCC04'
+
+        content.about_title_color = request.form.get('about_title_color') or '#ffffff'
+        content.about_text_color = request.form.get('about_text_color') or '#ffffff'
+        content.about_btn_bg_color = request.form.get('about_btn_bg_color') or '#6B21C8'
+        content.about_btn_text_color = request.form.get('about_btn_text_color') or '#FDCC04'
+
+        content.learning_title_color = request.form.get('learning_title_color') or '#ffffff'
+        content.learning_text_color = request.form.get('learning_text_color') or '#ffffff'
+        content.learning_btn_bg_color = request.form.get('learning_btn_bg_color') or '#6B21C8'
+        content.learning_btn_text_color = request.form.get('learning_btn_text_color') or '#FDCC04'
+
+        content.contact_title_color = request.form.get('contact_title_color') or '#ffffff'
+        content.contact_text_color = request.form.get('contact_text_color') or '#ffffff'
+        content.contact_btn_bg_color = request.form.get('contact_btn_bg_color') or '#6B21C8'
+        content.contact_btn_text_color = request.form.get('contact_btn_text_color') or '#FDCC04'
 
         # New Contact Fields
         content.contact_phone = request.form.get('contact_phone')

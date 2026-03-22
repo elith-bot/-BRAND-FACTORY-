@@ -258,12 +258,12 @@ nav {
     margin: 0 0 1.2rem;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--text-white);
+    color: var(--section-title-color, var(--text-white));
 }
 
 .hero-text p {
     font-size: clamp(1rem, 2.5vw, 1.25rem);
-    color: var(--text-muted);
+    color: var(--section-text-color, var(--text-muted));
     margin: 0 0 2.5rem;
     max-width: 480px;
 }
@@ -355,8 +355,8 @@ nav {
     cursor: pointer;
     border: none;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    background: linear-gradient(135deg, var(--purple), var(--purple-light));
-    color: var(--gold);
+    background: var(--section-btn-bg, linear-gradient(135deg, var(--purple), var(--purple-light)));
+    color: var(--section-btn-text, var(--gold));
     border: 2px solid rgba(253, 204, 4, 0.35);
 }
 
@@ -378,8 +378,8 @@ nav {
     border-radius: 8px;
     cursor: pointer;
     background: transparent;
-    color: var(--gold);
-    border: 2px solid rgba(253, 204, 4, 0.5);
+    color: var(--section-btn-bg, var(--gold));
+    border: 2px solid var(--section-btn-bg, rgba(253, 204, 4, 0.5));
     transition: all 0.3s ease;
 }
 
@@ -447,7 +447,7 @@ h2 {
     font-family: 'Anton', sans-serif;
     font-size: clamp(2rem, 5vw, 3rem);
     margin: 0 0 0.5rem;
-    color: #1f1d64;
+    color: var(--section-title-color, #ffffff);
     text-transform: uppercase;
     letter-spacing: 2px;
 }
@@ -463,7 +463,7 @@ h2::after {
 }
 
 .section-subtitle {
-    color: var(--text-muted);
+    color: var(--section-text-color, var(--text-muted));
     font-size: 1.05rem;
     margin-top: 1rem;
 }
@@ -483,7 +483,7 @@ h2::after {
 }
 
 .about-text p {
-    color: var(--text-muted);
+    color: var(--section-text-color, var(--text-muted));
     font-size: 1.1rem;
     line-height: 1.9;
     margin-bottom: 2rem;
@@ -661,12 +661,12 @@ h2::after {
 .course-title {
     font-family: 'Anton', sans-serif;
     font-size: 1.15rem;
-    color: var(--text-white);
+    color: var(--section-title-color, var(--text-white));
     margin: 0;
 }
 
 .course-desc {
-    color: var(--text-muted);
+    color: var(--section-text-color, var(--text-muted));
     font-size: 0.9rem;
     line-height: 1.6;
     flex: 1;
@@ -744,13 +744,13 @@ h2::after {
     font-size: 0.8rem;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--text-muted);
+    color: var(--section-text-color, var(--text-muted));
 }
 
 .contact-card-value {
     font-weight: 700;
     font-size: 1rem;
-    color: var(--text-white);
+    color: var(--section-title-color, var(--text-white));
 }
 
 /* Social icons row */
