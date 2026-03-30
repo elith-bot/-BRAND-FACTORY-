@@ -1,0 +1,384 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Visual Live Editor{% endblock %}
+{% block page_title %}Brand Factory Live Editor{% endblock %}
+{% block nav_live_editor %}active{% endblock %}
+
+{% block content %}
+<div class="live-editor-v2" style="display: flex; height: calc(100vh - 80px); margin: -30px; background: #0f0f0f; font-family: 'Inter', sans-serif; overflow: hidden;">
+    
+    <!-- 1. SLIM ICON BAR (CANVA STYLE) -->
+    <div class="editor-icon-bar" style="width: 72px; background: #18191b; display: flex; flex-direction: column; align-items: center; padding: 20px 0; border-right: 1px solid #2d2e32; z-index: 1001;">
+        <div class="nav-icon active" data-tab="design" style="color: white; margin-bottom: 25px; cursor: pointer; text-align: center;">
+            <i class="fas fa-th-large" style="font-size: 20px; display: block;"></i>
+            <span style="font-size: 10px; margin-top: 5px; display: block;">Design</span>
+        </div>
+        <div class="nav-icon" data-tab="elements" style="color: #a9abb3; margin-bottom: 25px; cursor: pointer; text-align: center;">
+            <i class="fas fa-shapes" style="font-size: 20px; display: block;"></i>
+            <span style="font-size: 10px; margin-top: 5px; display: block;">Elements</span>
+        </div>
+        <div class="nav-icon" data-tab="text" style="color: #a9abb3; margin-bottom: 25px; cursor: pointer; text-align: center;">
+            <i class="fas fa-font" style="font-size: 20px; display: block;"></i>
+            <span style="font-size: 10px; margin-top: 5px; display: block;">Text</span>
+        </div>
+        <div class="nav-icon" data-tab="menu" style="color: #a9abb3; margin-bottom: 25px; cursor: pointer; text-align: center;">
+            <i class="fas fa-utensils" style="font-size: 20px; display: block;"></i>
+            <span style="font-size: 10px; margin-top: 5px; display: block;">Menu</span>
+        </div>
+        <div class="nav-icon" data-tab="uploads" style="color: #a9abb3; margin-bottom: 25px; cursor: pointer; text-align: center; margin-top: auto;">
+            <i class="fas fa-cloud-upload-alt" style="font-size: 20px; display: block;"></i>
+            <span style="font-size: 10px; margin-top: 5px; display: block;">Uploads</span>
+        </div>
+    </div>
+
+    <!-- 2. EXPANDABLE DRAWER (DRAWER CONTENT) -->
+    <div id="editor-drawer" class="editor-drawer" style="width: 320px; background: #252627; border-right: 1px solid #2d2e32; transition: 0.3s; padding: 20px; overflow-y: auto;">
+        
+        <!-- DESIGN TAB: Sections List -->
+        <div id="pane-design" class="drawer-pane active">
+            <h5 style="color: white; margin-bottom: 20px;">Site Sections</h5>
+            <div id="sections-list" class="sortable-list">
+                <!-- Loaded via JS -->
+            </div>
+            <hr style="border-color: #333;">
+            <h5 style="color: white; margin-top: 20px;">Add New Block</h5>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+                <div class="block-template" data-type="hero" style="background:#3d3e40; padding:15px; border-radius:8px; cursor:pointer;">
+                    <i class="fas fa-star"></i> Hero Section
+                </div>
+                <div class="block-template" data-type="about" style="background:#3d3e40; padding:15px; border-radius:8px; cursor:pointer;">
+                    <i class="fas fa-info-circle"></i> About Section
+                </div>
+            </div>
+        </div>
+
+        <!-- ELEMENTS TAB -->
+        <div id="pane-elements" class="drawer-pane" style="display: none;">
+            <h5 style="color: white; margin-bottom: 20px;">Elements</h5>
+            <div class="element-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="draggable-item" data-type="text" style="background: #3d3e40; padding: 20px; border-radius: 8px; text-align: center; cursor: grab; transition: 0.2s;">
+                    <i class="fas fa-font" style="font-size: 1.5rem; display: block; margin-bottom: 8px;"></i> Text
+                </div>
+                <div class="draggable-item" data-type="image" style="background: #3d3e40; padding: 20px; border-radius: 8px; text-align: center; cursor: grab;">
+                    <i class="fas fa-image" style="font-size: 1.5rem; display: block; margin-bottom: 8px;"></i> Image
+                </div>
+            </div>
+        </div>
+
+        <!-- MENU TAB: Focused Menu Controls -->
+        <div id="pane-menu" class="drawer-pane" style="display: none;">
+            <h5 style="color: white; margin-bottom: 20px;">Pricing Menu Editor</h5>
+            <div class="menu-editor-btn" onclick="focusMenu()" style="background: var(--accent-yellow); color: black; padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; cursor: pointer;">
+                <i class="fas fa-expand-arrows-alt"></i> OPEN FULL CANVAS
+            </div>
+            <p style="color: #888; font-size: 0.8rem; margin-top: 15px;">Edit items directly in the site frame or open the full canvas for detail work.</p>
+        </div>
+
+    </div>
+
+    <!-- 3. MAIN CANVAS AREA -->
+    <div class="editor-main-canvas" style="flex:1; background: #0f0f0f; display: flex; flex-direction: column; position: relative;">
+        <!-- TOP TOOLBAR (CANVA STYLE) -->
+        <div class="canvas-header" style="height: 56px; background: #18191b; border-bottom: 1px solid #2d2e32; display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
+            <div class="device-toggles" style="display: flex; gap: 10px;">
+                <button class="device-btn active" data-device="desktop"><i class="fas fa-desktop"></i></button>
+                <button class="device-btn" data-device="tablet"><i class="fas fa-tablet-alt"></i></button>
+                <button class="device-btn" data-device="mobile"><i class="fas fa-mobile-alt"></i></button>
+            </div>
+            
+            <div id="selection-toolbar" class="selection-toolbar" style="display: none; background: #252627; border: 1px solid #3d3e40; border-radius: 8px; padding: 5px 15px; gap: 15px; align-items: center;">
+                <select id="font-family" style="background:transparent; color:white; border:none; outline:none; font-size:13px;"></select>
+                <input type="number" id="font-size" style="width:45px; background:#333; color:white; border:none; border-radius:4px; padding:2px 5px;">
+                <div style="width:1px; height:20px; background:#3d3e40;"></div>
+                <input type="color" id="text-color" style="width:25px; height:25px; border:none; background:none; cursor:pointer;">
+                <button onclick="toggleBold()" class="toolbar-btn"><i class="fas fa-bold"></i></button>
+            </div>
+
+            <div class="save-actions" style="display: flex; gap: 10px;">
+                <button class="btn btn-outline-light btn-sm" onclick="location.href='/admin/unified-manager'"><i class="fas fa-table"></i> Form Editor</button>
+                <button id="save-all" class="btn btn-primary" style="background: #3c77ea !important; border:none; padding: 8px 20px; font-weight: bold;">
+                    SAVE WEBSITE
+                </button>
+            </div>
+        </div>
+
+        <div id="iframe-outer" style="flex:1; display:flex; justify-content:center; align-items:center; overflow:auto; padding: 40px;">
+            <div id="iframe-wrapper" style="width: 100%; height: 100%; box-shadow: 0 0 50px rgba(0,0,0,0.5); background: white; transition: 0.3s; position: relative;">
+                <iframe id="site-frame" src="{{ url_for('index', edit='true', t=cache_id) }}" style="width: 100%; height: 100%; border: none;"></iframe>
+                
+                <!-- FLOATING TOOLBAR (Follows Selection) -->
+                <div id="floating-toolbar" style="display:none; position:absolute; z-index: 10002; background: #6B21C8; color: white; border-radius: 4px; padding: 2px 8px; font-size: 11px; transform: translateY(-30px); pointer-events: none;">
+                    Editing Mode
+                </div>
+            </div>
+        </div>
+
+        <!-- PRICING CANVAS OVERLAY (CANVA STYLE) -->
+        <div id="pricing-editor-overlay" style="display:none; position:fixed; inset:0; background: rgba(0,0,0,0.95); z-index: 20000; overflow-y:auto; padding:60px 20px;">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+                    <h2 style="color: white; margin:0;">Pricing Master Canvas</h2>
+                    <button onclick="closeMenu()" class="btn btn-outline-light"><i class="fas fa-times"></i> Done Editing</button>
+                </div>
+                
+                <div id="canvas-pricing-container" style="display: flex; flex-wrap: wrap; gap: 40px; justify-content: center;">
+                    <!-- Rendered via JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .nav-icon.active { color: white !important; border-left: 3px solid var(--accent-yellow); padding-left: 17px; background: #252627; width: 100%; }
+    .nav-icon:hover { color: white !important; }
+    .device-btn { background:none; border:none; color:#888; margin-right: 15px; cursor:pointer; }
+    .device-btn.active { color: var(--accent-yellow); }
+    .toolbar-btn { background: none; border: none; color: #a9abb3; cursor: pointer; padding: 5px; border-radius: 4px; }
+    .toolbar-btn:hover { background: #3d3e40; color: white; }
+    
+    .sortable-list .section-item {
+        background: #3d3e40; margin-bottom: 8px; padding: 12px; border-radius: 6px;
+        display: flex; justify-content: space-between; align-items:center; cursor: move; color: white;
+    }
+    
+    /* Custom Scrollbar */
+    .editor-drawer::-webkit-scrollbar { width: 6px; }
+    .editor-drawer::-webkit-scrollbar-thumb { background: #3d3e40; border-radius: 10px; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const frame = document.getElementById('site-frame');
+    const iframeWrapper = document.getElementById('iframe-wrapper');
+    const drawer = document.getElementById('editor-drawer');
+    let selectedField = null;
+
+    // 1. Device Preview Toggles
+    document.querySelectorAll('.device-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const device = btn.getAttribute('data-device');
+            if (device === 'mobile') iframeWrapper.style.width = '375px';
+            else if (device === 'tablet') iframeWrapper.style.width = '768px';
+            else iframeWrapper.style.width = '100%';
+        });
+    });
+
+    // 2. Canva-Style Drawer Navigation
+    document.querySelectorAll('.nav-icon').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.nav-icon').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.drawer-pane').forEach(p => p.style.display = 'none');
+            
+            btn.classList.add('active');
+            const paneId = 'pane-' + btn.getAttribute('data-tab');
+            const pane = document.getElementById(paneId);
+            if (pane) pane.style.display = 'block';
+        });
+    });
+
+    // 3. Iframe Bridge & Logic
+    frame.onload = function() {
+        console.log('Premium Editor v2.8 Live');
+        const doc = frame.contentWindow.document;
+        
+        // Inject Enhanced Selection Styles
+        const editorStyles = doc.createElement('style');
+        editorStyles.innerHTML = `
+            [contenteditable]:hover { outline: 2px dashed #3c77ea !important; outline-offset: 4px; cursor: text; }
+            .is-selected { outline: 3px solid #3c77ea !important; outline-offset: 4px; box-shadow: 0 0 15px rgba(60, 119, 234, 0.3); }
+            .section-hover { border: 2px solid #FDCC04 !important; }
+        `;
+        doc.head.appendChild(editorStyles);
+
+        refreshSectionsList();
+    };
+
+    function refreshSectionsList() {
+        const doc = frame.contentWindow.document;
+        const list = document.getElementById('sections-list');
+        if (!list) return;
+        list.innerHTML = '';
+        doc.querySelectorAll('section').forEach((sec, idx) => {
+            const name = sec.id.toUpperCase() || `Section ${idx+1}`;
+            const item = document.createElement('div');
+            item.className = 'section-item';
+            item.innerHTML = `<span><i class="fas fa-grip-vertical"></i> ${name}</span> <i class="fas fa-ellipsis-h"></i>`;
+            item.onclick = () => sec.scrollIntoView({behavior:'smooth'});
+            list.appendChild(item);
+        });
+    }
+
+    // 4. Handle Selection Messages
+    window.addEventListener('message', (e) => {
+        if (e.data.type === 'element_selected') {
+            handleElementSelection(e.data);
+        }
+        if (e.data === 'save_all') {
+            document.getElementById('save-all').click();
+        }
+    });
+
+    function handleElementSelection(data) {
+        selectedField = data.field;
+        
+        // Show Selection Toolbar
+        const toolbar = document.getElementById('selection-toolbar');
+        if (toolbar) toolbar.style.display = 'flex';
+        
+        const floating = document.getElementById('floating-toolbar');
+        if (floating && data.rect) {
+            floating.style.display = 'block';
+            // Position above the element with offset
+            const top = (typeof data.rect.top === 'number') ? data.rect.top : 0;
+            const left = (typeof data.rect.left === 'number') ? data.rect.left : 0;
+            floating.style.top = (top - 35) + 'px'; 
+            floating.style.left = left + 'px';
+            floating.innerText = `Editing: ${data.tagName}`;
+        }
+
+        // Sync values to UI
+        if (data.styles) {
+            if (data.styles.fontSize) {
+                const sizeInput = document.getElementById('font-size');
+                if (sizeInput) sizeInput.value = parseInt(data.styles.fontSize);
+            }
+            if (data.styles.color) {
+                const colorInput = document.getElementById('text-color');
+                if (colorInput) colorInput.value = rgbToHex(data.styles.color);
+            }
+        }
+    }
+
+    // 5. Real-time Style Controls
+    document.getElementById('font-size').oninput = function() {
+        if (selectedField) sendStyle('fontSize', this.value + 'px');
+    };
+    document.getElementById('text-color').oninput = function() {
+        if (selectedField) sendStyle('color', this.value);
+    };
+
+    function sendStyle(prop, val) {
+        frame.contentWindow.postMessage({
+            type: 'update_style',
+            field: selectedField,
+            property: prop,
+            value: val
+        }, '*');
+    }
+
+    window.toggleBold = () => {
+        if (selectedField) sendStyle('fontWeight', 'bold');
+    };
+
+    // 6. Save Logic
+    document.getElementById('save-all').onclick = async function() {
+        const btn = this;
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SAVING...';
+
+        const doc = frame.contentWindow.document;
+        
+        // Get dynamic data from iframe
+        const getDynamicData = new Promise((resolve) => {
+            const handler = (e) => {
+                if (e.data.type === 'dynamic_data_response') {
+                    window.removeEventListener('message', handler);
+                    resolve(e.data.data);
+                }
+            };
+            window.addEventListener('message', handler);
+            frame.contentWindow.postMessage('get_dynamic_data', '*');
+            setTimeout(() => resolve({}), 2000);
+        });
+
+        const dynamicElements = await getDynamicData;
+        const changes = [];
+
+        doc.querySelectorAll('[data-field]').forEach(el => {
+            const field = el.getAttribute('data-field');
+            const val = el.innerText.trim();
+            changes.push({ field: field, value: val });
+            
+            // Collect any visual tweaks
+            if (el.style.color) changes.push({ field: field + '_color', value: el.style.color });
+            if (el.style.fontSize) changes.push({ field: field + '_size', value: el.style.fontSize });
+        });
+
+        try {
+            const res = await fetch('{{ url_for("admin.save_live_editor") }}', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    changes: changes,
+                    dynamic_elements: JSON.stringify(dynamicElements),
+                    menu_state: frame.contentWindow.getMenuState()
+                })
+            });
+            const resData = await res.json();
+            if (resData.status === 'success') {
+                showToast('Website Saved Successfully!');
+                btn.style.background = '#2ecc71';
+                btn.innerHTML = '<i class="fas fa-check"></i> SUCCESS';
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.style.background = '#3c77ea';
+                    btn.innerHTML = originalText;
+                }, 2000);
+            }
+        } catch (e) {
+            alert('Error: ' + e.message);
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        }
+    };
+
+    // 7. Pricing Canvas Logic
+    window.focusMenu = function() {
+        const overlay = document.getElementById('pricing-editor-overlay');
+        overlay.style.display = 'block';
+        renderPricingMenu();
+    };
+
+    window.closeMenu = function() {
+        document.getElementById('pricing-editor-overlay').style.display = 'none';
+        // Refresh iframe to see changes
+        frame.src = frame.src;
+    };
+
+    function renderPricingMenu() {
+        const container = document.getElementById('canvas-pricing-container');
+        if (!container) return;
+        
+        const doc = frame.contentWindow.document;
+        const editorContent = doc.getElementById('pricing-a4-editor');
+        
+        if (editorContent) {
+            container.innerHTML = editorContent.innerHTML;
+            // Initialize Sortable for the new clones if needed
+            // But better to just let the user edit and then sync back
+        }
+    }
+    function rgbToHex(rgb) {
+        if (!rgb || !rgb.startsWith('rgb')) return '#ffffff';
+        const p = rgb.match(/\d+/g);
+        if (!p) return '#ffffff';
+        const r = parseInt(p[0]).toString(16).padStart(2,'0');
+        const g = parseInt(p[1]).toString(16).padStart(2,'0');
+        const b = parseInt(p[2]).toString(16).padStart(2,'0');
+        return `#${r}${g}${b}`;
+    }
+
+    function showToast(msg, type='success') {
+        const toast = document.createElement('div');
+        toast.style.cssText = `position:fixed; bottom:20px; right:20px; background:${type==='success'?'#2ecc71':'#e74c3c'}; color:white; padding:12px 25px; border-radius:8px; z-index:30000; box-shadow:0 10px 30px rgba(0,0,0,0.5); font-weight:bold;`;
+        toast.innerText = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+});
+</script>
+{% endblock %}

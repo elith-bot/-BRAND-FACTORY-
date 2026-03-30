@@ -1,278 +1,478 @@
 {% extends "admin/base.html" %}
 
-{% block title %}Site Content{% endblock %}
-{% block page_title %}Manage Site Content{% endblock %}
+{% block title %}Site Content & Pricing{% endblock %}
+{% block page_title %}Unified Site Manager{% endblock %}
 {% block nav_content %}active{% endblock %}
 
 {% block content %}
-<div class="card">
-    <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">About Us & Contact Information</h3>
-    <form method="POST" enctype="multipart/form-data">
-        <label style="font-weight: bold; color: #555;">About Us (English)</label>
-        <textarea name="about_us_en" rows="5"
-            style="width:100%; margin-bottom:15px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: inherit;">{{ content.about_us_en if content else '' }}</textarea>
+<div class="unified-dashboard">
+    <div class="admin-header-notice" style="background: rgba(107, 33, 200, 0.2); border-left: 4px solid #6B21C8; padding: 15px; margin-bottom: 25px; border-radius: 8px;">
+        <p style="margin: 0; font-weight: 600; color: #6B21C8;"><i class="fas fa-info-circle"></i> Safe-Sync Active: Empty fields below will automatically use the default template design on the live site. Only fill fields where you want to override the default content.</p>
+    </div>
 
-        <label style="font-weight: bold; color: #555;">About Us (Arabic) / من نحن</label>
-        <textarea name="about_us_ar" rows="5"
-            style="width:100%; margin-bottom:15px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: inherit;"
-            dir="rtl">{{ content.about_us_ar if content else '' }}</textarea>
-
-        <label style="font-weight: bold; color: #555;">Contact Info (English)</label>
-        <textarea name="contact_info_en" rows="5"
-            style="width:100%; margin-bottom:15px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: inherit;">{{ content.contact_info_en if content else '' }}</textarea>
-
-        <label style="font-weight: bold; color: #555;">Contact Info (Arabic) / معلومات التواصل</label>
-        <textarea name="contact_info_ar" rows="5"
-            style="width:100%; margin-bottom:20px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: inherit;"
-            dir="rtl">{{ content.contact_info_ar if content else '' }}</textarea>
-
-        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Direct Contact Links & Social Media
-        </h3>
-
-        <label style="font-weight: bold; color: #555;"><i class="fas fa-phone"></i> Phone Number</label>
-        <input type="text" name="contact_phone" value="{{ content.contact_phone if content else '' }}"
-            placeholder="+964..."
-            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
-
-        <label style="font-weight: bold; color: #555;"><i class="fab fa-whatsapp"></i> WhatsApp Number</label>
-        <input type="text" name="contact_whatsapp" value="{{ content.contact_whatsapp if content else '' }}"
-            placeholder="+964..."
-            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
-
-        <label style="font-weight: bold; color: #555;"><i class="fab fa-telegram"></i> Telegram Link</label>
-        <input type="text" name="contact_telegram" value="{{ content.contact_telegram if content else '' }}"
-            placeholder="https://t.me/username"
-            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
-
-        <label style="font-weight: bold; color: #555;"><i class="fas fa-envelope"></i> Email Address</label>
-        <input type="email" name="contact_email" value="{{ content.contact_email if content else '' }}"
-            placeholder="example@email.com"
-            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
-
-        <label style="font-weight: bold; color: #555;"><i class="fab fa-facebook"></i> Facebook Link</label>
-        <input type="text" name="contact_facebook" value="{{ content.contact_facebook if content else '' }}"
-            placeholder="https://facebook.com/..."
-            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
-
-        <label style="font-weight: bold; color: #555;"><i class="fab fa-instagram"></i> Instagram Link</label>
-        <input type="text" name="contact_instagram" value="{{ content.contact_instagram if content else '' }}"
-            placeholder="https://instagram.com/..."
-            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
-
-        <label style="font-weight: bold; color: #555;"><i class="fab fa-tiktok"></i> TikTok Link</label>
-        <input type="text" name="contact_tiktok" value="{{ content.contact_tiktok if content else '' }}"
-            placeholder="https://tiktok.com/@..."
-            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
-
-        <label style="font-weight: bold; color: #555;"><i class="fas fa-map-marker-alt"></i> GPS / Google Maps
-            Link</label>
-        <input type="text" name="contact_gps" value="{{ content.contact_gps if content else '' }}"
-            placeholder="https://maps.google.com/..."
-            style="width:100%; margin-bottom:25px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
-
-        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Homepage Hero Text</h3>
-
-        <label style="font-weight: bold; color: #555;">Hero Title (English) [Ex: WE ARE BRAND FACTORY]</label>
-        <input type="text" name="hero_title_en" value="{{ content.hero_title_en if content else '' }}"
-            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
-
-        <label style="font-weight: bold; color: #555;">Hero Title (Arabic) [Ex: نحن فوتوجينيك]</label>
-        <input type="text" name="hero_title_ar" value="{{ content.hero_title_ar if content else '' }}" dir="rtl"
-            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
-
-        <label style="font-weight: bold; color: #555;">Hero Subtitle (English) [Ex: Coding Your Vision into
-            Reality]</label>
-        <input type="text" name="hero_subtitle_en" value="{{ content.hero_subtitle_en if content else '' }}"
-            style="width:100%; margin-bottom:15px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
-
-        <label style="font-weight: bold; color: #555;">Hero Subtitle (Arabic) [Ex: نحول رؤيتك إلى حقيقة]</label>
-        <input type="text" name="hero_subtitle_ar" value="{{ content.hero_subtitle_ar if content else '' }}" dir="rtl"
-            style="width:100%; margin-bottom:25px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
-
-        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 1: Hero Background & Colors</h3>
+    <form id="unified-form" method="POST" enctype="multipart/form-data">
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-            <div>
-                <label style="font-weight: bold; color: #555;">Title Color</label>
-                <input type="color" name="hero_title_color" value="{{ content.hero_title_color if content and content.hero_title_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+        <!-- SECTION 1: HERO -->
+        <div class="admin-section active" id="sec-hero">
+            <div class="admin-section-header">
+                <h3><i class="fas fa-bolt"></i> Hero Section</h3>
+                <i class="fas fa-chevron-down"></i>
             </div>
-            <div>
-                <label style="font-weight: bold; color: #555;">Text Color</label>
-                <input type="color" name="hero_text_color" value="{{ content.hero_text_color if content and content.hero_text_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
-            </div>
-            <div>
-                <label style="font-weight: bold; color: #555;">Button Bg Color</label>
-                <input type="color" name="hero_btn_bg_color" value="{{ content.hero_btn_bg_color if content and content.hero_btn_bg_color else '#6B21C8' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
-            </div>
-            <div>
-                <label style="font-weight: bold; color: #555;">Button Text Color</label>
-                <input type="color" name="hero_btn_text_color" value="{{ content.hero_btn_text_color if content and content.hero_btn_text_color else '#FDCC04' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
-            </div>
-        </div>
-
-        <div style="margin-bottom: 20px;">
-            <label style="font-weight: bold; color: #555;">Background Type</label><br>
-            <input type="radio" name="hero_bg_type" value="image" id="hero_img" {{ 'checked' if not content or content.hero_bg_type == 'image' else '' }}> <label for="hero_img">Image Overlay</label> &nbsp;
-            <input type="radio" name="hero_bg_type" value="video" id="hero_vid" {{ 'checked' if content and content.hero_bg_type == 'video' else '' }}> <label for="hero_vid">Video Overlay</label> &nbsp;
-            <input type="radio" name="hero_bg_type" value="color" id="hero_col" {{ 'checked' if content and content.hero_bg_type == 'color' else '' }}> <label for="hero_col">Solid Color</label>
-        </div>
-
-        <label style="font-weight: bold; color: #555;">Upload Background Media (Image or Video)</label>
-        <input type="file" name="hero_bg" accept="image/*,video/*,.mkv,.flv,.wmv,.avi,.mov"
-            style="width:100%; margin-bottom:10px; padding:10px; border-radius: 5px; border: 1px solid #ccc;">
-
-        <label style="font-weight: bold; color: #555;">Background Color (if Solid Color is selected)</label>
-        <input type="color" name="hero_bg_color" value="{{ content.hero_bg_color if content and content.hero_bg_color else '#6B21C8' }}"
-            style="width: 50px; height: 50px; display: block; margin-bottom: 15px; border: none; cursor: pointer;">
-
-        {% if content and content.hero_bg_media %}
-        <div style="margin-bottom: 25px;">
-            <p style="margin: 0; color: #777; font-size: 0.9rem;">Current Hero Media: <code>{{ content.hero_bg_media }}</code></p>
-        </div>
-        {% endif %}
-
-        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 2: Portfolio Background & Colors</h3>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-            <div>
-                <label style="font-weight: bold; color: #555;">Title Color</label>
-                <input type="color" name="section2_title_color" value="{{ content.section2_title_color if content and content.section2_title_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
-            </div>
-            <div>
-                <label style="font-weight: bold; color: #555;">Text Color</label>
-                <input type="color" name="section2_text_color" value="{{ content.section2_text_color if content and content.section2_text_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
-            </div>
-            <div>
-                <label style="font-weight: bold; color: #555;">Button Bg Color</label>
-                <input type="color" name="section2_btn_bg_color" value="{{ content.section2_btn_bg_color if content and content.section2_btn_bg_color else '#6B21C8' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
-            </div>
-            <div>
-                <label style="font-weight: bold; color: #555;">Button Text Color</label>
-                <input type="color" name="section2_btn_text_color" value="{{ content.section2_btn_text_color if content and content.section2_btn_text_color else '#FDCC04' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            <div class="admin-section-body">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <label>Hero Title (EN)</label>
+                        <input type="text" name="hero_title_en" value="{{ content.hero_title_en or '' }}" 
+                               placeholder="Welcome to Brand Factory" class="form-control" style="width:100%;">
+                        <label>Title Font</label>
+                        <select name="hero_title_font" class="form-control">
+                            <option value="'Anton', sans-serif" {{ 'selected' if content.hero_title_font == "'Anton', sans-serif" else '' }}>Anton (Logo Style)</option>
+                            <option value="'Cairo', sans-serif" {{ 'selected' if content.hero_title_font == "'Cairo', sans-serif" else '' }}>Cairo (Arabic Standard)</option>
+                            <option value="'Roboto', sans-serif" {{ 'selected' if content.hero_title_font == "'Roboto', sans-serif" else '' }}>Roboto (Modern)</option>
+                        </select>
+                        <label>Hero Title (AR)</label>
+                        <input type="text" name="hero_title_ar" value="{{ content.hero_title_ar or '' }}" 
+                               placeholder="أهلاً بكم في براند فاكتوري" class="form-control" dir="rtl" style="width:100%;">
+                    </div>
+                    <div>
+                        <label>Hero Subtitle (EN)</label>
+                        <textarea name="hero_subtitle_en" rows="2" placeholder="We craft the most creative visual solutions" style="width:100%;">{{ content.hero_subtitle_en or '' }}</textarea>
+                        <label>Subtitle Font</label>
+                        <select name="hero_subtitle_font" class="form-control">
+                            <option value="'Cairo', sans-serif" {{ 'selected' if content.hero_subtitle_font == "'Cairo', sans-serif" else '' }}>Cairo</option>
+                            <option value="'Roboto', sans-serif" {{ 'selected' if content.hero_subtitle_font == "'Roboto', sans-serif" else '' }}>Roboto</option>
+                        </select>
+                        <label>Hero Subtitle (AR)</label>
+                        <textarea type="text" name="hero_subtitle_ar" rows="2" placeholder="نحن نصنع الحلول البصرية الأكثر إبداعاً" style="width:100%;" dir="rtl">{{ content.hero_subtitle_ar or '' }}</textarea>
+                    </div>
+                </div>
+                <hr>
+                <h4>Background & Visuals</h4>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+                    <div><label>Title Color</label><input type="color" name="hero_title_color" value="{{ content.hero_title_color or '#ffffff' }}"></div>
+                    <div><label>Text Color</label><input type="color" name="hero_text_color" value="{{ content.hero_text_color or '#ffffff' }}"></div>
+                    <div><label>Btn Bg</label><input type="color" name="hero_btn_bg_color" value="{{ content.hero_btn_bg_color or '#6B21C8' }}"></div>
+                    <div><label>Btn Text</label><input type="color" name="hero_btn_text_color" value="{{ content.hero_btn_text_color or '#FDCC04' }}"></div>
+                </div>
+                <div style="margin-top:15px;">
+                    <label>Background Type</label><br>
+                    <input type="radio" name="hero_bg_type" value="image" {{ 'checked' if content.hero_bg_type == 'image' else '' }}> Image &nbsp;
+                    <input type="radio" name="hero_bg_type" value="video" {{ 'checked' if content.hero_bg_type == 'video' else '' }}> Video &nbsp;
+                    <input type="radio" name="hero_bg_type" value="color" {{ 'checked' if content.hero_bg_type == 'color' else '' }}> Color
+                </div>
+                <label>Media Upload (Image/Video)</label>
+                <input type="file" name="hero_bg" accept="image/*,video/*">
+                <label>BG Color (if solid)</label>
+                <input type="color" name="hero_bg_color" value="{{ content.hero_bg_color or '#6B21C8' }}">
             </div>
         </div>
 
-        <div style="margin-bottom: 20px;">
-            <label style="font-weight: bold; color: #555;">Background Type</label><br>
-            <input type="radio" name="section2_bg_type" value="image" id="s2_img" {{ 'checked' if content and content.section2_bg_type == 'image' else '' }}> <label for="s2_img">Image Overlay</label> &nbsp;
-            <input type="radio" name="section2_bg_type" value="video" id="s2_vid" {{ 'checked' if content and content.section2_bg_type == 'video' else '' }}> <label for="s2_vid">Video Overlay</label> &nbsp;
-            <input type="radio" name="section2_bg_type" value="color" id="s2_col" {{ 'checked' if not content or content.section2_bg_type == 'color' or not content.section2_bg_type else '' }}> <label for="s2_col">Solid Color</label>
-        </div>
-        <label style="font-weight: bold; color: #555;">Upload Background Media</label>
-        <input type="file" name="section2_bg_media" accept="image/*,video/*">
-        <label style="font-weight: bold; color: #555; display:block; margin-top:10px;">Background Color</label>
-        <input type="color" name="section2_bg_color" value="{{ content.section2_bg_color if content and content.section2_bg_color else '#FDCC04' }}" style="width: 50px; height: 50px; border:none; cursor:pointer;">
-
-        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 3: About Background & Colors</h3>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-            <div>
-                <label style="font-weight: bold; color: #555;">Title Color</label>
-                <input type="color" name="about_title_color" value="{{ content.about_title_color if content and content.about_title_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+        <!-- SECTION 2: PORTFOLIO -->
+        <div class="admin-section" id="sec-portfolio">
+            <div class="admin-section-header">
+                <h3><i class="fas fa-briefcase"></i> Portfolio Section</h3>
+                <i class="fas fa-chevron-down"></i>
             </div>
-            <div>
-                <label style="font-weight: bold; color: #555;">Text Color</label>
-                <input type="color" name="about_text_color" value="{{ content.about_text_color if content and content.about_text_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
-            </div>
-            <div>
-                <label style="font-weight: bold; color: #555;">Button Bg Color</label>
-                <input type="color" name="about_btn_bg_color" value="{{ content.about_btn_bg_color if content and content.about_btn_bg_color else '#6B21C8' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
-            </div>
-            <div>
-                <label style="font-weight: bold; color: #555;">Button Text Color</label>
-                <input type="color" name="about_btn_text_color" value="{{ content.about_btn_text_color if content and content.about_btn_text_color else '#FDCC04' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
-            </div>
-        </div>
-
-        <div style="margin-bottom: 20px;">
-            <label style="font-weight: bold; color: #555;">Background Type</label><br>
-            <input type="radio" name="about_bg_type" value="image" id="s3_img" {{ 'checked' if content and content.about_bg_type == 'image' else '' }}> <label for="s3_img">Image Overlay</label> &nbsp;
-            <input type="radio" name="about_bg_type" value="video" id="s3_vid" {{ 'checked' if content and content.about_bg_type == 'video' else '' }}> <label for="s3_vid">Video Overlay</label> &nbsp;
-            <input type="radio" name="about_bg_type" value="color" id="s3_col" {{ 'checked' if not content or content.about_bg_type == 'color' or not content.about_bg_type else '' }}> <label for="s3_col">Solid Color</label>
-        </div>
-        <input type="file" name="about_bg_media" accept="image/*,video/*">
-        <input type="color" name="about_bg_color" value="{{ content.about_bg_color if content and content.about_bg_color else '#0A0A0A' }}" style="width: 50px; height: 50px; display:block; margin-top:10px; border:none; cursor:pointer;">
-
-        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 4: Learning Background & Colors</h3>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-            <div>
-                <label style="font-weight: bold; color: #555;">Title Color</label>
-                <input type="color" name="learning_title_color" value="{{ content.learning_title_color if content and content.learning_title_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
-            </div>
-            <div>
-                <label style="font-weight: bold; color: #555;">Text Color</label>
-                <input type="color" name="learning_text_color" value="{{ content.learning_text_color if content and content.learning_text_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
-            </div>
-            <div>
-                <label style="font-weight: bold; color: #555;">Button Bg Color</label>
-                <input type="color" name="learning_btn_bg_color" value="{{ content.learning_btn_bg_color if content and content.learning_btn_bg_color else '#6B21C8' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
-            </div>
-            <div>
-                <label style="font-weight: bold; color: #555;">Button Text Color</label>
-                <input type="color" name="learning_btn_text_color" value="{{ content.learning_btn_text_color if content and content.learning_btn_text_color else '#FDCC04' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            <div class="admin-section-body">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px;">
+                    <div>
+                        <label>Portfolio Title (EN)</label>
+                        <input type="text" name="section2_title_en" value="{{ content.section2_title_en or '' }}" 
+                               placeholder="OUR LATEST WORK" class="form-control" style="width:100%;">
+                        <label>Portfolio Title (AR)</label>
+                        <input type="text" name="section2_title_ar" value="{{ content.section2_title_ar or '' }}" 
+                               placeholder="أحدث مشاريعنا" class="form-control" dir="rtl" style="width:100%;">
+                    </div>
+                    <div>
+                        <label>Portfolio Subtitle (EN)</label>
+                        <textarea name="section2_text_en" rows="2" placeholder="A selection of our finest creative projects" style="width:100%;">{{ content.section2_text_en or '' }}</textarea>
+                        <label>Portfolio Subtitle (AR)</label>
+                        <textarea name="section2_text_ar" rows="2" placeholder="مختارات من أفضل مشاريعنا الإبداعية" style="width:100%;" dir="rtl">{{ content.section2_text_ar or '' }}</textarea>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+                    <div><label>Title Color</label><input type="color" name="section2_title_color" value="{{ content.section2_title_color or '#ffffff' }}"></div>
+                    <div><label>Title Font</label>
+                        <select name="section2_title_font" class="form-control">
+                            <option value="'Anton', sans-serif" {{ 'selected' if content.section2_title_font == "'Anton', sans-serif" else '' }}>Anton</option>
+                            <option value="'Cairo', sans-serif" {{ 'selected' if content.section2_title_font == "'Cairo', sans-serif" else '' }}>Cairo</option>
+                            <option value="'Roboto', sans-serif" {{ 'selected' if content.section2_title_font == "'Roboto', sans-serif" else '' }}>Roboto</option>
+                        </select>
+                    </div>
+                    <div><label>Text Color</label><input type="color" name="section2_text_color" value="{{ content.section2_text_color or '#ffffff' }}"></div>
+                    <div><label>Btn Bg</label><input type="color" name="section2_btn_bg_color" value="{{ content.section2_btn_bg_color or '#6B21C8' }}"></div>
+                    <div><label>Btn Text</label><input type="color" name="section2_btn_text_color" value="{{ content.section2_btn_text_color or '#FDCC04' }}"></div>
+                </div>
+                <div style="margin-top:15px;">
+                    <label>Background Type</label><br>
+                    <input type="radio" name="section2_bg_type" value="image" {{ 'checked' if content.section2_bg_type == 'image' else '' }}> Image &nbsp;
+                    <input type="radio" name="section2_bg_type" value="video" {{ 'checked' if content.section2_bg_type == 'video' else '' }}> Video &nbsp;
+                    <input type="radio" name="section2_bg_type" value="color" {{ 'checked' if content.section2_bg_type == 'color' else '' }}> Color
+                </div>
+                <input type="file" name="section2_bg_media" accept="image/*,video/*">
+                <input type="color" name="section2_bg_color" value="{{ content.section2_bg_color or '#FDCC04' }}">
             </div>
         </div>
 
-        <div style="margin-bottom: 20px;">
-            <label style="font-weight: bold; color: #555;">Background Type</label><br>
-            <input type="radio" name="learning_bg_type" value="image" id="s4_img" {{ 'checked' if content and content.learning_bg_type == 'image' else '' }}> <label for="s4_img">Image Overlay</label> &nbsp;
-            <input type="radio" name="learning_bg_type" value="video" id="s4_vid" {{ 'checked' if content and content.learning_bg_type == 'video' else '' }}> <label for="s4_vid">Video Overlay</label> &nbsp;
-            <input type="radio" name="learning_bg_type" value="color" id="s4_col" {{ 'checked' if not content or content.learning_bg_type == 'color' or not content.learning_bg_type else '' }}> <label for="s4_col">Solid Color</label>
-        </div>
-        <input type="file" name="learning_bg_media" accept="image/*,video/*">
-        <input type="color" name="learning_bg_color" value="{{ content.learning_bg_color if content and content.learning_bg_color else '#0A0A0A' }}" style="width: 50px; height: 50px; display:block; margin-top:10px; border:none; cursor:pointer;">
-
-        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Section 5: Contact Background & Colors</h3>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-            <div>
-                <label style="font-weight: bold; color: #555;">Title Color</label>
-                <input type="color" name="contact_title_color" value="{{ content.contact_title_color if content and content.contact_title_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+        <!-- SECTION 3: PRICING (Interactive) -->
+        <div class="admin-section" id="sec-pricing">
+            <div class="admin-section-header">
+                <h3><i class="fas fa-tags"></i> Interactive Pricing Menu</h3>
+                <i class="fas fa-chevron-down"></i>
             </div>
-            <div>
-                <label style="font-weight: bold; color: #555;">Text Color</label>
-                <input type="color" name="contact_text_color" value="{{ content.contact_text_color if content and content.contact_text_color else '#ffffff' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
-            </div>
-            <div>
-                <label style="font-weight: bold; color: #555;">Button Bg Color</label>
-                <input type="color" name="contact_btn_bg_color" value="{{ content.contact_btn_bg_color if content and content.contact_btn_bg_color else '#6B21C8' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
-            </div>
-            <div>
-                <label style="font-weight: bold; color: #555;">Button Text Color</label>
-                <input type="color" name="contact_btn_text_color" value="{{ content.contact_btn_text_color if content and content.contact_btn_text_color else '#FDCC04' }}" style="width: 100%; height: 40px; border:none; cursor:pointer;">
+            <div class="admin-section-body">
+                <p class="text-muted"><i class="fas fa-info-circle"></i> Drag items to reorder or move between packages. Click text to edit names/prices.</p>
+                
+                <div class="pricing-preview-layout">
+                    <!-- LEFT COLUMN -->
+                    <div class="pricing-column">
+                        <h4><i class="fas fa-arrow-left"></i> Left Side (Purple-Yellow)</h4>
+                        
+                        <!-- Packages on Left -->
+                        {% for package in pricing_left %}
+                        <div class="package-container" style="margin-bottom:20px; border: 1px solid #ddd; border-radius: 8px; padding: 10px;">
+                            <div style="margin-bottom: 10px;">
+                                <label style="font-size: 0.8rem; color: var(--primary-blue);">Package Name (AR)</label>
+                                <input type="text" class="item-input" name="pkg_name_ar_{{ package.id }}" value="{{ package.name_ar }}" style="font-weight: bold; font-size: 1.1rem; color: var(--primary-blue);">
+                                <label style="font-size: 0.8rem; color: var(--primary-blue);">Package Name (EN)</label>
+                                <input type="text" class="item-input" name="pkg_name_en_{{ package.id }}" value="{{ package.name_en }}" style="font-size: 0.9rem;">
+                            </div>
+                            <div class="sortable-list" data-package-id="{{ package.id }}">
+                                {% for item in package.items|sort(attribute='order_index') %}
+                                <div class="pricing-item-card" data-id="{{ item.id }}">
+                                    <div class="pricing-item-info">
+                                        <input type="text" class="item-input" name="item_name_ar_{{ item.id }}" value="{{ item.name_ar }}" placeholder="AR Name">
+                                        <div style="font-size: 0.8rem; color: #777; margin-top:5px;">
+                                            <input type="text" class="item-input" name="item_name_en_{{ item.id }}" value="{{ item.name_en }}" placeholder="EN Name">
+                                            <input type="text" class="item-input" name="item_price_{{ item.id }}" value="{{ item.price }}" placeholder="Price" style="width: 80px;">
+                                        </div>
+                                    </div>
+                                    <div class="item-actions">
+                                        <button type="button" class="btn-sm btn-danger delete-item" data-id="{{ item.id }}"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <!-- Standalone Left -->
+                        <div class="package-container" style="background:#fefefe; padding: 10px;">
+                            <small>Standalone Items (Left)</small>
+                            <div class="sortable-list" data-package-id="null" data-side="left">
+                                {% for item in standalone_items if item.side == 'left' %}
+                                <div class="pricing-item-card" data-id="{{ item.id }}">
+                                    <div class="pricing-item-info">
+                                        <input type="text" class="item-input" name="item_name_ar_{{ item.id }}" value="{{ item.name_ar }}" placeholder="AR Name">
+                                        <input type="text" class="item-input" name="item_price_{{ item.id }}" value="{{ item.price }}" placeholder="Price" style="width: 80px; margin-left:10px;">
+                                    </div>
+                                    <button type="button" class="btn-sm btn-danger delete-item" data-id="{{ item.id }}"><i class="fas fa-trash"></i></button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN -->
+                    <div class="pricing-column">
+                        <h4>Right Side (Yellow-Purple) <i class="fas fa-arrow-right"></i></h4>
+                        
+                        <!-- Packages on Right -->
+                        {% for package in pricing_right %}
+                        <div class="package-container" style="margin-bottom:20px; border: 1px solid #ddd; border-radius: 8px; padding: 10px;">
+                            <div style="margin-bottom: 10px;">
+                                <label style="font-size: 0.8rem; color: var(--primary-blue);">Package Name (AR)</label>
+                                <input type="text" class="item-input" name="pkg_name_ar_{{ package.id }}" value="{{ package.name_ar }}" style="font-weight: bold; font-size: 1.1rem; color: var(--primary-blue);">
+                                <label style="font-size: 0.8rem; color: var(--primary-blue);">Package Name (EN)</label>
+                                <input type="text" class="item-input" name="pkg_name_en_{{ package.id }}" value="{{ package.name_en }}" style="font-size: 0.9rem;">
+                            </div>
+                            <div class="sortable-list" data-package-id="{{ package.id }}">
+                                {% for item in package.items|sort(attribute='order_index') %}
+                                <div class="pricing-item-card" data-id="{{ item.id }}">
+                                    <div class="pricing-item-info">
+                                        <input type="text" class="item-input" name="item_name_ar_{{ item.id }}" value="{{ item.name_ar }}" placeholder="AR Name">
+                                        <div style="font-size: 0.8rem; color: #777; margin-top:5px;">
+                                            <input type="text" class="item-input" name="item_name_en_{{ item.id }}" value="{{ item.name_en }}" placeholder="EN Name">
+                                            <input type="text" class="item-input" name="item_price_{{ item.id }}" value="{{ item.price }}" placeholder="Price" style="width: 80px;">
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-sm btn-danger delete-item" data-id="{{ item.id }}"><i class="fas fa-trash"></i></button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <!-- Standalone Right -->
+                        <div class="package-container" style="background:#fefefe; padding: 10px;">
+                            <small>Standalone Items (Right)</small>
+                            <div class="sortable-list" data-package-id="null" data-side="right">
+                                {% for item in standalone_items if item.side == 'right' %}
+                                <div class="pricing-item-card" data-id="{{ item.id }}">
+                                    <div class="pricing-item-info">
+                                        <input type="text" class="item-input" name="item_name_ar_{{ item.id }}" value="{{ item.name_ar }}" placeholder="AR Name">
+                                        <div style="font-size: 0.8rem; color: #777; margin-top:5px;">
+                                            <input type="text" class="item-input" name="item_name_en_{{ item.id }}" value="{{ item.name_en }}" placeholder="EN Name">
+                                            <input type="text" class="item-input" name="item_price_{{ item.id }}" value="{{ item.price }}" placeholder="Price" style="width: 80px;">
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-sm btn-danger delete-item" data-id="{{ item.id }}"><i class="fas fa-trash"></i></button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top:20px; text-align: center;">
+                    <a href="{{ url_for('admin.add_pricing_item') }}" class="btn"><i class="fas fa-plus"></i> Add New Item</a>
+                    <a href="{{ url_for('admin.add_pricing_package') }}" class="btn" style="background:var(--accent-yellow); color:var(--primary-blue);"><i class="fas fa-box"></i> Create New Package</a>
+                </div>
             </div>
         </div>
 
-        <div style="margin-bottom: 20px;">
-            <label style="font-weight: bold; color: #555;">Background Type</label><br>
-            <input type="radio" name="contact_bg_type" value="image" id="s5_img" {{ 'checked' if content and content.contact_bg_type == 'image' else '' }}> <label for="s5_img">Image Overlay</label> &nbsp;
-            <input type="radio" name="contact_bg_type" value="video" id="s5_vid" {{ 'checked' if content and content.contact_bg_type == 'video' else '' }}> <label for="s5_vid">Video Overlay</label> &nbsp;
-            <input type="radio" name="contact_bg_type" value="color" id="s5_col" {{ 'checked' if not content or content.contact_bg_type == 'color' or not content.contact_bg_type else '' }}> <label for="s5_col">Solid Color</label>
+        <!-- SECTION 4: ABOUT US -->
+        <div class="admin-section" id="sec-about">
+            <div class="admin-section-header">
+                <h3><i class="fas fa-info-circle"></i> About Us Section</h3>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="admin-section-body">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px;">
+                    <div>
+                        <label>About Title (EN)</label>
+                        <input type="text" name="about_title_en" value="{{ content.about_title_en or '' }}" 
+                               placeholder="ABOUT BRAND FACTORY" class="form-control" style="width:100%;">
+                    </div>
+                    <div>
+                        <label>About Title (AR)</label>
+                        <input type="text" name="about_title_ar" value="{{ content.about_title_ar or '' }}" 
+                               placeholder="عن براند فاكتوري" class="form-control" dir="rtl" style="width:100%;">
+                    </div>
+                </div>
+                <label>About Us Description (EN)</label>
+                <textarea name="about_us_en" rows="5" placeholder="We are a passionate team transforming your ideas into unforgettable visual experiences." style="width:100%;">{{ content.about_us_en or '' }}</textarea>
+                <label>About Us Description (AR)</label>
+                <textarea name="about_us_ar" rows="5" placeholder="نحن فريق شغوف نحوّل أفكارك إلى تجارب بصرية لا تُنسى." style="width:100%;" dir="rtl">{{ content.about_us_ar or '' }}</textarea>
+                
+                <hr>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+                    <div><label>Title Color</label><input type="color" name="about_title_color" value="{{ content.about_title_color or '#ffffff' }}"></div>
+                    <div>
+                        <label>Title Font</label>
+                        <select name="about_title_font" class="form-control">
+                            <option value="'Cairo', sans-serif" {{ 'selected' if content.about_title_font == "'Cairo', sans-serif" else '' }}>Cairo</option>
+                            <option value="'Roboto', sans-serif" {{ 'selected' if content.about_title_font == "'Roboto', sans-serif" else '' }}>Roboto</option>
+                        </select>
+                    </div>
+                    <div><label>Text Color</label><input type="color" name="about_text_color" value="{{ content.about_text_color or '#ffffff' }}"></div>
+                    <div><label>Btn Bg</label><input type="color" name="about_btn_bg_color" value="{{ content.about_btn_bg_color or '#6B21C8' }}"></div>
+                    <div><label>Btn Text</label><input type="color" name="about_btn_text_color" value="{{ content.about_btn_text_color or '#FDCC04' }}"></div>
+                </div>
+                <div style="margin-top:15px;">
+                    <label>Background Type</label><br>
+                    <input type="radio" name="about_bg_type" value="image" {{ 'checked' if content.about_bg_type == 'image' else '' }}> Image &nbsp;
+                    <input type="radio" name="about_bg_type" value="video" {{ 'checked' if content.about_bg_type == 'video' else '' }}> Video &nbsp;
+                    <input type="radio" name="about_bg_type" value="color" {{ 'checked' if content.about_bg_type == 'color' else '' }}> Color
+                </div>
+                <input type="file" name="about_bg_media" accept="image/*,video/*">
+                <input type="color" name="about_bg_color" value="{{ content.about_bg_color or '#0A0A0A' }}">
+            </div>
         </div>
-        <input type="file" name="contact_bg_media" accept="image/*,video/*">
-        <input type="color" name="contact_bg_color" value="{{ content.contact_bg_color if content and content.contact_bg_color else '#0A0A0A' }}" style="width: 50px; height: 50px; display:block; margin-top:10px; border:none; cursor:pointer;">
 
-        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-        <h3 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Website Global Background Color</h3>
-
-        <label style="font-weight: bold; color: #555;">Scroll Background Color</label>
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px;">
-            <input type="color" name="bg_color"
-                value="{{ content.bg_color if content and content.bg_color else '#000000' }}"
-                style="width: 50px; height: 50px; padding: 0; border: none; cursor: pointer; border-radius: 5px;">
-            <span style="color: #777; font-size: 0.9rem;">(Default is Black #000000)</span>
+        <!-- SECTION 5: LEARNING -->
+        <div class="admin-section" id="sec-learning">
+            <div class="admin-section-header">
+                <h3><i class="fas fa-graduation-cap"></i> Learning Section</h3>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="admin-section-body">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px;">
+                    <div>
+                    <div>
+                        <label>Pricing Section Title (EN)</label>
+                        <input type="text" name="learning_title_en" value="{{ content.learning_title_en or '' }}" 
+                               placeholder="INVESTMENT" class="form-control" style="width:100%;">
+                        <label>Pricing Section Title (AR)</label>
+                        <input type="text" name="learning_title_ar" value="{{ content.learning_title_ar or '' }}" 
+                               placeholder="استثمر في هويتك" class="form-control" dir="rtl" style="width:100%;">
+                    </div>
+                    <div>
+                        <label>Pricing Section Description (EN)</label>
+                        <textarea name="learning_text_en" rows="2" placeholder="CHOOSE THE PLAN THAT SUITS YOUR PATH" style="width:100%;">{{ content.learning_text_en or '' }}</textarea>
+                        <label>Pricing Section Description (AR)</label>
+                        <textarea name="learning_text_ar" rows="2" placeholder="اختر الباقة التي تناسب تطلعاتك" style="width:100%;" dir="rtl">{{ content.learning_text_ar or '' }}</textarea>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+                    <div><label>Title Color</label><input type="color" name="learning_title_color" value="{{ content.learning_title_color or '#ffffff' }}"></div>
+                    <div>
+                        <label>Title Font</label>
+                        <select name="learning_title_font" class="form-control">
+                            <option value="'Cairo', sans-serif" {{ 'selected' if content.learning_title_font == "'Cairo', sans-serif" else '' }}>Cairo</option>
+                            <option value="'Roboto', sans-serif" {{ 'selected' if content.learning_title_font == "'Roboto', sans-serif" else '' }}>Roboto</option>
+                        </select>
+                    </div>
+                    <div><label>Text Color</label><input type="color" name="learning_text_color" value="{{ content.learning_text_color or '#ffffff' }}"></div>
+                    <div><label>Btn Bg</label><input type="color" name="learning_btn_bg_color" value="{{ content.learning_btn_bg_color or '#6B21C8' }}"></div>
+                    <div><label>Btn Text</label><input type="color" name="learning_btn_text_color" value="{{ content.learning_btn_text_color or '#FDCC04' }}"></div>
+                </div>
+                <div style="margin-top:15px;">
+                    <label>Background Type</label><br>
+                    <input type="radio" name="learning_bg_type" value="image" {{ 'checked' if content.learning_bg_type == 'image' else '' }}> Image &nbsp;
+                    <input type="radio" name="learning_bg_type" value="video" {{ 'checked' if content.learning_bg_type == 'video' else '' }}> Video &nbsp;
+                    <input type="radio" name="learning_bg_type" value="color" {{ 'checked' if content.learning_bg_type == 'color' else '' }}> Color
+                </div>
+                <input type="file" name="learning_bg_media" accept="image/*,video/*">
+                <input type="color" name="learning_bg_color" value="{{ content.learning_bg_color or '#0A0A0A' }}">
+            </div>
         </div>
 
-        <button type="submit" class="btn" style="font-size: 1.1rem; padding: 12px 25px;"><i class="fas fa-save"></i>
-            Update Content</button>
+        <!-- SECTION 6: CONTACT & LINKS -->
+        <div class="admin-section" id="sec-contact">
+            <div class="admin-section-header">
+                <h3><i class="fas fa-address-book"></i> Contact & Social Links</h3>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="admin-section-body">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                    <div>
+                        <label>Contact Title (EN)</label>
+                        <input type="text" name="contact_title_en" value="{{ content.contact_title_en or '' }}" 
+                               placeholder="CONTACT US" class="form-control" style="width:100%;">
+                        <label>Contact Title (AR)</label>
+                        <input type="text" name="contact_title_ar" value="{{ content.contact_title_ar or '' }}" 
+                               placeholder="تواصل معنا" class="form-control" dir="rtl" style="width:100%;">
+                    </div>
+                    <div>
+                        <label>Contact Info Subtitle (EN)</label>
+                        <textarea name="contact_info_en" rows="2" placeholder="READY TO START YOUR PROJECT? WE WOULD LOVE TO HEAR FROM YOU" style="width:100%;">{{ content.contact_info_en or '' }}</textarea>
+                        <label>Contact Info Subtitle (AR)</label>
+                        <textarea name="contact_info_ar" rows="2" placeholder="جاهز لبدء مشروعك؟ يسعدنا سماعك" style="width:100%;" dir="rtl">{{ content.contact_info_ar or '' }}</textarea>
+                    </div>
+                </div>
+                <hr>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <label>Phone</label><input type="text" name="contact_phone" value="{{ content.contact_phone or '' }}" style="width:100%;">
+                        <label>WhatsApp</label><input type="text" name="contact_whatsapp" value="{{ content.contact_whatsapp or '' }}" style="width:100%;">
+                        <label>Instagram</label><input type="text" name="contact_instagram" value="{{ content.contact_instagram or '' }}" style="width:100%;">
+                        <label>TikTok</label><input type="text" name="contact_tiktok" value="{{ content.contact_tiktok or '' }}" style="width:100%;">
+                    </div>
+                    <div>
+                        <label>Telegram</label><input type="text" name="contact_telegram" value="{{ content.contact_telegram or '' }}" style="width:100%;">
+                        <label>Facebook</label><input type="text" name="contact_facebook" value="{{ content.contact_facebook or '' }}" style="width:100%;">
+                        <label>Email</label><input type="text" name="contact_email" value="{{ content.contact_email or '' }}" style="width:100%;">
+                        <label>GPS Link</label><input type="text" name="contact_gps" value="{{ content.contact_gps or '' }}" style="width:100%;">
+                    </div>
+                </div>
+                <hr>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+                    <div><label>Title Color</label><input type="color" name="contact_title_color" value="{{ content.contact_title_color or '#ffffff' }}"></div>
+                    <div>
+                        <label>Title Font</label>
+                        <select name="contact_title_font" class="form-control">
+                            <option value="'Cairo', sans-serif" {{ 'selected' if content.contact_title_font == "'Cairo', sans-serif" else '' }}>Cairo</option>
+                            <option value="'Roboto', sans-serif" {{ 'selected' if content.contact_title_font == "'Roboto', sans-serif" else '' }}>Roboto</option>
+                        </select>
+                    </div>
+                    <div><label>Text Color</label><input type="color" name="contact_text_color" value="{{ content.contact_text_color or '#ffffff' }}"></div>
+                    <div><label>Btn Bg</label><input type="color" name="contact_btn_bg_color" value="{{ content.contact_btn_bg_color or '#6B21C8' }}"></div>
+                    <div><label>Btn Text</label><input type="color" name="contact_btn_text_color" value="{{ content.contact_btn_text_color or '#FDCC04' }}"></div>
+                </div>
+                <div style="margin-top:15px;">
+                    <label>Background Type</label><br>
+                    <input type="radio" name="contact_bg_type" value="image" {{ 'checked' if content.contact_bg_type == 'image' else '' }}> Image &nbsp;
+                    <input type="radio" name="contact_bg_type" value="video" {{ 'checked' if content.contact_bg_type == 'video' else '' }}> Video &nbsp;
+                    <input type="radio" name="contact_bg_type" value="color" {{ 'checked' if content.contact_bg_type == 'color' else '' }}> Color
+                </div>
+                <input type="file" name="contact_bg_media" accept="image/*,video/*">
+                <input type="color" name="contact_bg_color" value="{{ content.contact_bg_color or '#0A0A0A' }}">
+            </div>
+        </div>
+
+        <!-- GLOBAL SETTINGS -->
+        <div class="admin-section" id="sec-global">
+            <div class="admin-section-header">
+                <h3><i class="fas fa-globe"></i> Global Website Settings</h3>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="admin-section-body">
+                <label>Website Scroll Background Color</label>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="color" name="bg_color" value="{{ content.bg_color or '#000000' }}" style="width: 50px; height: 50px; border:none; cursor:pointer;">
+                    <span class="text-muted">(Default: Black #000000)</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="position: sticky; bottom: 20px; text-align: right; z-index: 100;">
+            <button type="submit" class="btn" style="padding: 15px 40px; font-size: 1.2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                <i class="fas fa-save"></i> Save All Changes
+            </button>
+        </div>
     </form>
 </div>
+
+<!-- Interactive JS for Pricing -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Initialize Sortable
+    const lists = document.querySelectorAll('.sortable-list');
+    lists.forEach(el => {
+        new Sortable(el, {
+            group: 'pricing',
+            animation: 150,
+            onEnd: function (evt) {
+                saveOrder();
+            }
+        });
+    });
+
+    async function saveOrder() {
+        const data = [];
+        document.querySelectorAll('.sortable-list').forEach(list => {
+            const packageId = list.getAttribute('data-package-id');
+            const side = list.getAttribute('data-side'); // side for standalone
+            const items = list.querySelectorAll('.pricing-item-card');
+            items.forEach((item, index) => {
+                data.push({
+                    id: item.getAttribute('data-id'),
+                    order_index: index,
+                    package_id: packageId === 'null' ? null : packageId,
+                    side: side || null
+                });
+            });
+        });
+
+        try {
+            const res = await fetch('/admin/pricing/reorder', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            console.log('Order saved');
+        } catch (err) {
+            console.error('Save failed', err);
+        }
+    }
+
+
+    // 3. Delete Action
+    document.querySelectorAll('.delete-item').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            if(!confirm('Are you sure?')) return;
+            const id = this.getAttribute('data-id');
+            const card = this.closest('.pricing-item-card');
+            
+            try {
+                const res = await fetch(`/admin/pricing/delete/${id}`, { method: 'POST' });
+                if(res.ok) card.remove();
+            } catch (err) {
+                console.error('Delete failed', err);
+            }
+        });
+    });
+});
+</script>
 {% endblock %}

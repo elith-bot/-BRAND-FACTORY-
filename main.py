@@ -32,8 +32,12 @@ def favicon():
 app.config.update(
     SQLALCHEMY_DATABASE_URI='sqlite:///' + db_path,
     SECRET_KEY='brand-factory-pro-key-2026', # المستخدم في الجلسات وللأمان
-    SQLALCHEMY_TRACK_MODIFICATIONS=False
+    SQLALCHEMY_TRACK_MODIFICATIONS=False,
+    CACHE_ID=app_version
 )
+import json
+app.jinja_env.filters['from_json'] = json.loads
+app.jinja_env.add_extension('jinja2.ext.do')
 
 db = SQLAlchemy(app)
 
@@ -139,6 +143,36 @@ class SiteContent(db.Model):
     contact_instagram = db.Column(db.String(200), nullable=True)
     contact_tiktok = db.Column(db.String(200), nullable=True)
     contact_gps = db.Column(db.String(500), nullable=True)
+    
+    # Advanced Typography & Dynamic Elements
+    hero_title_font = db.Column(db.Text, nullable=True)
+    hero_subtitle_font = db.Column(db.Text, nullable=True)
+    section2_title_font = db.Column(db.Text, nullable=True)
+    about_title_font = db.Column(db.Text, nullable=True)
+    learning_title_font = db.Column(db.Text, nullable=True)
+    contact_title_font = db.Column(db.Text, nullable=True)
+    global_font = db.Column(db.Text, nullable=True)
+    dynamic_elements_json = db.Column(db.Text, nullable=True) # Element Library storage
+
+    # Missing section titles
+    section2_title_ar = db.Column(db.String(200), nullable=True)
+    section2_title_en = db.Column(db.String(200), nullable=True)
+    section2_text_ar = db.Column(db.Text, nullable=True)
+    section2_text_en = db.Column(db.Text, nullable=True)
+    
+    about_title_ar = db.Column(db.String(200), nullable=True)
+    about_title_en = db.Column(db.String(200), nullable=True)
+    
+    learning_title_ar = db.Column(db.String(200), nullable=True)
+    learning_title_en = db.Column(db.String(200), nullable=True)
+    learning_text_ar = db.Column(db.Text, nullable=True)
+    learning_text_en = db.Column(db.Text, nullable=True)
+    
+    contact_title_ar = db.Column(db.String(200), nullable=True)
+    contact_title_en = db.Column(db.String(200), nullable=True)
+    
+    menu_left_style = db.Column(db.Text, nullable=True) # JSON or CSS string for background
+    menu_right_style = db.Column(db.Text, nullable=True)
 
 class TeamMember(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -153,6 +187,30 @@ class TeamMember(db.Model):
     twitter = db.Column(db.String(200), nullable=True)
     instagram = db.Column(db.String(200), nullable=True)
     linkedin = db.Column(db.String(200), nullable=True)
+
+class PricingPackage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name_ar = db.Column(db.String(100), nullable=False)
+    name_en = db.Column(db.String(100), nullable=False)
+    description_ar = db.Column(db.String(255), nullable=True)
+    description_en = db.Column(db.String(255), nullable=True)
+    side = db.Column(db.String(10), default='left') # 'left' or 'right'
+    order_index = db.Column(db.Integer, default=0)
+    items = relationship('PricingItem', backref='package', cascade="all, delete-orphan")
+
+class PricingItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name_ar = db.Column(db.String(100), nullable=False)
+    name_en = db.Column(db.String(100), nullable=False)
+    price = db.Column(db.String(50), nullable=True)
+    description_ar = db.Column(db.String(255), nullable=True)
+    description_en = db.Column(db.String(255), nullable=True)
+    category_ar = db.Column(db.String(100), nullable=True)
+    category_en = db.Column(db.String(100), nullable=True)
+    side = db.Column(db.String(10), default='left') # 'left' or 'right'
+    alignment = db.Column(db.String(10), default='left') # 'left', 'center', 'right'
+    order_index = db.Column(db.Integer, default=0)
+    package_id = db.Column(db.Integer, db.ForeignKey('pricing_package.id'), nullable=True)
 
 class CourseMedia(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -430,10 +488,15 @@ def delete_user(id):
 @login_required
 def site_content():
     content = SiteContent.query.first()
+    if not content:
+        content = SiteContent()
+        db.session.add(content)
+        db.session.commit()
+    
+    print(f"DEBUG: Unified Manager LOAD - Hero Title AR: '{content.hero_title_ar}'")
+
     if request.method == 'POST':
-        if not content:
-            content = SiteContent()
-            db.session.add(content)
+        print(f"DEBUG: Unified Manager SAVE - Incoming Hero Title AR: '{request.form.get('hero_title_ar')}'")
             
         content.about_us_ar = request.form.get('about_us_ar')
         content.about_us_en = request.form.get('about_us_en')
@@ -497,6 +560,32 @@ def site_content():
         content.contact_tiktok = request.form.get('contact_tiktok')
         content.contact_gps = request.form.get('contact_gps')
         
+        # New Typography Fields
+        content.hero_title_font = request.form.get('hero_title_font')
+        content.hero_subtitle_font = request.form.get('hero_subtitle_font')
+        content.section2_title_font = request.form.get('section2_title_font')
+        content.about_title_font = request.form.get('about_title_font')
+        content.learning_title_font = request.form.get('learning_title_font')
+        content.contact_title_font = request.form.get('contact_title_font')
+        content.global_font = request.form.get('global_font')
+        
+        # Save Newly Added Section Fields
+        content.section2_title_ar = request.form.get('section2_title_ar')
+        content.section2_title_en = request.form.get('section2_title_en')
+        content.section2_text_ar = request.form.get('section2_text_ar')
+        content.section2_text_en = request.form.get('section2_text_en')
+        
+        content.about_title_ar = request.form.get('about_title_ar')
+        content.about_title_en = request.form.get('about_title_en')
+        
+        content.learning_title_ar = request.form.get('learning_title_ar')
+        content.learning_title_en = request.form.get('learning_title_en')
+        content.learning_text_ar = request.form.get('learning_text_ar')
+        content.learning_text_en = request.form.get('learning_text_en')
+        
+        content.contact_title_ar = request.form.get('contact_title_ar')
+        content.contact_title_en = request.form.get('contact_title_en')
+        
         # Handle Media Uploads for all sections
         def handle_upload(field_name):
             f = request.files.get(field_name)
@@ -520,11 +609,229 @@ def site_content():
         contact_media = handle_upload('contact_bg_media')
         if contact_media: content.contact_bg_media = contact_media
 
+        # Bulk Pricing Updates
+        for key in request.form:
+            if key.startswith('item_name_ar_'):
+                item_id = key.split('_')[-1]
+                p_item = PricingItem.query.get(item_id)
+                if p_item: p_item.name_ar = request.form.get(key)
+            elif key.startswith('item_name_en_'):
+                item_id = key.split('_')[-1]
+                p_item = PricingItem.query.get(item_id)
+                if p_item: p_item.name_en = request.form.get(key)
+            elif key.startswith('item_price_'):
+                item_id = key.split('_')[-1]
+                p_item = PricingItem.query.get(item_id)
+                if p_item: p_item.price = request.form.get(key)
+            elif key.startswith('pkg_name_ar_'):
+                pkg_id = key.split('_')[-1]
+                pkg = PricingPackage.query.get(pkg_id)
+                if pkg: pkg.name_ar = request.form.get(key)
+            elif key.startswith('pkg_name_en_'):
+                pkg_id = key.split('_')[-1]
+                pkg = PricingPackage.query.get(pkg_id)
+                if pkg: pkg.name_en = request.form.get(key)
+
         db.session.commit()
         flash('Site Content updated successfully!', 'success')
         return redirect(url_for('admin.site_content'))
         
-    return render_template('admin/site_content.html', content=content)
+    pricing_left = PricingPackage.query.filter_by(side='left').order_by(PricingPackage.order_index.asc()).all()
+    pricing_right = PricingPackage.query.filter_by(side='right').order_by(PricingPackage.order_index.asc()).all()
+    standalone_items = PricingItem.query.filter_by(package_id=None).all()
+
+    return render_template('admin/site_content.html', 
+                           content=content,
+                           pricing_left=pricing_left,
+                           pricing_right=pricing_right,
+                           standalone_items=standalone_items)
+
+@admin_bp.route('/live-editor')
+@login_required
+def live_editor():
+    import time
+    content = SiteContent.query.first()
+    lang = session.get('lang', 'ar')
+    cache_id = int(time.time())
+    return render_template('admin/live_editor.html', content=content, lang=lang, cache_id=cache_id)
+@admin_bp.route('/menu-live-editor')
+@login_required
+def menu_live_editor():
+    site_content = SiteContent.query.first()
+    pricing_left = PricingPackage.query.filter_by(side='left').order_by(PricingPackage.order_index.asc()).all()
+    pricing_right = PricingPackage.query.filter_by(side='right').order_by(PricingPackage.order_index.asc()).all()
+    standalone_items = PricingItem.query.filter_by(package_id=None).all()
+    lang = session.get('lang', 'ar')
+    return render_template('admin/menu_editor.html', 
+                           site_content=site_content,
+                           pricing_left=pricing_left,
+                           pricing_right=pricing_right,
+                           standalone_items=standalone_items,
+                           lang=lang,
+                           cache_id=int(time.time()))
+
+@admin_bp.route('/live-editor/save', methods=['POST'])
+@login_required
+def save_live_editor():
+    data = request.get_json()
+    if not data:
+        return {"error": "No data"}, 400
+    
+    content = SiteContent.query.first()
+    if not content:
+        content = SiteContent()
+        db.session.add(content)
+    
+    # Mapping for fields and styles
+    for item in data.get('changes', []):
+        field = item.get('field', '')
+        value = item.get('value', '')
+        
+        # 1. Handle PricingPackage: pkg_name_{lang}_{id}
+        if field.startswith('pkg_name_'):
+            parts = field.split('_')
+            if len(parts) >= 4:
+                lang_code = parts[2]
+                pkg_id = parts[3]
+                pkg = PricingPackage.query.get(pkg_id)
+                if pkg:
+                    if lang_code == 'ar': pkg.name_ar = value
+                    else: pkg.name_en = value
+            continue
+
+        # 2. Handle PricingItem: item_name_{lang}_{id}
+        if field.startswith('item_name_'):
+            parts = field.split('_')
+            if len(parts) >= 4:
+                lang_code = parts[2]
+                item_id = parts[3]
+                pitem = PricingItem.query.get(item_id)
+                if pitem:
+                    if lang_code == 'ar': pitem.name_ar = value
+                    else: pitem.name_en = value
+            continue
+
+        # 3. Handle PricingItem Price: item_price_{id}
+        if field.startswith('item_price_'):
+            parts = field.split('_')
+            if len(parts) >= 3:
+                item_id = parts[2]
+                pitem = PricingItem.query.get(item_id)
+                if pitem:
+                    pitem.price = value
+            continue
+
+        # 4. Handle SiteContent fields (hero_title_en, hero_title_ar, etc.)
+        if hasattr(content, field):
+            setattr(content, field, value)
+    
+    # Handle dynamic elements
+    if 'dynamic_elements' in data:
+        content.dynamic_elements_json = data['dynamic_elements']
+
+    # 5. Handle Structured Menu State (Advanced Menu Editor)
+    if 'menu_state' in data:
+        menu_state = data['menu_state']
+        # Robustness: ensure menu_state is a dict
+        if isinstance(menu_state, str):
+            try:
+                import json
+                menu_state = json.loads(menu_state)
+            except Exception as e:
+                print(f"ERROR: Failed to parse menu_state string: {e}")
+                menu_state = {}
+        
+        if not isinstance(menu_state, dict):
+            print(f"ERROR: menu_state is {type(menu_state)}, expected dict")
+            menu_state = {}
+
+        for side in ['left', 'right']:
+            active_pkg_ids = []
+            for p_idx, pkg_data in enumerate(menu_state.get(side, [])):
+                pkg = None
+                if pkg_data.get('id'):
+                    pkg = PricingPackage.query.get(pkg_data['id'])
+                
+                if not pkg:
+                    # Create NEW Package
+                    pkg = PricingPackage(
+                        name_en=pkg_data.get('name_en', 'New Package'),
+                        name_ar=pkg_data.get('name_ar', 'باقة جديدة'),
+                        side=side,
+                        order_index=p_idx
+                    )
+                    db.session.add(pkg)
+                    db.session.flush() # get pkg.id
+                else:
+                    # Update Existing Package
+                    if pkg_data.get('name_en'): pkg.name_en = pkg_data['name_en']
+                    if pkg_data.get('name_ar'): pkg.name_ar = pkg_data['name_ar']
+                    pkg.side = side
+                    pkg.order_index = p_idx
+                
+                active_pkg_ids.append(pkg.id)
+                
+                active_item_ids = []
+                for itm_idx, itm_data in enumerate(pkg_data.get('items', [])):
+                    itm_id = itm_data.get('id')
+                    # Cast string ID to int if necessary
+                    if itm_id and str(itm_id).isdigit(): itm_id = int(itm_id)
+
+                    if itm_id:
+                        # Update Existing Item
+                        pitem = PricingItem.query.get(itm_id)
+                        if pitem:
+                            pitem.name_ar = itm_data.get('name_ar', pitem.name_ar)
+                            pitem.name_en = itm_data.get('name_en', pitem.name_en or pitem.name_ar)
+                            pitem.price = itm_data.get('price', pitem.price)
+                            pitem.alignment = itm_data.get('alignment', 'right')
+                            pitem.order_index = itm_idx
+                            pitem.package_id = pkg.id
+                            pitem.side = side # CRITICAL FIX
+                            active_item_ids.append(pitem.id)
+                    else:
+                        # Create NEW Item
+                        new_item = PricingItem(
+                            package_id=pkg.id,
+                            name_ar=itm_data.get('name_ar', 'عنصر جديد'),
+                            name_en=itm_data.get('name_en', itm_data.get('name_ar', 'New Item')),
+                            price=itm_data.get('price', '0'),
+                            alignment=itm_data.get('alignment', 'right'),
+                            order_index=itm_idx,
+                            side=side # CRITICAL FIX
+                        )
+                        db.session.add(new_item)
+                        db.session.flush()
+                        active_item_ids.append(new_item.id)
+                
+                # DELETE missing items from this package
+                for pitem in pkg.items:
+                    if pitem.id not in active_item_ids:
+                        db.session.delete(pitem)
+
+            # DELETE missing packages for this side
+            for pkg_to_del in PricingPackage.query.filter_by(side=side).all():
+                if pkg_to_del.id not in active_pkg_ids:
+                    db.session.delete(pkg_to_del)
+
+        # Update Menu Styles
+        if 'menu_styles' in data:
+            menu_styles = data['menu_styles']
+            if isinstance(menu_styles, str):
+                try:
+                    import json
+                    menu_styles = json.loads(menu_styles)
+                except:
+                    menu_styles = {}
+            
+            if isinstance(menu_styles, dict):
+                if menu_styles.get('left'):
+                    content.menu_left_style = menu_styles['left']
+                if menu_styles.get('right'):
+                    content.menu_right_style = menu_styles['right']
+
+    db.session.commit()
+    return {"status": "success"}
 
 @admin_bp.route('/team', methods=['GET', 'POST'])
 @login_required
@@ -755,24 +1062,175 @@ def delete_course_media(media_id):
     flash('Media fragment removed.', 'success')
     return redirect(request.referrer)
 
+@admin_bp.route('/pricing', methods=['GET', 'POST'])
+@login_required
+def pricing():
+    packages = PricingPackage.query.order_by(PricingPackage.order_index.asc()).all()
+    # Also get items that don't have a package just in case
+    standalone_items = PricingItem.query.filter_by(package_id=None).order_by(PricingItem.order_index.asc()).all()
+    return render_template('admin/pricing.html', packages=packages, standalone_items=standalone_items)
+
+@admin_bp.route('/pricing/packages/add', methods=['GET', 'POST'])
+@login_required
+def add_pricing_package():
+    if request.method == 'POST':
+        package = PricingPackage(
+            name_ar=request.form.get('name_ar'),
+            name_en=request.form.get('name_en'),
+            description_ar=request.form.get('description_ar'),
+            description_en=request.form.get('description_en'),
+            side=request.form.get('side', 'left'),
+            order_index=int(request.form.get('order_index', 0))
+        )
+        db.session.add(package)
+        db.session.commit()
+        flash('Pricing package added.', 'success')
+        return redirect(url_for('admin.pricing'))
+    return render_template('admin/pricing_package_form.html', package=None)
+
+@admin_bp.route('/pricing/packages/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_pricing_package(id):
+    package = PricingPackage.query.get_or_404(id)
+    if request.method == 'POST':
+        package.name_ar = request.form.get('name_ar')
+        package.name_en = request.form.get('name_en')
+        package.description_ar = request.form.get('description_ar')
+        package.description_en = request.form.get('description_en')
+        package.side = request.form.get('side', 'left')
+        package.order_index = int(request.form.get('order_index', 0))
+        db.session.commit()
+        flash('Pricing package updated.', 'success')
+        return redirect(url_for('admin.pricing'))
+    return render_template('admin/pricing_package_form.html', package=package)
+
+@admin_bp.route('/pricing/packages/delete/<int:id>', methods=['POST'])
+@login_required
+def delete_pricing_package(id):
+    package = PricingPackage.query.get_or_404(id)
+    db.session.delete(package)
+    db.session.commit()
+    flash('Pricing package deleted.', 'success')
+    return redirect(url_for('admin.pricing'))
+
+@admin_bp.route('/pricing/add', methods=['GET', 'POST'])
+@login_required
+def add_pricing_item():
+    packages = PricingPackage.query.all()
+    if request.method == 'POST':
+        item = PricingItem(
+            name_ar=request.form.get('name_ar'),
+            name_en=request.form.get('name_en'),
+            price=request.form.get('price'),
+            description_ar=request.form.get('description_ar'),
+            description_en=request.form.get('description_en'),
+            category_ar=request.form.get('category_ar'),
+            category_en=request.form.get('category_en'),
+            side=request.form.get('side', 'left'),
+            order_index=int(request.form.get('order_index', 0)),
+            package_id=request.form.get('package_id') if request.form.get('package_id') else None
+        )
+        db.session.add(item)
+        db.session.commit()
+        flash('Pricing item added.', 'success')
+        return redirect(url_for('admin.pricing'))
+    return render_template('admin/pricing_form.html', item=None, packages=packages)
+
+@admin_bp.route('/pricing/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_pricing_item(id):
+    item = PricingItem.query.get_or_404(id)
+    packages = PricingPackage.query.all()
+    if request.method == 'POST':
+        item.name_ar = request.form.get('name_ar')
+        item.name_en = request.form.get('name_en')
+        item.price = request.form.get('price')
+        item.description_ar = request.form.get('description_ar')
+        item.description_en = request.form.get('description_en')
+        item.category_ar = request.form.get('category_ar')
+        item.category_en = request.form.get('category_en')
+        item.side = request.form.get('side', 'left')
+        item.order_index = int(request.form.get('order_index', 0))
+        item.package_id = request.form.get('package_id') if request.form.get('package_id') else None
+        
+        db.session.commit()
+        flash('Pricing item updated.', 'success')
+        return redirect(url_for('admin.pricing'))
+    return render_template('admin/pricing_form.html', item=item, packages=packages)
+
+@admin_bp.route('/pricing/delete/<int:id>', methods=['POST'])
+@login_required
+def delete_pricing_item(id):
+    item = PricingItem.query.get_or_404(id)
+    db.session.delete(item)
+    db.session.commit()
+    flash('Pricing item deleted.', 'success')
+    return redirect(request.referrer)
+
+@admin_bp.route('/pricing/reorder', methods=['POST'])
+@login_required
+def reorder_pricing():
+    data = request.get_json()
+    if not data:
+        return {"error": "No data received"}, 400
+    
+    try:
+        # data should be a list of {id: int, order_index: int, package_id: int|None, side: str|None}
+        for item_data in data:
+            item = PricingItem.query.get(item_data['id'])
+            if item:
+                item.order_index = item_data['order_index']
+                item.package_id = item_data['package_id']
+                if 'side' in item_data and item_data['side']:
+                    item.side = item_data['side']
+        db.session.commit()
+        return {"status": "success"}
+    except Exception as e:
+        db.session.rollback()
+        return {"error": str(e)}, 500
+
+@admin_bp.route('/pricing/update-inline', methods=['POST'])
+@login_required
+def update_pricing_inline():
+    data = request.get_json()
+    if not data or 'id' not in data:
+        return {"error": "Missing item ID"}, 400
+    
+    item = PricingItem.query.get_or_404(data['id'])
+    field = data.get('field')
+    value = data.get('value')
+    
+    if field in ['name_ar', 'name_en', 'price', 'description_ar', 'description_en']:
+        setattr(item, field, value)
+        db.session.commit()
+        return {"status": "success"}
+    
+    return {"error": "Invalid field"}, 400
+
 app.register_blueprint(admin_bp)
 
 # --- 7. المسارات (Routes) للزوار ---
 @app.route("/")
 def index():
-    content = SiteContent.query.first()
+    edit_mode = request.args.get('edit') == 'true'
+    lang = session.get('lang', 'ar')
+    site_content = SiteContent.query.first()
+    projects = Project.query.order_by(Project.id.desc()).limit(6).all()
     
-    # Try fetching featured projects first
-    projects = Project.query.filter_by(is_featured=True).order_by(Project.id.desc()).limit(3).all()
-    if len(projects) == 0:
-        projects = Project.query.order_by(Project.id.desc()).limit(3).all()
-        
-    # Try fetching featured courses first
-    courses = Course.query.filter_by(is_featured=True).order_by(Course.id.desc()).limit(3).all()
-    if len(courses) == 0:
-        courses = Course.query.order_by(Course.id.desc()).limit(3).all()
-        
-    return render_template('index.html', site_content=content, projects=projects, courses=courses)
+    # Fetch Pricing Packages split by side
+    pricing_left = PricingPackage.query.filter_by(side='left').order_by(PricingPackage.order_index.asc()).all()
+    pricing_right = PricingPackage.query.filter_by(side='right').order_by(PricingPackage.order_index.asc()).all()
+    standalone_items = PricingItem.query.filter_by(package_id=None).all() # Just in case
+
+    return render_template('index.html',
+                           lang=lang,
+                           edit_mode=edit_mode,
+                           site_content=site_content,
+                           projects=projects,
+                           pricing_left=pricing_left,
+                           pricing_right=pricing_right,
+                           standalone_items=standalone_items,
+                           cache_id=app.config['CACHE_ID'])
 
 @app.route("/portfolio")
 def portfolio():

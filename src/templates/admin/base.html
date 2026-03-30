@@ -225,6 +225,61 @@
             border-radius: 5px;
             margin-bottom: 20px;
         }
+
+        /* Admin Dashboard Modern Overhaul */
+        .admin-section {
+            background: white; border-radius: 12px; margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-left: 5px solid var(--primary-blue);
+            overflow: hidden; transition: 0.3s;
+        }
+        .admin-section-header {
+            padding: 18px 25px; background: #f8f9fa; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .admin-section-header:hover { background: #edf0ff; }
+        .admin-section-header h3 {
+            margin: 0; font-size: 1.25rem; color: var(--primary-blue);
+            display: flex; align-items: center; gap: 12px; font-family: 'Anton', sans-serif;
+        }
+        .admin-section-body { padding: 25px; display: none; border-top: 1px solid #eee; }
+        .admin-section.active .admin-section-body { display: block; }
+        .admin-section.active .admin-section-header i.fa-chevron-down { transform: rotate(180deg); }
+
+        .pricing-preview-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px; }
+        .pricing-column { background: #fdfdfd; padding: 20px; border-radius: 10px; border: 1px solid #eee; }
+        .pricing-column h4 { margin-top: 0; color: var(--primary-blue); border-bottom: 2px solid var(--accent-yellow); padding-bottom: 8px; }
+
+        .sortable-list { min-height: 100px; padding: 10px 0; }
+        .pricing-item-card {
+            background: white; border: 1px solid #e0e0e0; margin-bottom: 12px;
+            padding: 15px; border-radius: 8px; display: flex; justify-content: space-between;
+            align-items: center; cursor: move; transition: 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .pricing-item-card:hover { border-color: var(--primary-blue); box-shadow: 0 4px 12px rgba(107,33,200,0.1); }
+        .editable { padding: 3px 6px; border-radius: 4px; transition: 0.2s; cursor: text; border: 1px solid transparent; }
+        .editable:hover { background: #fffde7; border-color: #ffd600; }
+        .editable:focus { background: white; border-color: var(--primary-blue); outline: none; box-shadow: 0 0 0 3px rgba(107,33,200,0.1); }
+        
+        .item-actions { display: flex; gap: 10px; }
+        .btn-sm { padding: 5px 10px; font-size: 0.85rem; border-radius: 4px; }
+        .btn-danger { background: #ff4d4d; color: white; border: none; cursor: pointer; }
+        .btn-danger:hover { background: #ff1a1a; }
+        
+        .item-input {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px 8px;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            transition: 0.2s;
+        }
+        .item-input:focus {
+            border-color: var(--primary-blue);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(107,33,200,0.1);
+        }
     </style>
 </head>
 
@@ -248,8 +303,11 @@
                         class="fas fa-users"></i> Team Members</a>
             </li>
             <li><a href="{{ url_for('admin.site_content') }}" class="{% block nav_content %}{% endblock %}"><i
-                        class="fas fa-file-alt"></i> Site
-                    Content</a></li>
+                        class="fas fa-edit"></i> Unified Manager</a></li>
+            <li><a href="{{ url_for('admin.live_editor') }}" class="{% block nav_live_editor %}{% endblock %}"><i
+                        class="fas fa-magic"></i> Live Editor</a></li>
+            <li><a href="{{ url_for('admin.menu_live_editor') }}" class="{% block nav_menu_editor %}{% endblock %}"><i
+                        class="fas fa-utensils"></i> Menu Live Editor</a></li>
             <li><a href="{{ url_for('admin.users') }}" class="{% block nav_users %}{% endblock %}"><i
                         class="fas fa-shield-alt"></i> Security & Access</a></li>
             <li style="margin-top:20px;border-top:1px solid rgba(255,255,255,0.1);"><a href="{{ url_for('index') }}"
@@ -284,6 +342,7 @@
     </div>
 
     <!-- Mobile Sidebar Overlay Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script>
         const toggleBtn = document.getElementById('sidebar-toggle');
         const sidebar = document.querySelector('.sidebar');
@@ -293,7 +352,16 @@
                 sidebar.classList.toggle('show');
             });
         }
+
+        // Accordion Logic
+        document.querySelectorAll('.admin-section-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const section = header.parentElement;
+                section.classList.toggle('active');
+            });
+        });
     </script>
+    {% block scripts %}{% endblock %}
 </body>
 
 </html>

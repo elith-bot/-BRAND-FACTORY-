@@ -1,0 +1,82 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<div class="admin-header">
+    <h2>Manage Pricing Menu</h2>
+    <div>
+        <a href="{{ url_for('admin.add_pricing_package') }}" class="btn btn-secondary"><i class="fas fa-box"></i> Add Package</a>
+        <a href="{{ url_for('admin.add_pricing_item') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Add Item</a>
+    </div>
+</div>
+
+<div class="admin-card">
+    <h3 class="mb-3">Packages</h3>
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Order</th>
+                <th>Package Name</th>
+                <th>Side</th>
+                <th>Items Count</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pkg in packages %}
+            <tr>
+                <td>{{ pkg.order_index }}</td>
+                <td>{{ pkg.name_ar }} / {{ pkg.name_en }}</td>
+                <td><span class="badge {{ 'bg-info' if pkg.side == 'left' else 'bg-warning' }}">{{ pkg.side|capitalize }}</span></td>
+                <td>{{ pkg.items|length }}</td>
+                <td>
+                    <a href="{{ url_for('admin.edit_pricing_package', id=pkg.id) }}" class="btn-icon text-primary"><i class="fas fa-edit"></i></a>
+                    <form action="{{ url_for('admin.delete_pricing_package', id=pkg.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete this package and all its items?')">
+                        <button type="submit" class="btn-icon text-danger" style="border:none; background:none;"><i class="fas fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5" style="text-align:center;">No packages yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="admin-card mt-4">
+    <h3 class="mb-3">Standalone Items</h3>
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Order</th>
+                <th>Item Name</th>
+                <th>Price</th>
+                <th>Side</th>
+                <th>Package</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set all_items = [] %}
+            {% for pkg in packages %}{% for i in pkg.items %}{% do all_items.append(i) %}{% endfor %}{% endfor %}
+            {% for i in standalone_items %}{% do all_items.append(i) %}{% endfor %}
+            
+            {% for item in all_items|sort(attribute='order_index') %}
+            <tr>
+                <td>{{ item.order_index }}</td>
+                <td>{{ item.name_ar }} / {{ item.name_en }}</td>
+                <td>{{ item.price }}</td>
+                <td><span class="badge {{ 'bg-info' if item.side == 'left' else 'bg-warning' }}">{{ item.side|capitalize }}</span></td>
+                <td>{{ item.package.name_en if item.package else 'None' }}</td>
+                <td>
+                    <a href="{{ url_for('admin.edit_pricing_item', id=item.id) }}" class="btn-icon text-primary"><i class="fas fa-edit"></i></a>
+                    <form action="{{ url_for('admin.delete_pricing_item', id=item.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete this item?')">
+                        <button type="submit" class="btn-icon text-danger" style="border:none; background:none;"><i class="fas fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6" style="text-align:center;">No items found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

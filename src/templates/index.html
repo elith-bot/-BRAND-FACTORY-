@@ -38,27 +38,42 @@
     <!-- Fonts & Styles -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@300;400;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Cairo:wght@400;700&family=Roboto:wght@300;400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v={{ cache_id }}">
+    {% if edit_mode %}
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    {% endif %}
     <link rel="preload" href="{{ url_for('static', filename='logo.png') }}" as="image">
     <style>
+        h1, h2, h3, h4, h5, h6 {
+            font-family: {{ site_content.global_font or "'Anton', sans-serif" }};
+        }
+        
+        #hero h1 { font-family: {{ site_content.hero_title_font or "'Anton', sans-serif" }}; }
+        #hero p { font-family: {{ site_content.hero_subtitle_font or "'Cairo', sans-serif" }}; }
+        #portfolio h2 { font-family: {{ site_content.section2_title_font or "'Anton', sans-serif" }}; }
+        #about h2 { font-family: {{ site_content.about_title_font or "'Anton', sans-serif" }}; }
+        #learning h2 { font-family: {{ site_content.learning_title_font or "'Anton', sans-serif" }}; }
+        #contact h2 { font-family: {{ site_content.contact_title_font or "'Anton', sans-serif" }}; }
+
         body {
-            background-color: {{ global_site_content.section2_bg_color if global_site_content and global_site_content.section2_bg_color else '#FDCC04' }};
+            background-color: {{ site_content.section2_bg_color if site_content and site_content.section2_bg_color else '#FDCC04' }};
+            font-family: {{ site_content.global_font or "'Cairo', sans-serif" }};
         }
         
         #hero {
-            {% if global_site_content.hero_bg_type == 'color' %}
-            background: {{ global_site_content.hero_bg_color or '#6B21C8' }} !important;
+            {% if site_content.hero_bg_type == 'color' %}
+            background: {{ site_content.hero_bg_color or '#6B21C8' }} !important;
             {% endif %}
         }
         
         #portfolio {
-            {% if global_site_content.section2_bg_type == 'color' %}
-            background: {{ global_site_content.section2_bg_color or '#FDCC04' }} !important;
+            {% if site_content.section2_bg_type == 'color' %}
+            background: {{ site_content.section2_bg_color or '#FDCC04' }} !important;
             {% endif %}
         }
 
@@ -68,7 +83,42 @@
                 var(--bridge-to, #FDCC04)
             );
         }
+
+        /* Editing Styles */
+        {% if edit_mode %}
+        /* Visual Menu Editor Enhancements */
+        .editable-item-wrapper { position: relative; display: flex; align-items: center; }
+        .item-actions {
+            position: absolute; right: -40px; top: 50%; transform: translateY(-50%);
+            display: none; height: 100%; align-items: center; padding-left: 10px;
+        }
+        .editable-item-wrapper:hover .item-actions { display: flex; }
+        .del-menu-item {
+            background: rgba(231, 76, 60, 0.1); color: #e74c3c; border: none;
+            border-radius: 4px; padding: 2px 8px; cursor: pointer; transition: 0.2s;
+        }
+        .del-menu-item:hover { background: #e74c3c; color: white; }
+        
+        .package-actions { display: none; margin-bottom: 2rem; }
+        .package-actions { display: block; }
+        .add-menu-item-btn {
+            background: transparent; border: 2px dashed rgba(253, 204, 4, 0.4);
+            color: var(--accent-yellow); padding: 5px 15px; border-radius: 6px;
+            width: 100%; font-size: 0.9rem; transition: 0.3s; margin-top: 10px;
+        }
+        .add-menu-item-btn:hover { background: rgba(253, 204, 4, 0.1); border-color: var(--accent-yellow); }
+        
+        /* High-Fidelity A4 Grid Tweaks */
+        .a4-template { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .a4-template:hover { transform: scale(0.9) translateY(-10px) !important; z-index: 10; cursor: move; }
+        {% endif %}
     </style>
+    <script>
+        window.CONFIG = {
+            editMode: {{ 'true' if edit_mode else 'false' }},
+            lang: '{{ lang }}'
+        };
+    </script>
 </head>
 
 <body>
@@ -81,10 +131,10 @@
                 <span>BRAND FACTORY</span>
             </a>
             <ul class="nav-links">
-                <li><a href="#portfolio">{{ 'Work' if lang == 'en' else 'أعمالنا' }}</a></li>
-                <li><a href="#learning">{{ 'Learning' if lang == 'en' else 'التعليم' }}</a></li>
-                <li><a href="#about">{{ 'About' if lang == 'en' else 'من نحن' }}</a></li>
-                <li><a href="#contact">{{ 'Contact' if lang == 'en' else 'تواصل' }}</a></li>
+                <li><a href="#about" contenteditable="{{ 'true' if edit_mode else 'false' }}" data-field="nav_about_{{ lang }}">{{ 'About' if lang == 'en' else 'من نحن' }}</a></li>
+                <li><a href="#portfolio" contenteditable="{{ 'true' if edit_mode else 'false' }}" data-field="nav_portfolio_{{ lang }}">{{ 'Work' if lang == 'en' else 'أعمالنا' }}</a></li>
+                <li><a href="#pricing" contenteditable="{{ 'true' if edit_mode else 'false' }}" data-field="nav_pricing_{{ lang }}">{{ 'Pricing' if lang == 'en' else 'الأسعار' }}</a></li>
+                <li><a href="#contact" contenteditable="{{ 'true' if edit_mode else 'false' }}" data-field="nav_contact_{{ lang }}">{{ 'Contact' if lang == 'en' else 'تواصل' }}</a></li>
                 <li>
                     <a href="{{ url_for('set_lang', lang='ar' if lang == 'en' else 'en') }}" class="lang-btn">
                         <span>{{ 'ع' if lang == 'en' else 'EN' }}</span>
@@ -99,10 +149,46 @@
         </nav>
     </header>
 
-    <main>
+    <main class="site-main {{ 'is-editing' if edit_mode else '' }}">
+        {% if edit_mode %}
+        <style>
+            .is-editing section { position: relative; border: 1px dashed transparent; transition: border 0.3s; }
+            .is-editing section:hover { border: 1px dashed var(--accent-yellow); }
+            .section-drag-handle {
+                position: absolute; top: 10px; right: 10px; background: var(--accent-yellow);
+                color: #000; padding: 4px 12px; border-radius: 20px;
+                cursor: grab; z-index: 1001; display: flex; gap: 8px; align-items: center;
+                font-size: 11px; font-weight: bold; text-transform: uppercase;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            }
+            .section-drag-handle:active { cursor: grabbing; }
+            .site-main > .section-bridge { opacity: 0.3; }
+            .sortable-ghost { opacity: 0.4; background: var(--accent-yellow) !important; }
+
+            /* A4 Editor Styles */
+            .pricing-a4-grid { perspective: 1000px; overflow-x: auto; padding: 60px 20px !important; }
+            .a4-editor-page { 
+                background: linear-gradient(135deg, #FDCC04 0%, #D4AF37 100%) !important;
+                color: black !important;
+                width: 794px; min-height: 1123px; padding: 40px; box-sizing: border-box;
+                border: 2px solid var(--accent-yellow);
+            }
+            .a4-editor-page .t-package-name { color: #6B21C8 !important; border-bottom: 2px solid #6B21C8; margin-bottom: 15px; font-weight: bold; font-size: 1.8rem; }
+            .a4-editor-page .t-item-name { font-weight: bold; font-size: 1.1rem; }
+            .a4-editor-page .t-item-price { background: #6B21C8; color: white; padding: 2px 8px; border-radius: 4px; }
+            .a4-editor-page .t-menu-item { margin-bottom: 15px; border-bottom: 1px dashed rgba(0,0,0,0.1); padding-bottom: 8px; }
+
+            .is-selected { border: 2px solid var(--accent-yellow) !important; box-shadow: 0 0 20px var(--accent-yellow) !important; position: relative; z-index: 1000 !important; }
+            .is-selected::after { content: 'SELECTED'; position: absolute; top: -20px; right: 0; background: var(--accent-yellow); color: black; font-size: 10px; font-weight: bold; padding: 2px 6px; }
+        </style>
+        {% endif %}
 
         <!-- ========== HERO ========== -->
-        <section id="hero" style="--section-title-color: {{ global_site_content.hero_title_color if global_site_content.hero_title_color else '#ffffff' }}; --section-text-color: {{ global_site_content.hero_text_color if global_site_content.hero_text_color else '#ffffff' }}; --section-btn-bg: {{ global_site_content.hero_btn_bg_color if global_site_content.hero_btn_bg_color else '#6B21C8' }}; --section-btn-text: {{ global_site_content.hero_btn_text_color if global_site_content.hero_btn_text_color else '#FDCC04' }};">
+        <section id="hero" class="movable-section" data-is-section="true" data-section-name="Hero"
+            style="--section-title-color: {{ global_site_content.hero_title_color if global_site_content.hero_title_color else '#ffffff' }}; --section-text-color: {{ global_site_content.hero_text_color if global_site_content.hero_text_color else '#ffffff' }}; --section-btn-bg: {{ global_site_content.hero_btn_bg_color if global_site_content.hero_btn_bg_color else '#6B21C8' }}; --section-btn-text: {{ global_site_content.hero_btn_text_color if global_site_content.hero_btn_text_color else '#FDCC04' }};">
+            {% if edit_mode %}
+            <div class="section-drag-handle"><i class="fas fa-arrows-alt"></i> HERO</div>
+            {% endif %}
             <!-- Dynamic Background -->
             <div class="hero-bg">
                 {% if global_site_content.hero_bg_type == 'video' and global_site_content.hero_bg_media %}
@@ -118,18 +204,28 @@
                 <div class="hero-text" data-aos="fade-right">
                     <span class="hero-tag">✦ {{ 'Creative Media Agency' if lang == 'en' else 'وكالة إبداعية' }}</span>
 
-                    {% if site_content and (site_content.hero_title_en or site_content.hero_title_ar) %}
-                    <h1 class="glowing-text">{{ site_content.hero_title_en if lang == 'en' else
-                        site_content.hero_title_ar }}</h1>
-                    <p>{{ site_content.hero_subtitle_en if lang == 'en' else site_content.hero_subtitle_ar }}</p>
-                    {% else %}
-                    <h1 class="glowing-text">
-                        {{ 'WE ARE' if lang == 'en' else 'نحن' }}<br>
-                        <span class="brand-gradient">BRAND FACTORY</span>
-                    </h1>
-                    <p>{{ 'Crafting your vision into stunning visual reality.' if lang == 'en' else 'نحوّل رؤيتك إلى
-                        واقع بصري مبهر.' }}</p>
-                    {% endif %}
+                    {% set h_title = global_site_content.hero_title_ar if lang == 'ar' else global_site_content.hero_title_en %}
+                    <h1 class="hero-title" contenteditable="{{ 'true' if edit_mode else 'false' }}" 
+                        data-field="hero_title_{{ lang }}"
+                        data-placeholder="{{ 'أهلاً بكم في براند فاكتوري' if lang == 'ar' else 'Welcome to Brand Factory' }}">{{ h_title if h_title else '' }}</h1>
+                    
+                    {% set h_sub = global_site_content.hero_subtitle_ar if lang == 'ar' else global_site_content.hero_subtitle_en %}
+                    <p class="hero-subtitle" contenteditable="{{ 'true' if edit_mode else 'false' }}" 
+                        data-field="hero_subtitle_{{ lang }}"
+                        data-placeholder="{{ 'نحن نصنع الحلول البصرية الأكثر إبداعاً' if lang == 'ar' else 'We craft the most creative visual solutions' }}">{{ h_sub if h_sub else '' }}</p>
+                    
+                    <div class="dynamic-elements-container" data-section="hero">
+                        {% if global_site_content.dynamic_elements_json %}
+                            {% set dynamic = global_site_content.dynamic_elements_json|from_json %}
+                            {% if dynamic.hero %}
+                                {% for el in dynamic.hero %}
+                                    <div class="dynamic-el" data-type="{{ el.type }}" style="{{ el.style }}">
+                                        {{ el.content|safe }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    </div>
 
                     <div class="hero-buttons">
                         <a href="#portfolio" class="cta-button">{{ 'Our Work' if lang == 'en' else 'شاهد أعمالنا' }}</a>
@@ -144,12 +240,52 @@
             </div>
         </section>
 
-        <!-- ========== BRIDGE HERO-PORTFOLIO ========== -->
-        <div class="section-bridge" style="--bridge-from: {{ global_site_content.hero_bg_color if global_site_content.hero_bg_type == 'color' else '#1a0533' }}; --bridge-to: {{ global_site_content.section2_bg_color if global_site_content.section2_bg_type == 'color' else '#FDCC04' }};"></div>
+        <!-- ========== BRIDGE HERO-ABOUT ========== -->
+        <div class="section-bridge" style="--bridge-from: {{ global_site_content.hero_bg_color if global_site_content.hero_bg_type == 'color' else '#1a0533' }}; --bridge-to: {{ global_site_content.about_bg_color if global_site_content.about_bg_type == 'color' else '#0A0A0A' }};"></div>
+
+        <!-- ========== ABOUT ========== -->
+        <section id="about" class="movable-section {{ 'light-bg' if global_site_content.about_bg_type == 'color' and global_site_content.about_bg_color == '#FDCC04' else '' }}" data-is-section="true" data-section-name="About"
+            style="{% if global_site_content.about_bg_type == 'color' %}background: {{ global_site_content.about_bg_color or '#0A0A0A' }} !important;{% endif %} --section-title-color: {{ global_site_content.about_title_color if global_site_content.about_title_color else '#ffffff' }}; --section-text-color: {{ global_site_content.about_text_color if global_site_content.about_text_color else '#ffffff' }}; --section-btn-bg: {{ global_site_content.about_btn_bg_color if global_site_content.about_btn_bg_color else '#6B21C8' }}; --section-btn-text: {{ global_site_content.about_btn_text_color if global_site_content.about_btn_text_color else '#FDCC04' }};">
+            {% if edit_mode %}
+            <div class="section-drag-handle"><i class="fas fa-arrows-alt"></i> ABOUT</div>
+            {% endif %}
+            
+            {% if global_site_content.about_bg_type == 'video' and global_site_content.about_bg_media %}
+            <div class="hero-bg" style="z-index: 1;"><video src="{{ url_for('static', filename='uploads/' + global_site_content.about_bg_media) }}" autoplay muted loop playsinline></video></div>
+            {% elif global_site_content.about_bg_type == 'image' and global_site_content.about_bg_media %}
+            <div class="hero-bg" style="z-index: 1;"><div style="background-image: url('{{ url_for('static', filename='uploads/' + global_site_content.about_bg_media) }}'); width:100%; height:100%; background-size:cover; background-position:center;"></div></div>
+            {% endif %}
+
+            <div class="section-inner" style="position: relative; z-index: 2;">
+                <div class="section-header" data-aos="fade-up">
+                    <h2 class="glowing-text" contenteditable="{{ 'true' if edit_mode else 'false' }}" 
+                        data-field="about_title_{{ lang }}"
+                        data-placeholder="{{ 'عن براند فاكتوري' if lang == 'ar' else 'ABOUT BRAND FACTORY' }}">{{ (global_site_content.about_title_en if lang == 'en' else global_site_content.about_title_ar) or '' }}</h2>
+                </div>
+
+                <div class="about-content" data-aos="fade-up" style="max-width: 900px; margin: 0 auto; text-align: center;">
+                    <div class="about-text">
+                        <p style="font-size: 1.25rem; line-height: 2;" contenteditable="{{ 'true' if edit_mode else 'false' }}" 
+                            data-field="about_us_{{ lang }}"
+                            data-placeholder="{{ 'نحن فريق شغوف نحوّل أفكارك إلى تجارب بصرية لا تُنسى (اضغط للتعديل)' if lang == 'ar' else 'We are a passionate team transforming your ideas (Click to Edit)' }}">
+                            {{ (global_site_content.about_us_en if lang == 'en' else global_site_content.about_us_ar) or '' }}</p>
+                        <div style="margin-top: 3rem;">
+                            <a href="{{ url_for('team') }}" class="cta-button">{{ 'Meet Our Team' if lang == 'en' else 'تعرف على فريقنا' }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== BRIDGE ABOUT-PORTFOLIO ========== -->
+        <div class="section-bridge" style="--bridge-from: {{ global_site_content.about_bg_color if global_site_content.about_bg_type == 'color' else '#0A0A0A' }}; --bridge-to: {{ global_site_content.section2_bg_color if global_site_content.section2_bg_type == 'color' else '#FDCC04' }};"></div>
 
         <!-- ========== PORTFOLIO ========== -->
-        <section id="portfolio" class="{{ 'light-bg' if not global_site_content or global_site_content.section2_bg_type == 'color' or global_site_content.section2_bg_type == 'image' else '' }}" 
+        <section id="portfolio" class="movable-section {{ 'light-bg' if not global_site_content or global_site_content.section2_bg_type == 'color' or global_site_content.section2_bg_type == 'image' else '' }}" data-is-section="true" data-section-name="Portfolio"
             style="{% if global_site_content.section2_bg_type == 'color' %}background: {{ global_site_content.section2_bg_color or '#FDCC04' }} !important;{% endif %} --section-title-color: {{ global_site_content.section2_title_color if global_site_content.section2_title_color else '#ffffff' }}; --section-text-color: {{ global_site_content.section2_text_color if global_site_content.section2_text_color else '#ffffff' }}; --section-btn-bg: {{ global_site_content.section2_btn_bg_color if global_site_content.section2_btn_bg_color else '#6B21C8' }}; --section-btn-text: {{ global_site_content.section2_btn_text_color if global_site_content.section2_btn_text_color else '#FDCC04' }};">
+            {% if edit_mode %}
+            <div class="section-drag-handle"><i class="fas fa-arrows-alt"></i> PORTFOLIO</div>
+            {% endif %}
             
             {% if global_site_content.section2_bg_type == 'video' and global_site_content.section2_bg_media %}
             <div class="hero-bg" style="z-index: 1;"><video src="{{ url_for('static', filename='uploads/' + global_site_content.section2_bg_media) }}" autoplay muted loop playsinline></video></div>
@@ -159,9 +295,27 @@
 
             <div class="section-inner" style="position: relative; z-index: 2;">
                 <div class="section-header" data-aos="fade-up">
-                    <h2 class="glowing-text">{{ 'OUR LATEST WORK' if lang == 'en' else 'أحدث أعمالنا' }}</h2>
-                    <p class="section-subtitle">{{ 'A selection of our finest creative projects.' if lang == 'en' else
-                        'مختارات من أفضل مشاريعنا الإبداعية.' }}</p>
+                    <h2 class="glowing-text" contenteditable="{{ 'true' if edit_mode else 'false' }}" 
+                        data-field="section2_title_{{ lang }}"
+                        data-placeholder="{{ 'أحدث مشاريعنا' if lang == 'ar' else 'OUR LATEST WORK' }}">
+                        {{ (global_site_content.section2_title_en if lang == 'en' else global_site_content.section2_title_ar) or '' }}</h2>
+                    <p class="section-subtitle" contenteditable="{{ 'true' if edit_mode else 'false' }}" 
+                        data-field="section2_text_{{ lang }}"
+                        data-placeholder="{{ 'مختارات من أفضل مشاريعنا الإبداعية' if lang == 'ar' else 'A selection of our finest creative projects' }}">
+                        {{ (global_site_content.section2_text_en if lang == 'en' else global_site_content.section2_text_ar) or '' }}</p>
+
+                    <div class="dynamic-elements-container" data-section="portfolio">
+                        {% if global_site_content.dynamic_elements_json %}
+                            {% set dynamic = global_site_content.dynamic_elements_json|from_json %}
+                            {% if dynamic.portfolio %}
+                                {% for el in dynamic.portfolio %}
+                                    <div class="dynamic-el" data-type="{{ el.type }}" style="{{ el.style }}">
+                                        {{ el.content|safe }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    </div>
                 </div>
 
                 <div class="portfolio-grid">
@@ -194,65 +348,15 @@
             </div>
         </section>
 
-        <!-- ========== BRIDGE PORTFOLIO-ABOUT ========== -->
-        <div class="section-bridge" style="--bridge-from: {{ global_site_content.section2_bg_color if global_site_content.section2_bg_type == 'color' else '#0A0A0A' }}; --bridge-to: {{ global_site_content.about_bg_color if global_site_content.about_bg_type == 'color' else '#0A0A0A' }};"></div>
+        <!-- ========== BRIDGE PORTFOLIO-PRICING ========== -->
+        <div class="section-bridge" style="--bridge-from: {{ global_site_content.section2_bg_color if global_site_content.section2_bg_type == 'color' else '#FDCC04' }}; --bridge-to: {{ global_site_content.learning_bg_color if global_site_content.learning_bg_type == 'color' else '#0A0A0A' }};"></div>
 
-        <!-- ========== ABOUT ========== -->
-        <section id="about" class="{{ 'light-bg' if global_site_content.about_bg_type == 'color' and global_site_content.about_bg_color == '#FDCC04' else '' }}"
-            style="{% if global_site_content.about_bg_type == 'color' %}background: {{ global_site_content.about_bg_color or '#0A0A0A' }} !important;{% endif %} --section-title-color: {{ global_site_content.about_title_color if global_site_content.about_title_color else '#ffffff' }}; --section-text-color: {{ global_site_content.about_text_color if global_site_content.about_text_color else '#ffffff' }}; --section-btn-bg: {{ global_site_content.about_btn_bg_color if global_site_content.about_btn_bg_color else '#6B21C8' }}; --section-btn-text: {{ global_site_content.about_btn_text_color if global_site_content.about_btn_text_color else '#FDCC04' }};">
-            
-            {% if global_site_content.about_bg_type == 'video' and global_site_content.about_bg_media %}
-            <div class="hero-bg" style="z-index: 1;"><video src="{{ url_for('static', filename='uploads/' + global_site_content.about_bg_media) }}" autoplay muted loop playsinline></video></div>
-            {% elif global_site_content.about_bg_type == 'image' and global_site_content.about_bg_media %}
-            <div class="hero-bg" style="z-index: 1;"><div style="background-image: url('{{ url_for('static', filename='uploads/' + global_site_content.about_bg_media) }}'); width:100%; height:100%; background-size:cover; background-position:center;"></div></div>
-            {% endif %}
-
-            <div class="section-inner" style="position: relative; z-index: 2;">
-                <div class="section-header" data-aos="fade-up">
-                    <h2 class="glowing-text">{{ 'ABOUT US' if lang == 'en' else 'من نحن' }}</h2>
-                </div>
-
-                <div class="about-grid">
-                    <div class="about-text" data-aos="fade-right">
-                        <p>{{ (site_content.about_us_en if lang == 'en' else site_content.about_us_ar) if site_content
-                            else
-                            ('We are a passionate team of photographers, videographers, and brand builders dedicated to
-                            transforming your ideas into unforgettable visual experiences.' if lang == 'en' else
-                            'نحن فريق شغوف من المصورين ومنتجي الفيديو وبناة العلامات التجارية، نحوّل أفكارك إلى تجارب
-                            بصرية لا تُنسى.') }}</p>
-                        <a href="{{ url_for('team') }}" class="cta-button">{{ 'Meet Our Team' if lang == 'en' else 'تعرف
-                            على فريقنا' }}</a>
-                    </div>
-
-                    <div class="about-stats" data-aos="fade-left">
-                        <div class="stat-card">
-                            <span class="stat-number">50+</span>
-                            <span class="stat-label">{{ 'Projects Done' if lang == 'en' else 'مشروع منجز' }}</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-number">3+</span>
-                            <span class="stat-label">{{ 'Years Experience' if lang == 'en' else 'سنوات خبرة' }}</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-number">100%</span>
-                            <span class="stat-label">{{ 'Client Satisfaction' if lang == 'en' else 'رضا العملاء'
-                                }}</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-number">20+</span>
-                            <span class="stat-label">{{ 'Happy Clients' if lang == 'en' else 'عميل سعيد' }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ========== BRIDGE ABOUT-LEARNING ========== -->
-        <div class="section-bridge" style="--bridge-from: {{ global_site_content.about_bg_color if global_site_content.about_bg_type == 'color' else '#0A0A0A' }}; --bridge-to: {{ global_site_content.learning_bg_color if global_site_content.learning_bg_type == 'color' else '#0A0A0A' }};"></div>
-
-        <!-- ========== LEARNING ========== -->
-        <section id="learning" class="{{ 'light-bg' if global_site_content.learning_bg_type == 'color' and global_site_content.learning_bg_color == '#FDCC04' else '' }}"
+        <!-- ========== PRICING MENU ========== -->
+        <section id="pricing" class="movable-section {{ 'light-bg' if global_site_content.learning_bg_type == 'color' and global_site_content.learning_bg_color == '#FDCC04' else '' }}"
             style="{% if global_site_content.learning_bg_type == 'color' %}background: {{ global_site_content.learning_bg_color or '#0A0A0A' }} !important;{% endif %} --section-title-color: {{ global_site_content.learning_title_color if global_site_content.learning_title_color else '#ffffff' }}; --section-text-color: {{ global_site_content.learning_text_color if global_site_content.learning_text_color else '#ffffff' }}; --section-btn-bg: {{ global_site_content.learning_btn_bg_color if global_site_content.learning_btn_bg_color else '#6B21C8' }}; --section-btn-text: {{ global_site_content.learning_btn_text_color if global_site_content.learning_btn_text_color else '#FDCC04' }};">
+            {% if edit_mode %}
+            <div class="section-drag-handle"><i class="fas fa-arrows-alt"></i> PRICING</div>
+            {% endif %}
             
             {% if global_site_content.learning_bg_type == 'video' and global_site_content.learning_bg_media %}
             <div class="hero-bg" style="z-index: 1;"><video src="{{ url_for('static', filename='uploads/' + global_site_content.learning_bg_media) }}" autoplay muted loop playsinline></video></div>
@@ -261,53 +365,248 @@
             {% endif %}
 
             <div class="section-inner" style="position: relative; z-index: 2;">
-                <div class="section-header" data-aos="fade-up">
-                    <h2 class="glowing-text">{{ 'COURSES' if lang == 'en' else 'الكورسات التعليمية' }}</h2>
-                    <p class="section-subtitle">{{ 'Learn photography & videography from the best.' if lang == 'en' else
-                        'تعلم التصوير والفيديو من الأفضل.' }}</p>
-                </div>
-
-                <div class="courses-grid">
-                    {% for course in courses %}
-                    <a href="{{ url_for('course_detail', course_id=course.id) }}" class="course-card" data-aos="fade-up"
-                        data-aos-delay="{{ loop.index0 * 80 }}">
-                        {% if course.cover_media_type == 'video' %}
-                        <video class="course-card-img"
-                            src="{{ url_for('static', filename='uploads/' + course.cover_media) }}" loading="lazy"
-                            muted></video>
-                        {% else %}
-                        <img class="course-card-img"
-                            src="{{ url_for('static', filename='uploads/' + (course.cover_media or 'placeholder.png')) }}"
-                            alt="{{ course.title_en if lang == 'en' else course.title_ar }}" loading="lazy">
+                <div class="section-header text-center mb-5" data-aos="fade-up">
+                    <h2 class="section-title fw-bold" contenteditable="{{ 'true' if edit_mode else 'false' }}" 
+                        data-field="learning_title_{{ lang }}"
+                        data-placeholder="{{ 'استثمر في هويتك' if lang == 'ar' else 'INVESTMENT' }}">
+                        {{ (global_site_content.learning_title_en if lang == 'en' else global_site_content.learning_title_ar) or '' }}</h2>
+                    <p class="section-description" contenteditable="{{ 'true' if edit_mode else 'false' }}" 
+                        data-field="learning_text_{{ lang }}"
+                        data-placeholder="{{ 'اختر الباقة التي تناسب تطلعاتك' if lang == 'ar' else 'CHOOSE THE PLAN THAT SUITS YOUR PATH' }}">
+                        {{ (global_site_content.learning_text_en if lang == 'en' else global_site_content.learning_text_ar) or '' }}</p>
+                    
+                    <div class="dynamic-elements-container" data-section="pricing">
+                        {% if global_site_content.dynamic_elements_json %}
+                            {% set dynamic = global_site_content.dynamic_elements_json|from_json %}
+                            {% if dynamic.pricing %}
+                                {% for el in dynamic.pricing %}
+                                    <div class="dynamic-el" data-type="{{ el.type }}" style="{{ el.style }}">
+                                        {{ el.content|safe }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
                         {% endif %}
-                        <div class="course-card-body">
-                            <span class="course-badge">{{ 'New' if lang == 'en' else 'جديد' }}</span>
-                            <h3 class="course-title">{{ course.title_en if lang == 'en' else course.title_ar }}</h3>
-                            <p class="course-desc">{{ (course.description_en if lang == 'en' else
-                                course.description_ar)|striptags|truncate(90) if (course.description_en or
-                                course.description_ar) else '' }}</p>
-                        </div>
-                    </a>
-                    {% else %}
-                    <p style="color:var(--text-muted); text-align:center; grid-column:1/-1;">
-                        {{ 'No courses yet.' if lang == 'en' else 'لا توجد كورسات بعد.' }}
-                    </p>
-                    {% endfor %}
+                    </div>
                 </div>
 
-                <div class="view-all-wrapper" data-aos="fade-up">
-                    <a href="{{ url_for('learning') }}" class="cta-button">{{ 'View All Courses' if lang == 'en' else
-                        'عرض كل الكورسات' }}</a>
+                <!-- Pricing Menu (High-Fidelity Editor) -->
+                {% if not edit_mode %}
+                <div id="pricing-live-view" class="pricing-image-display" data-aos="zoom-in">
+                    <div class="rendering-placeholder">
+                        <i class="fas fa-spinner fa-spin"></i> {{ "Creating your menu..." if lang == "en" else "جاري تجهيز المنيو..." }}
+                    </div>
+                </div>
+                {% else %}
+                <!-- HIGH-FIDELITY A4 EDITOR -->
+                <div id="pricing-a4-editor" class="pricing-a4-grid" style="display: flex; flex-wrap: wrap; gap: 40px; justify-content: center; padding: 40px 0;">
+                    
+                    <!-- Side A (Left) -->
+                    <div class="a4-editor-page a4-template" style="position: relative; overflow: hidden; transform: scale(0.85); transform-origin: top center; flex-shrink: 0; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+                        <div class="template-bg-objects">
+                            <i class="fas fa-camera bg-obj bg-obj-1"></i>
+                            <i class="fas fa-video bg-obj bg-obj-2"></i>
+                            <i class="fas fa-cog bg-obj bg-obj-3"></i>
+                        </div>
+                        <div class="template-header">
+                            <img src="/static/logo.png" class="template-logo" alt="Logo">
+                            <h1 class="template-brand">BRAND FACTORY</h1>
+                        </div>
+                        <div class="template-body dynamic-elements-container" data-section="pricing-left">
+                            {% for package in pricing_left %}
+                            <div class="t-package draggable-item" data-id="{{ package.id }}">
+                                <div class="t-package-name" contenteditable="true" data-field="pkg_name_{{ lang }}_{{ package.id }}">{{ package.name_en if lang == 'en' else package.name_ar }}</div>
+                                {% for item in package.items|sort(attribute='order_index') %}
+                                <div class="t-menu-item editable-item-wrapper">
+                                    <div class="t-item-main">
+                                        <span class="t-item-name" contenteditable="true" data-field="item_name_{{ lang }}_{{ item.id }}">{{ item.name_en if lang == 'en' else item.name_ar }}</span>
+                                        <span class="t-item-price" contenteditable="true" data-field="item_price_{{ item.id }}">{{ item.price }}</span>
+                                    </div>
+                                    {% if edit_mode %}
+                                    <div class="item-actions" data-html2canvas-ignore>
+                                        <button class="del-menu-item" onclick="this.closest('.t-menu-item').remove()" title="Delete Item"><i class="fas fa-times"></i></button>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                                {% if edit_mode %}
+                                <div class="package-actions mt-2" data-html2canvas-ignore>
+                                    <button class="add-menu-item-btn" onclick="addMenuItem(this.closest('.t-package'))"><i class="fas fa-plus"></i> Add Item</button>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Side B (Right) -->
+                    <div class="a4-editor-page a4-template" style="position: relative; overflow: hidden; transform: scale(0.85); transform-origin: top center; flex-shrink: 0; box-shadow: 0 20px 50px rgba(0,0,0,0.5); background: linear-gradient(135deg, #1A0533 0%, #3D0E75 100%) !important;">
+                         <div class="template-bg-objects">
+                            <i class="fas fa-cogs bg-obj bg-obj-1"></i>
+                            <i class="fas fa-lightbulb bg-obj bg-obj-2"></i>
+                            <i class="fas fa-clapperboard bg-obj bg-obj-3"></i>
+                        </div>
+                        <div class="template-header">
+                            <img src="/static/logo.png" class="template-logo" alt="Logo">
+                            <h1 class="template-brand">BRAND FACTORY</h1>
+                        </div>
+                        <div class="template-body dynamic-elements-container" data-section="pricing-right">
+                             {% for package in pricing_right %}
+                            <div class="t-package draggable-item" data-id="{{ package.id }}">
+                                <div class="t-package-name" contenteditable="true" data-field="pkg_name_{{ lang }}_{{ package.id }}">{{ package.name_en if lang == 'en' else package.name_ar }}</div>
+                                {% for item in package.items|sort(attribute='order_index') %}
+                                <div class="t-menu-item editable-item-wrapper">
+                                    <div class="t-item-main">
+                                        <span class="t-item-name" contenteditable="true" data-field="item_name_{{ lang }}_{{ item.id }}">{{ item.name_en if lang == 'en' else item.name_ar }}</span>
+                                        <span class="t-item-price" contenteditable="true" data-field="item_price_{{ item.id }}">{{ item.price }}</span>
+                                    </div>
+                                    {% if edit_mode %}
+                                    <div class="item-actions" data-html2canvas-ignore>
+                                        <button class="del-menu-item" onclick="this.closest('.t-menu-item').remove()" title="Delete Item"><i class="fas fa-times"></i></button>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                                {% if edit_mode %}
+                                <div class="package-actions mt-2" data-html2canvas-ignore>
+                                    <button class="add-menu-item-btn" onclick="addMenuItem(this.closest('.t-package'))"><i class="fas fa-plus"></i> Add Item</button>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+                {% endif %}
+
+                <!-- Download Button -->
+                <div class="view-all-wrapper" style="margin-top: 4rem;">
+                    <button id="download-menu-btn" class="cta-button">
+                        <i class="fas fa-download"></i> {{ 'Download Menu (2x A4 PNG)' if lang == 'en' else 'تحميل المينيو كصورتين (A4)' }}
+                    </button>
+                    {% if edit_mode %}
+                    <button class="cta-button" style="background:#2ecc71; margin-top:10px;" onclick="window.parent.postMessage('save_all', '*')">
+                        <i class="fas fa-save"></i> {{ 'Save All Changes' if lang == 'en' else 'حفظ كافة التغييرات' }}
+                    </button>
+                    {% endif %}
                 </div>
             </div>
         </section>
+
+        <!-- Hidden A4 Export Templates -->
+        <div id="export-container" style="position: absolute; left: -9999px; top: -9999px;">
+            <!-- Left Side Template (Yellow/Purple Gradient) -->
+            <div id="menu-template-left" class="a4-template" style="width: 210mm; height: 297mm; background: {{ site_content.menu_left_style or 'linear-gradient(135deg, #1A0533 0%, #FDCC04 500%)' }}; color: white; position: relative; padding: 40px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.3); display: flex; flex-direction: column;">
+                <div class="template-bg-objects" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; opacity: 0.1;">
+                     <i class="fas fa-camera" style="position:absolute; top:10%; left:10%; font-size:10rem;"></i>
+                     <i class="fas fa-video" style="position:absolute; top:40%; right:5%; font-size:12rem;"></i>
+                     <i class="fas fa-cog" style="position:absolute; bottom:15%; left:20%; font-size:8rem;"></i>
+                </div>
+                
+                <div class="template-header" style="text-align: center; margin-bottom: 20px; position: relative; z-index: 1; flex-shrink: 0;">
+                    <img src="/static/logo.png" style="width: 70px; margin-bottom: 10px;" alt="Logo">
+                    <h1 class="template-brand" style="font-family: 'Anton', sans-serif; color: #FDCC04; margin:0; font-size: 2.2rem; letter-spacing: 2px;">BRAND FACTORY</h1>
+                </div>
+                
+                <div class="template-body" style="position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; gap: 15px; overflow: hidden;">
+                    {% for package in pricing_left %}
+                    <div class="t-package" style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; border-left: 4px solid #FDCC04; flex-shrink: 1; min-height: 0; display: flex; flex-direction: column;">
+                        <div class="t-package-name" style="font-family: 'Anton', sans-serif; font-size: 1.3rem; color: #FDCC04; margin-bottom: 8px; text-transform: uppercase; text-align: center;">{{ package.name_en if lang == 'en' else package.name_ar }}</div>
+                        <div style="display: flex; flex-direction: column; gap: 5px; flex: 1; min-height: 0; overflow: hidden;">
+                            {% for item in package.items|sort(attribute='order_index') %}
+                            <div class="t-menu-item" style="text-align: {{ item.alignment or 'right' }}; direction: rtl; flex-shrink: 1;">
+                                <div class="t-item-main" style="display: flex; justify-content: space-between; font-weight: bold; font-size: 0.95rem; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 2px; flex-direction: {{ 'row' if (item.alignment or 'right') == 'right' else ('row-reverse' if (item.alignment or 'right') == 'left' else 'column') }}; gap: 10px;">
+                                    <span class="t-item-name">{{ item.name_en if lang == 'en' else item.name_ar }}</span>
+                                    <span class="t-item-price" style="color: #FDCC04;">{{ item.price }}</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    {# Fallback for items without package #}
+                    {% if standalone_items %}
+                        {% for item in standalone_items if item.side == 'left' %}
+                        <div class="t-menu-item">
+                            <div class="t-item-main">
+                                <span class="t-item-name">{{ item.name_en if lang == 'en' else item.name_ar }}</span>
+                                <span class="t-item-price">{{ item.price }}</span>
+                            </div>
+                            {% set desc = item.description_en if lang == 'en' else item.description_ar %}
+                            {% if desc %}<div class="t-item-desc">{{ desc }}</div>{% endif %}
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="template-footer">
+                    <span><i class="fas fa-map-marker-alt"></i> {{ site_content.contact_gps or 'Baghdad, Iraq' }}</span>
+                    <span><i class="fab fa-whatsapp"></i> {{ site_content.contact_whatsapp or '07813886233' }}</span>
+                    <span><i class="fab fa-instagram"></i> brand.factory</span>
+                </div>
+            </div>
+
+            <!-- Right Side Template -->
+            <div id="menu-template-right" class="a4-template" style="width: 210mm; height: 297mm; background: {{ site_content.menu_right_style or 'linear-gradient(135deg, #6B21C8 0%, #FDCC04 500%)' }}; color: white; position: relative; padding: 40px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.3); display: flex; flex-direction: column;">
+                <div class="template-bg-objects" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; opacity: 0.1;">
+                     <i class="fas fa-cogs" style="position:absolute; top:10%; right:10%; font-size:10rem;"></i>
+                     <i class="fas fa-camera-retro" style="position:absolute; top:40%; left:5%; font-size:12rem;"></i>
+                     <i class="fas fa-lightbulb" style="position:absolute; bottom:15%; right:20%; font-size:8rem;"></i>
+                </div>
+                
+                <div class="template-header" style="text-align: center; margin-bottom: 20px; position: relative; z-index: 1; flex-shrink: 0;">
+                    <img src="/static/logo.png" style="width: 70px; margin-bottom: 10px;" alt="Logo">
+                    <h1 class="template-brand" style="font-family: 'Anton', sans-serif; color: #FDCC04; margin:0; font-size: 2.2rem; letter-spacing: 2px;">BRAND FACTORY</h1>
+                </div>
+                
+                <div class="template-body" style="position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; gap: 15px; overflow: hidden;">
+                    {% for package in pricing_right %}
+                    <div class="t-package" style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; border-left: 4px solid #FDCC04; flex-shrink: 1; min-height: 0; display: flex; flex-direction: column;">
+                        <div class="t-package-name" style="font-family: 'Anton', sans-serif; font-size: 1.3rem; color: #FDCC04; margin-bottom: 8px; text-transform: uppercase; text-align: center;">{{ package.name_en if lang == 'en' else package.name_ar }}</div>
+                        <div style="display: flex; flex-direction: column; gap: 5px; flex: 1; min-height: 0; overflow: hidden;">
+                            {% for item in package.items|sort(attribute='order_index') %}
+                            <div class="t-menu-item" style="text-align: {{ item.alignment or 'right' }}; direction: rtl; flex-shrink: 1;">
+                                <div class="t-item-main" style="display: flex; justify-content: space-between; font-weight: bold; font-size: 0.95rem; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 2px; flex-direction: {{ 'row' if (item.alignment or 'right') == 'right' else ('row-reverse' if (item.alignment or 'right') == 'left' else 'column') }}; gap: 10px;">
+                                    <span class="t-item-name">{{ item.name_en if lang == 'en' else item.name_ar }}</span>
+                                    <span class="t-item-price" style="color: #FDCC04;">{{ item.price }}</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    {# Fallback for items without package #}
+                    {% if standalone_items %}
+                        {% for item in standalone_items if item.side == 'right' %}
+                        <div class="t-menu-item">
+                            <div class="t-item-main">
+                                <span class="t-item-name">{{ item.name_en if lang == 'en' else item.name_ar }}</span>
+                                <span class="t-item-price">{{ item.price }}</span>
+                            </div>
+                            {% set desc = item.description_en if lang == 'en' else item.description_ar %}
+                            {% if desc %}<div class="t-item-desc">{{ desc }}</div>{% endif %}
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="template-footer">
+                    <span><i class="fas fa-map-marker-alt"></i> {{ site_content.contact_gps or 'Baghdad, Iraq' }}</span>
+                    <span><i class="fab fa-whatsapp"></i> {{ site_content.contact_whatsapp or '07813886233' }}</span>
+                    <span><i class="fab fa-instagram"></i> brand.factory</span>
+                </div>
+            </div>
+        </div>
 
         <!-- ========== BRIDGE LEARNING-CONTACT ========== -->
         <div class="section-bridge" style="--bridge-from: {{ global_site_content.learning_bg_color if global_site_content.learning_bg_type == 'color' else '#0A0A0A' }}; --bridge-to: {{ global_site_content.contact_bg_color if global_site_content.contact_bg_type == 'color' else '#0A0A0A' }};"></div>
 
         <!-- ========== CONTACT ========== -->
-        <section id="contact" class="{{ 'light-bg' if global_site_content.contact_bg_type == 'color' and global_site_content.contact_bg_color == '#FDCC04' else '' }}"
+        <section id="contact" class="movable-section {{ 'light-bg' if global_site_content.contact_bg_type == 'color' and global_site_content.contact_bg_color == '#FDCC04' else '' }}" data-is-section="true" data-section-name="Contact"
             style="{% if global_site_content.contact_bg_type == 'color' %}background: {{ global_site_content.contact_bg_color or '#0A0A0A' }} !important;{% endif %} --section-title-color: {{ global_site_content.contact_title_color if global_site_content.contact_title_color else '#ffffff' }}; --section-text-color: {{ global_site_content.contact_text_color if global_site_content.contact_text_color else '#ffffff' }}; --section-btn-bg: {{ global_site_content.contact_btn_bg_color if global_site_content.contact_btn_bg_color else '#6B21C8' }}; --section-btn-text: {{ global_site_content.contact_btn_text_color if global_site_content.contact_btn_text_color else '#FDCC04' }};">
+            {% if edit_mode %}
+            <div class="section-drag-handle"><i class="fas fa-arrows-alt"></i> CONTACT</div>
+            {% endif %}
             
             {% if global_site_content.contact_bg_type == 'video' and global_site_content.contact_bg_media %}
             <div class="hero-bg" style="z-index: 1;"><video src="{{ url_for('static', filename='uploads/' + global_site_content.contact_bg_media) }}" autoplay muted loop playsinline></video></div>
@@ -317,34 +616,48 @@
 
             <div class="section-inner" style="position: relative; z-index: 2;">
                 <div class="section-header" data-aos="fade-up">
-                    <h2 class="glowing-text">{{ 'GET IN TOUCH' if lang == 'en' else 'تواصل معنا' }}</h2>
-                    <p class="section-subtitle">
-                        {{ (site_content.contact_info_en if lang == 'en' else site_content.contact_info_ar) if
-                        site_content
-                        else ('Ready to start your project? We would love to hear from you.' if lang == 'en'
-                        else 'جاهز لبدء مشروعك؟ يسعدنا سماعك.') }}
-                    </p>
+                    <h2 class="glowing-text" contenteditable="{{ 'true' if edit_mode else 'false' }}" 
+                        data-field="contact_title_{{ lang }}"
+                        data-placeholder="{{ 'تواصل معنا' if lang == 'ar' else 'CONTACT US' }}">
+                        {{ (global_site_content.contact_title_en if lang == 'en' else global_site_content.contact_title_ar) or '' }}</h2>
+                    <p class="section-description" contenteditable="{{ 'true' if edit_mode else 'false' }}" 
+                        data-field="contact_info_{{ lang }}"
+                        data-placeholder="{{ 'جاهز لبدء مشروعك؟ يسعدنا سماعك' if lang == 'ar' else 'READY TO START YOUR PROJECT? WE WOULD LOVE TO HEAR FROM YOU' }}">
+                        {{ (global_site_content.contact_info_en if lang == 'en' else global_site_content.contact_info_ar) or '' }}</p>
+                </div>
+                    <div class="dynamic-elements-container" data-section="contact">
+                        {% if global_site_content.dynamic_elements_json %}
+                            {% set dynamic = global_site_content.dynamic_elements_json|from_json %}
+                            {% if dynamic.contact %}
+                                {% for el in dynamic.contact %}
+                                    <div class="dynamic-el" data-type="{{ el.type }}" style="{{ el.style }}">
+                                        {{ el.content|safe }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    </div>
                 </div>
 
                 <!-- Three Contact Cards -->
                 <div class="contact-cards" data-aos="fade-up">
-                    <a href="mailto:{{ site_content.contact_email if site_content and site_content.contact_email else 'photogenic2026@gmail.com' }}"
+                    <a href="mailto:{{ global_site_content.contact_email if site_content and global_site_content.contact_email else 'photogenic2026@gmail.com' }}"
                         class="contact-card">
                         <div class="contact-card-icon"><i class="fas fa-envelope"></i></div>
                         <span class="contact-card-label">{{ 'Email' if lang == 'en' else 'البريد' }}</span>
-                        <span class="contact-card-value">{{ site_content.contact_email if site_content and
-                            site_content.contact_email else 'photogenic2026@gmail.com' }}</span>
+                        <span class="contact-card-value">{{ global_site_content.contact_email if site_content and
+                            global_site_content.contact_email else 'photogenic2026@gmail.com' }}</span>
                     </a>
 
-                    <a href="tel:{{ site_content.contact_phone if site_content and site_content.contact_phone else '07813886233' }}"
+                    <a href="tel:{{ global_site_content.contact_phone if site_content and global_site_content.contact_phone else '07813886233' }}"
                         class="contact-card">
                         <div class="contact-card-icon"><i class="fas fa-phone"></i></div>
                         <span class="contact-card-label">{{ 'Phone' if lang == 'en' else 'الهاتف' }}</span>
-                        <span class="contact-card-value">{{ site_content.contact_phone if site_content and
-                            site_content.contact_phone else '07813886233' }}</span>
+                        <span class="contact-card-value">{{ global_site_content.contact_phone if site_content and
+                            global_site_content.contact_phone else '07813886233' }}</span>
                     </a>
 
-                    <a href="{{ site_content.contact_gps if site_content and site_content.contact_gps else 'https://maps.google.com' }}"
+                    <a href="{{ global_site_content.contact_gps if site_content and global_site_content.contact_gps else 'https://maps.google.com' }}"
                         target="_blank" class="contact-card">
                         <div class="contact-card-icon"><i class="fas fa-map-marker-alt"></i></div>
                         <span class="contact-card-label">{{ 'Location' if lang == 'en' else 'الموقع' }}</span>
@@ -355,15 +668,15 @@
 
                 <!-- Social Icons -->
                 <div class="social-icons-row" data-aos="fade-up">
-                    <a href="{{ site_content.contact_facebook if site_content and site_content.contact_facebook else 'https://www.facebook.com/share/1DgECZfEpi/?mibextid=wwXIfr' }}"
+                    <a href="{{ global_site_content.contact_facebook if site_content and global_site_content.contact_facebook else 'https://www.facebook.com/share/1DgECZfEpi/?mibextid=wwXIfr' }}"
                         target="_blank" class="contact-icon-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="{{ site_content.contact_instagram if site_content and site_content.contact_instagram else 'https://www.instagram.com/photo_s_genic/' }}"
+                    <a href="{{ global_site_content.contact_instagram if site_content and global_site_content.contact_instagram else 'https://www.instagram.com/photo_s_genic/' }}"
                         target="_blank" class="contact-icon-btn" title="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="{{ site_content.contact_tiktok if site_content and site_content.contact_tiktok else 'https://www.tiktok.com/@photoganic' }}"
+                    <a href="{{ global_site_content.contact_tiktok if site_content and global_site_content.contact_tiktok else 'https://www.tiktok.com/@photoganic' }}"
                         target="_blank" class="contact-icon-btn" title="TikTok"><i class="fab fa-tiktok"></i></a>
-                    <a href="{{ ('https://wa.me/' + site_content.contact_whatsapp.replace('+','').replace(' ','')) if site_content and site_content.contact_whatsapp else 'https://wa.me/9647813886233' }}"
+                    <a href="{{ ('https://wa.me/' + global_site_content.contact_whatsapp.replace('+','').replace(' ','')) if site_content and global_site_content.contact_whatsapp else 'https://wa.me/9647813886233' }}"
                         target="_blank" class="contact-icon-btn" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                    <a href="{{ site_content.contact_telegram if site_content and site_content.contact_telegram else 'https://t.me/username' }}"
+                    <a href="{{ global_site_content.contact_telegram if site_content and global_site_content.contact_telegram else 'https://t.me/username' }}"
                         target="_blank" class="contact-icon-btn" title="Telegram"><i
                             class="fab fa-telegram-plane"></i></a>
                 </div>
@@ -383,13 +696,13 @@
                 <p style="margin-top:1rem;">{{ 'Professional photography, videography & branding services.' if lang ==
                     'en' else 'خدمات تصوير وفيديو وبراندينج احترافية.' }}</p>
                 <div class="footer-socials" style="margin-top:1.2rem;">
-                    <a href="{{ site_content.contact_facebook if site_content and site_content.contact_facebook else '#' }}"
+                    <a href="{{ global_site_content.contact_facebook if site_content and global_site_content.contact_facebook else '#' }}"
                         target="_blank" class="footer-social-btn"><i class="fab fa-facebook-f"></i></a>
-                    <a href="{{ site_content.contact_instagram if site_content and site_content.contact_instagram else '#' }}"
+                    <a href="{{ global_site_content.contact_instagram if site_content and global_site_content.contact_instagram else '#' }}"
                         target="_blank" class="footer-social-btn"><i class="fab fa-instagram"></i></a>
-                    <a href="{{ site_content.contact_tiktok if site_content and site_content.contact_tiktok else '#' }}"
+                    <a href="{{ global_site_content.contact_tiktok if site_content and global_site_content.contact_tiktok else '#' }}"
                         target="_blank" class="footer-social-btn"><i class="fab fa-tiktok"></i></a>
-                    <a href="{{ ('https://wa.me/' + site_content.contact_whatsapp.replace('+','').replace(' ','')) if site_content and site_content.contact_whatsapp else '#' }}"
+                    <a href="{{ ('https://wa.me/' + global_site_content.contact_whatsapp.replace('+','').replace(' ','')) if site_content and global_site_content.contact_whatsapp else '#' }}"
                         target="_blank" class="footer-social-btn"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
@@ -400,7 +713,7 @@
                     <li><a href="{{ url_for('index') }}">{{ 'Home' if lang == 'en' else 'الرئيسية' }}</a></li>
                     <li><a href="{{ url_for('portfolio') }}">{{ 'Portfolio' if lang == 'en' else 'الأعمال' }}</a></li>
                     <li><a href="{{ url_for('team') }}">{{ 'Team' if lang == 'en' else 'الفريق' }}</a></li>
-                    <li><a href="{{ url_for('learning') }}">{{ 'Courses' if lang == 'en' else 'الكورسات' }}</a></li>
+                    <li><a href="#pricing">{{ 'Pricing' if lang == 'en' else 'الأسعار' }}</a></li>
                 </ul>
             </div>
 
@@ -408,34 +721,344 @@
                 <h4>{{ 'Contact' if lang == 'en' else 'التواصل' }}</h4>
                 <ul>
                     <li><a
-                            href="mailto:{{ site_content.contact_email if site_content and site_content.contact_email else 'photogenic2026@gmail.com' }}">{{
+                            href="mailto:{{ global_site_content.contact_email if site_content and global_site_content.contact_email else 'photogenic2026@gmail.com' }}">{{
                             'Email Us' if lang == 'en' else 'راسلنا' }}</a></li>
                     <li><a
-                            href="tel:{{ site_content.contact_phone if site_content and site_content.contact_phone else '07813886233' }}">{{
+                            href="tel:{{ global_site_content.contact_phone if site_content and global_site_content.contact_phone else '07813886233' }}">{{
                             'Call Us' if lang == 'en' else 'اتصل بنا' }}</a></li>
-                    <li><a href="{{ site_content.contact_gps if site_content and site_content.contact_gps else '#' }}"
-                            target="_blank">{{ 'Find Us' if lang == 'en' else 'موقعنا' }}</a></li>
-                </ul>
-            </div>
-        </div>
+            <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox" onclick="this.classList.remove('active')">
+        <img id="lightbox-img" src="" alt="Full view">
+    </div>
 
-        <div class="footer-bottom">
-            &copy; 2026 BRAND FACTORY. {{ 'All rights reserved.' if lang == 'en' else 'جميع الحقوق محفوظة.' }}
-        </div>
-    </footer>
+    {% if edit_mode %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const containers = document.querySelectorAll('.dynamic-elements-container');
+            containers.forEach(container => {
+                new Sortable(container, {
+                    group: {
+                        name: 'shared',
+                        pull: true,
+                        put: true
+                    },
+                    animation: 150,
+                    ghostClass: 'sortable-ghost',
+                    filter: '.del-btn, [contenteditable="true"]', // Allow clicking/typing in these
+                    preventOnFilter: false,
+                    onAdd: function(evt) {
+                        const type = evt.item.dataset.type;
+                        if (!type) return;
+                        
+                        let content = '';
+                        if (type === 'text') {
+                            content = '<p contenteditable="true" data-field="dynamic_text">New Text Click to Edit</p>';
+                        } else if (type === 'image') {
+                            content = '<img src="/static/logo.png" style="width:100px; display:block; margin:10px auto;">';
+                        } else if (type === 'button') {
+                            content = '<a href="#" class="btn btn-primary" style="margin:10px;">New Button</a>';
+                        }
+                        
+                        evt.item.innerHTML = content + '<span class="del-btn"><i class="fas fa-times"></i></span>';
+                        evt.item.classList.add('dynamic-el');
+                        evt.item.style.padding = '10px';
+                        evt.item.style.border = '1px dashed #ccc';
+                    }
+                });
 
-    <!-- Floating Contact Button -->
-    <a href="#contact" class="floating-contact-btn">
-        {{ 'Contact Us' if lang == 'en' else 'اتصل بنا' }}
-    </a>
+                // Add HTML5 Drag/Drop support for cross-iframe adding
+                container.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    container.classList.add('drag-over');
+                });
+                container.addEventListener('dragleave', () => container.classList.remove('drag-over'));
+                container.addEventListener('drop', e => {
+                    e.preventDefault();
+                    container.classList.remove('drag-over');
+                    const type = e.dataTransfer.getData('element-type');
+                    if (!type) return;
+                    
+                    const newItem = document.createElement('div');
+                    newItem.className = 'dynamic-el draggable-item';
+                    newItem.dataset.type = type;
+                    
+                    let content = '';
+                    if (type === 'text') content = '<p contenteditable="true" data-field="dynamic_text">New Text Click to Edit</p>';
+                    else if (type === 'image') content = '<img src="/static/logo.png" style="width:100px; display:block; margin:10px auto;">';
+                    else if (type === 'button') content = '<a href="#" class="btn btn-primary" style="margin:10px;">New Button</a>';
+                    
+                    newItem.innerHTML = content + '<span class="del-btn"><i class="fas fa-times"></i></span>';
+                    newItem.style.padding = '10px';
+                    newItem.style.border = '1px dashed #ccc';
+                    
+                    // Insert at drop position (simplified)
+                    container.appendChild(newItem);
+                });
+            });
+            
+            window.addEventListener('message', function(e) {
+                if (e.data === 'get_dynamic_data') {
+                    const data = {};
+                    document.querySelectorAll('.dynamic-elements-container').forEach(container => {
+                        const section = container.dataset.section;
+                        data[section] = container.innerHTML;
+                    });
+                    window.parent.postMessage({ type: 'dynamic_data_response', data: data }, '*');
+                }
+            });
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='main.js') }}?v={{ cache_id }}"></script>
+            // Intercept Clicks for Property Sync
+            document.body.addEventListener('click', function(e) {
+                const target = e.target.closest('[contenteditable="true"], section, h1, h2, h3, p, a, button, .t-item-name, .t-item-price');
+                if (!target) return;
+
+                if (window.CONFIG.editMode) {
+                    // Prevent navigation
+                    if (target.tagName === 'A' || target.tagName === 'BUTTON') {
+                        if (!e.ctrlKey) { e.preventDefault(); e.stopPropagation(); }
+                    }
+
+                    // Selection Logic
+                    const field = target.getAttribute('data-field');
+                    const styles = window.getComputedStyle(target);
+                    const rect = target.getBoundingClientRect();
+                    
+                    window.parent.postMessage({
+                        type: 'element_selected',
+                        field: field,
+                        tagName: target.tagName,
+                        content: (target.innerText || '').trim(),
+                        is_section: target.tagName === 'SECTION',
+                        styles: {
+                            fontSize: styles.fontSize,
+                            color: styles.color,
+                            fontWeight: styles.fontWeight
+                        },
+                        rect: {
+                            top: rect.top,
+                            left: rect.left,
+                            width: rect.width,
+                            height: rect.height
+                        }
+                    }, '*');
+
+                    // Visual highlight
+                    document.querySelectorAll('.is-selected').forEach(el => el.classList.remove('is-selected'));
+                    target.classList.add('is-selected');
+                }
+            }, true);
+
+            // Listen for Sidebar Updates
+            window.addEventListener('message', function(e) {
+                if (e.data.type === 'update_text') {
+                    const el = document.querySelector(`[data-field="${e.data.field}"]`);
+                    if (el) el.innerText = e.data.content;
+                }
+                if (e.data.type === 'update_style') {
+                    let el = null;
+                    if (e.data.field) el = document.querySelector(`[data-field="${e.data.field}"]`);
+                    else if (e.data.selector) el = document.querySelector(e.data.selector);
+                    
+                    if (el) el.style[e.data.property] = e.data.value;
+                }
+                if (e.data.type === 'clear_selection') {
+                    document.querySelectorAll('.is-selected').forEach(el => el.classList.remove('is-selected'));
+                }
+            });
+
+            window.getMenuState = function() {
+                const state = { left: [], right: [] };
+                ['pricing-left', 'pricing-right'].forEach(section => {
+                    const side = section.split('-')[1];
+                    document.querySelectorAll(`[data-section="${section}"] .t-package`).forEach(pkg => {
+                        const pkgData = {
+                            id: pkg.dataset.id,
+                            name_en: pkg.querySelector(`[data-field^="pkg_name_en_"]`)?.innerText,
+                            name_ar: pkg.querySelector(`[data-field^="pkg_name_ar_"]`)?.innerText,
+                            items: []
+                        };
+                        pkg.querySelectorAll('.t-menu-item').forEach(item => {
+                            const nameEl = item.querySelector('.t-item-name');
+                            const priceEl = item.querySelector('.t-item-price');
+                            const f = nameEl?.dataset.field || '';
+                            const id = f.split('_').pop();
+                            
+                            pkgData.items.push({
+                                id: id.startsWith('new') ? null : id,
+                                temp_id: id.startsWith('new') ? id : null,
+                                name_en: (window.CONFIG.lang === 'en') ? nameEl?.innerText : '',
+                                name_ar: (window.CONFIG.lang === 'ar') ? nameEl?.innerText : '',
+                                price: priceEl?.innerText
+                            });
+                        });
+                        state[side].push(pkgData);
+                    });
+                });
+                return state;
+            };
+
+            window.addMenuItem = function(packageEl) {
+                const pkgId = packageEl.dataset.id;
+                const newItem = document.createElement('div');
+                newItem.className = 't-menu-item editable-item-wrapper';
+                const tempId = 'new_' + Date.now();
+                newItem.innerHTML = `
+                    <div class="t-item-main">
+                        <span class="t-item-name" contenteditable="true" data-field="item_name_{{ lang }}_new_${tempId}">NEW ITEM</span>
+                        <span class="t-item-price" contenteditable="true" data-field="item_price_new_${tempId}">0</span>
+                    </div>
+                    <div class="item-actions">
+                        <button class="del-menu-item" onclick="this.closest('.t-menu-item').remove()"><i class="fas fa-times"></i></button>
+                    </div>
+                `;
+                // Insert before package-actions
+                packageEl.insertBefore(newItem, packageEl.querySelector('.package-actions'));
+            };
+
+            {% if edit_mode %}
+            // Section Reordering (WordPress Style)
+            new Sortable(document.querySelector('.site-main'), {
+                animation: 150,
+                draggable: '.movable-section',
+                handle: '.section-drag-handle',
+                ghostClass: 'sortable-ghost'
+            });
+
+            // Re-initialize dynamic containers
+            document.querySelectorAll('.dynamic-elements-container').forEach(container => {
+                new Sortable(container, {
+                    group: 'packages',
+                    animation: 150,
+                    draggable: '.t-package',
+                    ghostClass: 'sortable-ghost'
+                });
+            });
+
+            // Make items sortable within packages
+            document.querySelectorAll('.t-package').forEach(pkg => {
+                new Sortable(pkg, {
+                    group: 'menu-items',
+                    animation: 150,
+                    draggable: '.t-menu-item',
+                    ghostClass: 'sortable-ghost'
+                });
+            });
+            {% endif %}
+        });
+    </script>
+    <style>
+        .sortable-ghost { opacity: 0.4; border: 2px dashed var(--accent-yellow) !important; }
+        .drag-over { border: 2px solid var(--accent-yellow) !important; background: rgba(253, 204, 4, 0.1) !important; transition: 0.3s; }
+        .dynamic-el { position: relative; transition: 0.2s; min-height: 20px; }
+        .dynamic-el:hover { outline: 1px solid var(--accent-yellow); }
+        .dynamic-el .del-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            cursor: pointer;
+            z-index: 100;
+        }
+        .dynamic-el:hover .del-btn { display: flex; }
+    </style>
+    <script>
+        // Use event delegation for delete buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('del-btn')) {
+                e.target.parentElement.remove();
+            }
+        });
+    </script>
+    {% endif %}
+    <!-- AOS & Custom Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="{{ url_for('static', filename='main.js') }}?v={{ cache_id }}"></script>
+
     <script>
         AOS.init({ duration: 700, once: false, offset: 60 });
+
+        // Lightbox function
+        window.openLightbox = function(src) {
+            const lb = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            img.src = src;
+            lb.classList.add('active');
+        }
+
+        // Pricing Menu Rendering & Export Logic
+        async function renderPricingMenu() {
+            const liveView = document.getElementById('pricing-live-view');
+            const isRTL = document.documentElement.dir === 'rtl';
+            const sides = isRTL ? ['right', 'left'] : ['left', 'right'];
+            
+            try {
+                liveView.innerHTML = ''; // Clear loading
+                for (const side of sides) {
+                    const element = document.getElementById(`menu-template-${side}`);
+                    const canvas = await html2canvas(element, {
+                        scale: 1, // Medium quality for live preview
+                        useCORS: true,
+                        allowTaint: true,
+                        backgroundColor: null
+                    });
+                    
+                    const img = new Image();
+                    img.src = canvas.toDataURL('image/png');
+                    img.className = 'rendered-menu-img';
+                    img.alt = `Pricing Menu ${side}`;
+                    img.style.cursor = 'zoom-in';
+                    img.onclick = function() { window.openLightbox(this.src); };
+                    
+                    liveView.appendChild(img);
+                }
+            } catch (error) {
+                console.error('Initial rendering failed:', error);
+            }
+        }
+
+        // Run rendering on load
+        window.addEventListener('load', renderPricingMenu);
+
+        // Pricing Menu PNG Export Logic (High Quality)
+        document.getElementById('download-menu-btn')?.addEventListener('click', async function() {
+            const btn = this;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {{ "Generating HQ Images..." if lang == "en" else "جاري تجهيز الصور..." }}';
+            btn.disabled = true;
+
+            try {
+                const sides = ['left', 'right'];
+                for (const side of sides) {
+                    const element = document.getElementById(`menu-template-${side}`);
+                    const canvas = await html2canvas(element, {
+                        scale: 2.5, // High quality for print
+                        useCORS: true,
+                        allowTaint: true
+                    });
+                    
+                    const link = document.createElement('a');
+                    link.download = `brand-factory-menu-${side}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                }
+            } catch (error) {
+                console.error('Export failed:', error);
+                alert('Failed to generate images. Please try again.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
     </script>
 </body>
-
 </html>

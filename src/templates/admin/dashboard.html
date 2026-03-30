@@ -6,11 +6,22 @@
 
 {% block content %}
 
-<div class="card">
-    <h2 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">Welcome to the Control Panel</h2>
-    <p>This is your custom administration dashboard. From here, you can manage all dynamic content on your website,
-        including the latest courses, portfolio projects, team members, and general site texts.</p>
-</div>
+    <div class="card" style="background: linear-gradient(135deg, #6B21C8, #1a0533); color: white; border: none; padding: 40px; margin-bottom: 30px; position: relative; overflow: hidden;">
+        <div style="position: relative; z-index: 2;">
+            <h2 style="font-family: 'Anton', sans-serif; font-size: 2.5rem; margin-bottom: 15px;">New: Live Website Manager</h2>
+            <p style="font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin-bottom: 25px;">
+                Experience the new real-time visual editor. Edit text, fonts, and layout directly on your website with drag-and-drop tools.
+            </p>
+            <a href="{{ url_for('admin.live_editor') }}" class="btn" style="background: var(--accent-yellow); color: #1a0533; font-weight: bold; font-size: 1.1rem; padding: 15px 30px; border: none;">Launch Visual Editor</a>
+        </div>
+        <i class="fas fa-magic" style="position: absolute; right: -20px; bottom: -20px; font-size: 15rem; opacity: 0.1; transform: rotate(-15deg);"></i>
+    </div>
+
+    <div class="card">
+        <h2 style="color: var(--primary-blue); font-family: 'Anton', sans-serif;">General Overview</h2>
+        <p>This is your custom administration dashboard. From here, you can manage all dynamic content on your website,
+            including the latest courses, portfolio projects, team members, and general site texts.</p>
+    </div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
     <!-- Course Stats -->

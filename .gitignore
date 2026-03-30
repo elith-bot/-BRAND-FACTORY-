@@ -1,1 +1,8 @@
-.venvvenv/
+.venv/
+__pycache__/
+*.pyc
+instance/database.db
+tmp/
+.idx/
+# Keep static assets but ignore specific massive files if any
+# src/static/uploads/*.mp4
